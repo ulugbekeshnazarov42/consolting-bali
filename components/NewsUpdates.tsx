@@ -1,16 +1,19 @@
 "use client";
 
-import * as React from "react";
-import { motion } from "motion/react";
-import { ArrowUpRight, Newspaper, Send } from "lucide-react";
+import ScrollableCardStack from "@/components/smoothui/scrollable-card-stack";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import ScrollableCardStack from "@/components/smoothui/scrollable-card-stack";
-import { content, resolveHref, isExternalHref } from "@/lib/content";
+import { content, isExternalHref, resolveHref } from "@/lib/content";
+import gsap from "gsap";
+import { ArrowUpRight, Send, Sparkles } from "lucide-react";
+import { motion } from "motion/react"; // Yoki framer-motion
+import * as React from "react";
 
 const news = content.news;
-
-const resolvedCards = news.cards.map((c) => ({ ...c, href: resolveHref(c.href) }));
+const resolvedCards = news.cards.map((c) => ({
+  ...c,
+  href: resolveHref(c.href),
+}));
 
 function useNewsCardHeight() {
   const [height, setHeight] = React.useState(400);
@@ -35,101 +38,270 @@ function useNewsCardHeight() {
   return height;
 }
 
+// --- GSAP Magnetic Button Component ---
+function MagneticElement({
+  children,
+  strength = 0.3,
+}: {
+  children: React.ReactNode;
+  strength?: number;
+}) {
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const xTo = gsap.quickTo(element, "x", {
+      duration: 1,
+      ease: "elastic.out(1, 0.3)",
+    });
+    const yTo = gsap.quickTo(element, "y", {
+      duration: 1,
+      ease: "elastic.out(1, 0.3)",
+    });
+
+    const mouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { height, width, left, top } = element.getBoundingClientRect();
+      const x = clientX - (left + width / 2);
+      const y = clientY - (top + height / 2);
+      xTo(x * strength);
+      yTo(y * strength);
+    };
+
+    const mouseLeave = () => {
+      xTo(0);
+      yTo(0);
+    };
+
+    element.addEventListener("mousemove", mouseMove);
+    element.addEventListener("mouseleave", mouseLeave);
+
+    return () => {
+      element.removeEventListener("mousemove", mouseMove);
+      element.removeEventListener("mouseleave", mouseLeave);
+    };
+  }, [strength]);
+
+  return (
+    <div ref={ref} className="inline-block w-full z-10">
+      {children}
+    </div>
+  );
+}
+
 export default function NewsUpdates() {
   const cardHeight = useNewsCardHeight();
   const secondaryHref = resolveHref(news.secondaryCta.href);
   const secondaryIsExternal = isExternalHref(news.secondaryCta.href);
 
+  // GSAP Refs
+  const sectionRef = React.useRef<HTMLElement>(null);
+  const orb1Ref = React.useRef<HTMLDivElement>(null);
+  const orb2Ref = React.useRef<HTMLDivElement>(null);
+  const rightColRef = React.useRef<HTMLDivElement>(null);
+
+  // GSAP Animations (Orbs + 3D Hover Tilt)
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Floating Orbs
+      gsap.to(orb1Ref.current, {
+        y: "random(-30, 30)",
+        x: "random(-30, 30)",
+        duration: "random(4, 6)",
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      gsap.to(orb2Ref.current, {
+        y: "random(-40, 40)",
+        x: "random(-40, 40)",
+        scale: "random(0.9, 1.2)",
+        duration: "random(5, 7)",
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }, sectionRef);
+
+    // 2. 3D Tilt for Right Column
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!rightColRef.current) return;
+      const { clientX, clientY } = e;
+      const xPos = clientX / window.innerWidth - 0.5;
+      const yPos = clientY / window.innerHeight - 0.5;
+
+      gsap.to(rightColRef.current, {
+        rotationY: xPos * 8, // Subtle tilt so it doesn't break cards UX
+        rotationX: -yPos * 8,
+        ease: "power3.out",
+        transformPerspective: 1200,
+        duration: 1.5,
+      });
+    };
+
+    const handleMouseLeave = () => {
+      if (!rightColRef.current) return;
+      gsap.to(rightColRef.current, {
+        rotationY: 0,
+        rotationX: 0,
+        duration: 1.5,
+        ease: "power3.out",
+      });
+    };
+
+    const section = sectionRef.current;
+    if (section) {
+      window.addEventListener("mousemove", handleMouseMove);
+      section.addEventListener("mouseleave", handleMouseLeave);
+    }
+
+    return () => {
+      ctx.revert();
+      if (section) {
+        window.removeEventListener("mousemove", handleMouseMove);
+        section.removeEventListener("mouseleave", handleMouseLeave);
+      }
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="news"
-      className="relative overflow-hidden border-b border-border/60 py-24 md:py-32"
+      className="relative overflow-hidden border-b border-border/20 bg-background py-24 md:py-32"
     >
+      {/* Background Grid Pattern */}
       <div
-        className="pointer-events-none absolute inset-0 bg-dot mask-radial-fade opacity-25"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute right-0 top-1/2 h-[420px] w-[420px] -translate-y-1/2 translate-x-1/4 rounded-full bg-primary/10 blur-[100px]"
+        className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-30"
         aria-hidden
       />
 
-      <div className="container relative mx-auto px-4 md:px-6">
-        <div className="grid content-start items-start gap-10 lg:grid-cols-12 lg:gap-14 xl:gap-16">
+      {/* Animated GSAP Orbs */}
+      <div
+        ref={orb1Ref}
+        className="pointer-events-none absolute left-0 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px] opacity-60"
+        aria-hidden
+      />
+      <div
+        ref={orb2Ref}
+        className="pointer-events-none absolute right-0 top-1/2 h-[450px] w-[450px] -translate-y-1/2 translate-x-1/4 rounded-full bg-orange-500/15 blur-[120px] opacity-60"
+        aria-hidden
+      />
+
+      <div className="container relative mx-auto px-4 md:px-6 z-10">
+        <div className="grid content-start items-center gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20">
+          {/* LEFT COLUMN: Texts and Actions */}
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="order-2 flex w-full justify-center self-start lg:order-2 lg:col-span-7 lg:col-start-6 lg:row-start-1"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="order-1 flex w-full min-w-0 max-w-none flex-col items-start self-center lg:order-1 lg:col-span-6 lg:col-start-1"
           >
-            <div className="relative w-full max-w-[min(100vw-2rem,700px)] md:max-w-[min(100vw-3rem,840px)] lg:max-w-[min(100vw-4rem,940px)]">
+            <Badge className="mb-6 w-fit gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium tracking-wide text-primary shadow-sm backdrop-blur-md hover:bg-primary/20 transition-colors">
+              <Sparkles className="size-4" />
+              {news.badge}
+            </Badge>
+
+            <h2 className="text-balance font-heading text-[2.75rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[4rem] lg:leading-[1.1]">
+              <span className="block mb-2 text-white/90">
+                {news.heading.before}
+              </span>
+              <span className="relative inline-block my-1 group">
+                {/* Neon Glow under accent text */}
+                <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-xl bg-gradient-to-r from-primary/30 to-orange-500/30 blur-xl opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+                <span className="text-gradient-orange drop-shadow-md">
+                  {news.heading.accent}
+                </span>
+              </span>{" "}
+              <span className="block mt-2 text-white/80">
+                {news.heading.after}
+              </span>
+            </h2>
+
+            <p className="mt-6 text-lg leading-relaxed text-white/70 md:mt-8 md:text-xl max-w-lg">
+              {news.paragraph}
+            </p>
+
+            <div className="mt-10 flex w-full flex-col gap-4 sm:flex-row sm:items-center">
+              <MagneticElement strength={0.3}>
+                <Button
+                  asChild
+                  size="lg"
+                  className="group relative h-14 w-full sm:w-auto rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_50px_-15px_var(--primary)] transition-all duration-300"
+                >
+                  <a href={news.primaryCta.href}>
+                    <span className="relative z-10 flex items-center gap-2">
+                      {news.primaryCta.label}
+                      <span className="flex size-6 items-center justify-center rounded-full bg-black/20 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                        <ArrowUpRight className="size-3.5" />
+                      </span>
+                    </span>
+                  </a>
+                </Button>
+              </MagneticElement>
+
+              <MagneticElement strength={0.2}>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="group h-14 w-full sm:w-auto rounded-full border-white/20 bg-white/5 px-8 text-base font-medium backdrop-blur-md hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                >
+                  <a
+                    href={secondaryHref}
+                    target={secondaryIsExternal ? "_blank" : undefined}
+                    rel={
+                      secondaryIsExternal ? "noopener noreferrer" : undefined
+                    }
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Send className="size-4 text-primary transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                    {news.secondaryCta.label}
+                  </a>
+                </Button>
+              </MagneticElement>
+            </div>
+          </motion.div>
+
+          {/* RIGHT COLUMN: 3D Scrollable Card Stack container */}
+          <motion.div
+            initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            className="order-2 flex w-full justify-center lg:order-2 lg:col-span-6 lg:col-start-7 perspective-[1200px]"
+          >
+            <div
+              ref={rightColRef}
+              className="relative w-full max-w-[min(100vw-2rem,550px)] transform-gpu"
+            >
+              {/* Outer Glow of the box */}
               <div
-                className="pointer-events-none absolute -inset-1 rounded-[2.1rem] bg-linear-to-br from-primary/25 via-orange-500/12 to-transparent opacity-80 blur-xl md:-inset-2 md:rounded-[2.25rem]"
+                className="pointer-events-none absolute -inset-2 rounded-[2.5rem] bg-gradient-to-br from-primary/30 via-orange-500/10 to-transparent opacity-50 blur-2xl transition-opacity duration-500 hover:opacity-80"
                 aria-hidden
               />
-              <div className="relative overflow-visible rounded-[1.85rem] border border-border/50 bg-card/60 p-1 shadow-[0_20px_60px_-20px_color-mix(in_oklch,var(--foreground)_25%,transparent)] backdrop-blur-md md:rounded-[2rem] md:p-1.5">
-                <div className="rounded-[1.65rem] bg-background/40 p-3 pb-12 ring-1 ring-inset ring-white/5 dark:bg-background/25 md:p-5 md:pb-14 md:rounded-[1.75rem]">
+
+              {/* Main Premium Glass Container */}
+              <div className="relative overflow-visible rounded-[2.2rem] border border-white/10 bg-black/40 p-2 shadow-2xl backdrop-blur-xl transition-all duration-500">
+                {/* Inner darker container for contrast */}
+                <div className="rounded-[1.9rem] bg-black/60 p-4 pb-14 border border-white/5 relative z-10 md:p-6 md:pb-16">
+                  {/* Subtle inner grid inside the box */}
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px] rounded-[1.9rem]" />
+
                   <ScrollableCardStack
                     cardHeight={cardHeight}
                     items={resolvedCards}
                     perspective={1300}
                     transitionDuration={200}
                     showArrowNav
-                    className="mx-auto min-w-0 w-full max-w-full"
+                    className="mx-auto min-w-0 w-full max-w-full relative z-20"
                   />
                 </div>
               </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6, delay: 0.06 }}
-            className="order-1 flex w-full min-w-0 max-w-none flex-col items-stretch self-stretch lg:order-1 lg:col-span-5 lg:col-start-1 lg:row-start-1"
-          >
-            <Badge className="mb-5 w-fit gap-2 rounded-full border border-primary/35 bg-primary/12 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-primary shadow-sm shadow-primary/10 sm:mb-6">
-              <Newspaper className="size-3.5" />
-              {news.badge}
-            </Badge>
-            <h2 className="text-balance font-heading text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.04] lg:text-6xl lg:leading-[1.05] xl:text-7xl xl:leading-[1.03]">
-              {news.heading.before}{" "}
-              <span className="text-gradient-orange">{news.heading.accent}</span>{" "}
-              {news.heading.after}
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground md:mt-6 md:text-lg lg:text-xl">
-              {news.paragraph}
-            </p>
-
-            <div className="mt-7 flex w-full flex-col gap-3 sm:mt-8 md:mt-8">
-              <Button
-                asChild
-                size="lg"
-                className="group h-12 w-full gap-2 rounded-full bg-primary px-7 text-base font-semibold shadow-lg shadow-primary/30 transition-shadow hover:shadow-xl hover:shadow-primary/35 sm:h-14"
-              >
-                <a href={news.primaryCta.href}>
-                  {news.primaryCta.label}
-                  <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="h-12 w-full rounded-full border-border/70 bg-background/50 px-7 text-base font-medium backdrop-blur-sm hover:border-primary/40 hover:bg-muted/50 sm:h-14"
-              >
-                <a
-                  href={secondaryHref}
-                  target={secondaryIsExternal ? "_blank" : undefined}
-                  rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
-                  className="inline-flex items-center gap-2"
-                >
-                  <Send className="size-4 text-primary" />
-                  {news.secondaryCta.label}
-                </a>
-              </Button>
             </div>
           </motion.div>
         </div>
