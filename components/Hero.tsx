@@ -1,142 +1,265 @@
 "use client";
 
-import { useMemo } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Sparkles, GraduationCap, Send, Plane, Route } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { content, resolveHref, isExternalHref } from "@/lib/content";
+import { Button } from "@/components/ui/button";
+import { usePrefersFinePointer } from "@/hooks/use-prefers-fine-pointer";
+import { content, isExternalHref, resolveHref } from "@/lib/content";
 import { getIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { usePrefersFinePointer } from "@/hooks/use-prefers-fine-pointer";
+import gsap from "gsap";
+import {
+  ArrowUpRight,
+  GraduationCap,
+  Plane,
+  Route,
+  Send,
+  Sparkles,
+} from "lucide-react";
+import { motion, useReducedMotion } from "motion/react"; // Yoki "framer-motion" agar eski versiya bo'lsa
+import { useEffect, useMemo, useRef } from "react";
 
 const hero = content.hero;
 
+// Framer Motion Variants
 const container = {
   hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+const headlineBlock = {
+  hidden: { opacity: 1 },
   show: {
     opacity: 1,
     transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
-  },
-};
+// --- YANGA FEATURE: Magnetic Button Wrap (GSAP) ---
+function MagneticElement({
+  children,
+  strength = 0.4,
+}: {
+  children: React.ReactNode;
+  strength?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
 
-const headlineBlock = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.09,
-      delayChildren: 0.06,
-      when: "beforeChildren" as const,
-    },
-  },
-};
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const xTo = gsap.quickTo(element, "x", {
+      duration: 1,
+      ease: "elastic.out(1, 0.3)",
+    });
+    const yTo = gsap.quickTo(element, "y", {
+      duration: 1,
+      ease: "elastic.out(1, 0.3)",
+    });
+
+    const mouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { height, width, left, top } = element.getBoundingClientRect();
+      const x = clientX - (left + width / 2);
+      const y = clientY - (top + height / 2);
+      xTo(x * strength);
+      yTo(y * strength);
+    };
+
+    const mouseLeave = () => {
+      xTo(0);
+      yTo(0);
+    };
+
+    element.addEventListener("mousemove", mouseMove);
+    element.addEventListener("mouseleave", mouseLeave);
+
+    return () => {
+      element.removeEventListener("mousemove", mouseMove);
+      element.removeEventListener("mouseleave", mouseLeave);
+    };
+  }, [strength]);
+
+  return (
+    <div ref={ref} className="inline-block w-full sm:w-auto z-10">
+      {children}
+    </div>
+  );
+}
 
 export default function Hero() {
   const reduceMotion = useReducedMotion();
   const finePointer = usePrefersFinePointer();
 
-  const headlineLine = useMemo(
-    () => ({
-      hidden: reduceMotion
-        ? { opacity: 0 }
-        : { opacity: 0, y: 20, filter: "blur(7px)" as const },
-      show: {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        transition: {
-          duration: reduceMotion ? 0.2 : 0.62,
-          ease: [0.16, 1, 0.3, 1] as const,
-        },
-      },
-    }),
-    [reduceMotion]
-  );
+  // GSAP Parallax Refs
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const aurora1Ref = useRef<HTMLDivElement>(null);
+  const aurora2Ref = useRef<HTMLDivElement>(null);
 
-  const headlineAccentMotion = useMemo(
-    () => ({
-      hidden: reduceMotion
-        ? { opacity: 0 }
-        : { opacity: 0, y: 26, filter: "blur(8px)" as const, scale: 0.98 },
-      show: {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        scale: 1,
-        transition: {
-          duration: reduceMotion ? 0.2 : 0.68,
-          ease: [0.14, 1, 0.28, 1] as const,
-        },
-      },
-    }),
-    [reduceMotion]
-  );
+  // GSAP 3D Hover & Parallax Logic
+  useEffect(() => {
+    if (reduceMotion || !finePointer) return;
 
-  const headlineHover =
-    !reduceMotion && finePointer
-      ? {
-          y: -3,
-          transition: {
-            type: "spring" as const,
-            stiffness: 420,
-            damping: 34,
-            mass: 0.78,
-          },
-        }
-      : undefined;
+    const section = sectionRef.current;
+    if (!section) return;
 
-  const accentHover =
-    !reduceMotion && finePointer
-      ? {
-          y: -1,
-          scale: 1.025,
-          transition: {
-            type: "spring" as const,
-            stiffness: 460,
-            damping: 28,
-          },
-        }
-      : undefined;
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const xPos = clientX / window.innerWidth - 0.5;
+      const yPos = clientY / window.innerHeight - 0.5;
+
+      // Karta uchun 3D aylanish effekti
+      if (cardRef.current) {
+        gsap.to(cardRef.current, {
+          rotationY: xPos * 15,
+          rotationX: -yPos * 15,
+          ease: "power3.out",
+          transformPerspective: 1200,
+          duration: 1.5,
+        });
+      }
+
+      // Orqa fon yorug'liklari uchun sekin parallax
+      if (aurora1Ref.current && aurora2Ref.current) {
+        gsap.to(aurora1Ref.current, {
+          x: xPos * -60,
+          y: yPos * -60,
+          duration: 2,
+          ease: "power2.out",
+        });
+        gsap.to(aurora2Ref.current, {
+          x: xPos * 80,
+          y: yPos * 80,
+          duration: 2.5,
+          ease: "power2.out",
+        });
+      }
+
+      // Sichqonchaga ergashadigan yorug'lik
+      if (glowRef.current) {
+        gsap.to(glowRef.current, {
+          x: clientX,
+          y: clientY,
+          duration: 0.8,
+          ease: "power3.out",
+        });
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (cardRef.current) {
+        gsap.to(cardRef.current, {
+          rotationY: 0,
+          rotationX: 0,
+          duration: 1.5,
+          ease: "power3.out",
+        });
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    section.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      section.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [reduceMotion, finePointer]);
 
   const secondaryHref = resolveHref(hero.secondaryCta.href);
   const secondaryIsExternal = isExternalHref(hero.secondaryCta.href);
 
+  // Text Animations
+  const headlineBefore = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: 20 },
+      show: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", stiffness: 100, damping: 20 },
+      },
+    }),
+    [],
+  );
+
+  const headlineAccentMotion = useMemo(
+    () => ({
+      hidden: { opacity: 0, scale: 0.9, rotateX: 20 },
+      show: {
+        opacity: 1,
+        scale: 1,
+        rotateX: 0,
+        transition: { type: "spring", stiffness: 90, damping: 15 },
+      },
+    }),
+    [],
+  );
+
+  const headlineAfter = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: 20 },
+      show: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", stiffness: 100, damping: 20 },
+      },
+    }),
+    [],
+  );
+
   return (
     <section
+      ref={sectionRef}
       id="home"
-      className="relative isolate overflow-hidden border-b border-border/60"
+      className="relative isolate overflow-hidden min-h-screen flex items-center border-b border-border/20 bg-background"
     >
-      <div className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-40" />
+      {/* GSAP Mouse Follow Glow */}
       <div
-        className="pointer-events-none absolute -top-32 -left-32 size-[420px] rounded-full bg-primary/22 blur-[72px] motion-reduce:animate-none animate-aurora"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -bottom-40 -right-40 size-[440px] rounded-full bg-orange-500/18 blur-[80px] motion-reduce:animate-none animate-aurora"
-        style={{ animationDelay: "-4s" }}
+        ref={glowRef}
+        className="pointer-events-none fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 size-[600px] rounded-full bg-primary/10 blur-[120px] z-[-1] hidden lg:block"
         aria-hidden
       />
 
-      <div className="container relative mx-auto grid max-w-[min(100%,100rem)] gap-10 px-3 pb-14 pt-14 sm:gap-12 sm:px-4 sm:pb-16 sm:pt-16 md:px-6 md:pb-24 md:pt-24 lg:grid-cols-12 lg:gap-14 lg:pt-28 xl:max-w-[min(100%,90rem)] 2xl:max-w-[min(100%,100rem)] 2xl:gap-16 2xl:pt-32 min-[1920px]:max-w-[min(100%,110rem)]">
+      {/* Grid Pattern with Fade */}
+      <div className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-30 z-[-2]" />
+
+      {/* Aurora Lights */}
+      <div
+        ref={aurora1Ref}
+        className="pointer-events-none absolute -top-32 -left-32 size-[500px] rounded-full bg-primary/20 blur-[100px] animate-pulse z-[-1]"
+        aria-hidden
+      />
+      <div
+        ref={aurora2Ref}
+        className="pointer-events-none absolute -bottom-40 right-10 size-[550px] rounded-full bg-orange-500/15 blur-[120px] z-[-1]"
+        aria-hidden
+      />
+
+      <div className="container relative mx-auto grid w-full gap-12 px-4 py-20 lg:grid-cols-12 lg:gap-16 lg:py-32 xl:max-w-7xl">
+        {/* LEFT COLUMN: Texts and CTAs */}
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="flex flex-col gap-7 overflow-visible lg:col-span-7"
+          className="flex flex-col gap-8 overflow-visible lg:col-span-7 z-10 justify-center"
         >
           <motion.div variants={item}>
-            <Badge className="gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/15">
-              <Sparkles className="size-3.5" />
+            <Badge className="gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-md hover:bg-primary/20 transition-colors">
+              <Sparkles className="size-4" />
               {hero.badge}
             </Badge>
           </motion.div>
@@ -144,242 +267,225 @@ export default function Hero() {
           <motion.h1
             variants={headlineBlock}
             className={cn(
-              "group/headline font-heading text-balance font-extrabold tracking-[-0.02em]",
-              finePointer ? "cursor-default" : "cursor-text",
-              "text-[clamp(1.75rem,6vw+0.35rem,2.45rem)] leading-[1.08]",
-              "min-[375px]:text-[clamp(1.9rem,5.5vw+0.5rem,2.75rem)] min-[375px]:leading-[1.06]",
-              "sm:text-[clamp(2.1rem,4.2vw+0.75rem,3.25rem)] sm:leading-[1.04]",
-              "md:text-6xl md:leading-[1.02]",
-              "lg:text-7xl lg:leading-[0.99] lg:tracking-[-0.03em]",
-              "xl:text-8xl xl:leading-[0.98]",
-              "2xl:max-w-[min(100%,52rem)] 2xl:text-[clamp(3.5rem,2.8vw+2rem,5.75rem)] 2xl:leading-[0.96]",
-              "min-[1920px]:max-w-[min(100%,58rem)] min-[1920px]:text-[clamp(4rem,2.2vw+2.5rem,6.25rem)]",
-              "[text-shadow:0_1px_0_color-mix(in_oklch,var(--background)_88%,transparent),0_18px_48px_-28px_color-mix(in_oklch,var(--foreground)_22%,transparent)]",
-              "dark:[text-shadow:0_1px_0_color-mix(in_oklch,var(--background)_35%,transparent),0_22px_56px_-24px_color-mix(in_oklch,var(--primary)_18%,transparent)]"
+              "group/headline relative font-heading text-balance font-extrabold tracking-tight text-foreground",
+              "text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] lg:leading-[1.05]",
             )}
-            style={{ transformOrigin: "0% 52%" }}
-            whileHover={headlineHover}
           >
-            <motion.span variants={headlineLine} className="inline-block">
+            <motion.span variants={headlineBefore} className="block mb-2">
               {hero.headline.before}
-            </motion.span>{" "}
+            </motion.span>
+
             <motion.span
               variants={headlineAccentMotion}
-              whileHover={accentHover}
-              className={cn(
-                "relative inline-block pb-0.5",
-                "after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:rounded-full",
-                "after:bg-gradient-to-r after:from-transparent after:via-primary/55 after:to-transparent",
-                "after:opacity-0 after:transition-opacity after:duration-500 after:ease-out",
-                finePointer && "after:group-hover/headline:opacity-100",
-                "motion-reduce:after:opacity-0"
-              )}
+              className="relative isolate inline-block my-2 group"
             >
-              <span
-                className={cn(
-                  "text-gradient-orange relative z-1 inline-block",
-                  "drop-shadow-[0_2px_14px_color-mix(in_oklch,var(--primary)_28%,transparent)]",
-                  "transition-[filter] duration-300 ease-out",
-                  finePointer && "group-hover/headline:brightness-[1.08]",
-                  "motion-reduce:transition-none motion-reduce:group-hover/headline:brightness-100"
-                )}
-              >
+              <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-orange-500/20 blur-xl transition-all duration-500 group-hover:blur-2xl group-hover:opacity-100 opacity-70" />
+              <span className="pointer-events-none absolute inset-[-0.05em_-0.15em] -z-10 rounded-xl bg-background/50 border border-primary/30 backdrop-blur-sm" />
+              <span className="text-gradient-orange relative z-1 px-2 inline-block drop-shadow-md">
                 {hero.headline.accent}
               </span>
-            </motion.span>{" "}
-            <motion.span variants={headlineLine} className="inline-block">
+            </motion.span>
+
+            <motion.span
+              variants={headlineAfter}
+              className="block mt-2 text-foreground/90"
+            >
               {hero.headline.after}
             </motion.span>
           </motion.h1>
 
           <motion.p
             variants={item}
-            className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
+            className="max-w-xl text-lg leading-relaxed text-muted-foreground/90 md:text-xl"
           >
             {hero.paragraph}
           </motion.p>
 
+          {/* CTAs with GSAP Magnetic Effect */}
           <motion.div
             variants={item}
-            className="flex w-full max-w-xl flex-col gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-start"
+            className="flex w-full flex-col gap-4 sm:flex-row sm:items-center mt-4"
           >
-            <Button
-              asChild
-              size="lg"
-              className="group h-12 w-full gap-2 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90 sm:w-auto"
-            >
-              <a href={hero.primaryCta.href}>
-                {hero.primaryCta.label}
-                <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </a>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="group h-12 w-full gap-2 rounded-full border-border/60 bg-background/40 px-6 text-base font-medium backdrop-blur hover:bg-muted/60 sm:w-auto"
-            >
-              <a
-                href={secondaryHref}
-                target={secondaryIsExternal ? "_blank" : undefined}
-                rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
+            <MagneticElement strength={0.3}>
+              <Button
+                asChild
+                size="lg"
+                className="group relative h-14 w-full sm:w-auto rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_0_40px_-10px_var(--primary)] hover:shadow-[0_0_60px_-15px_var(--primary)] transition-all duration-300"
               >
-                <Send className="size-4 text-primary" />
-                {hero.secondaryCta.label}
-              </a>
-            </Button>
+                <a href={hero.primaryCta.href}>
+                  <span className="relative z-10 flex items-center gap-2">
+                    {hero.primaryCta.label}
+                    <span className="flex size-6 items-center justify-center rounded-full bg-background/20 transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110">
+                      <ArrowUpRight className="size-3.5" />
+                    </span>
+                  </span>
+                </a>
+              </Button>
+            </MagneticElement>
+
+            <MagneticElement strength={0.2}>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="group h-14 w-full sm:w-auto gap-2 rounded-full border-border/50 bg-background/30 px-8 text-base font-medium backdrop-blur-md hover:bg-muted/50 hover:border-border transition-all duration-300"
+              >
+                <a
+                  href={secondaryHref}
+                  target={secondaryIsExternal ? "_blank" : undefined}
+                  rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
+                >
+                  <Send className="size-4 text-primary transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                  {hero.secondaryCta.label}
+                </a>
+              </Button>
+            </MagneticElement>
           </motion.div>
 
           <motion.div
             variants={item}
-            className="flex flex-col gap-3 pt-4 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2"
+            className="flex flex-wrap gap-x-8 gap-y-4 pt-6 border-t border-border/30 mt-4"
           >
-            {hero.features.map(({ icon, text }) => {
+            {hero.features.map(({ icon, text }, i) => {
               const Icon = getIcon(icon);
               return (
                 <div
                   key={text}
-                  className="flex w-full min-w-0 items-center gap-2 text-sm text-muted-foreground sm:w-auto"
+                  className="flex items-center gap-3 text-sm font-medium text-muted-foreground/80 hover:text-foreground transition-colors group"
                 >
-                  <Icon className="size-4 shrink-0 text-primary" />
-                  <span className="min-w-0">{text}</span>
+                  <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors">
+                    <Icon className="size-4 text-primary" />
+                  </div>
+                  <span>{text}</span>
                 </div>
               );
             })}
           </motion.div>
         </motion.div>
 
-        <HeroCard />
+        {/* RIGHT COLUMN: 3D Parallax Card */}
+        <motion.div
+          initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+          className="relative lg:col-span-5 flex items-center justify-center perspective-[1200px]"
+        >
+          <div ref={cardRef} className="w-full max-w-[480px] transform-gpu">
+            <HeroCard card={hero.card} />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-function HeroCard() {
-  const card = hero.card;
-
+function HeroCard({ card }: { card: any }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 36, rotateX: -6 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{ duration: 0.85, delay: 0.28, ease: [0.16, 1, 0.3, 1] as const }}
-      className="relative lg:col-span-5"
-      style={{ perspective: 1100 }}
-    >
+    <div className="relative w-full group">
+      {/* Glow Effect behind the card */}
+      <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-br from-primary/30 via-transparent to-orange-500/30 blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
+
+      {/* Main Glass Card */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-[1.65rem] border border-border/50 bg-card/90 shadow-[0_24px_80px_-24px_color-mix(in_oklch,var(--primary)_28%,transparent)]",
-          "ring-1 ring-inset ring-white/5 dark:ring-white/10"
+          "relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl",
+          "ring-1 ring-inset ring-white/5",
         )}
       >
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_65%_at_100%_-10%,color-mix(in_oklch,var(--primary)_22%,transparent),transparent_55%)]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay [background-image:repeating-linear-gradient(-12deg,transparent,transparent_3px,color-mix(in_oklch,var(--foreground)_6%,transparent)_3px,color-mix(in_oklch,var(--foreground)_6%,transparent)_4px)]"
-          aria-hidden
-        />
-
-        <div className="relative border-b border-dashed border-border/50 bg-gradient-to-r from-primary/12 via-primary/5 to-transparent px-5 py-4 sm:px-6 sm:py-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-xl border border-primary/25 bg-primary/10 text-primary shadow-inner shadow-primary/10">
-                <Route className="size-[18px]" strokeWidth={2} />
+        {/* Header Area */}
+        <div className="relative border-b border-white/10 bg-white/5 px-6 py-6 sm:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-primary/30 bg-primary/20 text-primary shadow-[0_0_15px_-3px_var(--primary)]">
+                <Route className="size-5" strokeWidth={2} />
               </span>
               <div>
-                <p className="font-heading text-[11px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-primary/80">
                   {card.eyebrow}
                 </p>
-                <p className="mt-1 font-heading text-lg font-extrabold leading-tight tracking-tight text-balance sm:text-xl">
+                <p className="mt-1 font-heading text-xl font-bold tracking-tight text-white">
                   {card.title}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 self-start rounded-full border border-border/60 bg-background/50 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm sm:self-auto">
-              <Plane className="size-3.5 shrink-0 text-primary" aria-hidden />
-              <span className="tabular-nums tracking-tight">{card.badge}</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm font-semibold text-white shadow-inner backdrop-blur-md">
+              <Plane className="size-4 text-primary animate-pulse" />
+              <span>{card.badge}</span>
             </div>
           </div>
         </div>
 
-        <div className="relative px-5 pb-2 pt-6 sm:px-6 sm:pt-7">
-          <div className="relative">
-            <div
-              className="absolute left-[15px] top-3 bottom-3 w-px bg-gradient-to-b from-primary via-primary/45 to-orange-500/50 sm:left-[17px]"
-              aria-hidden
-            />
+        {/* Content Area (Destinations Timeline) */}
+        <div className="relative px-6 py-8 sm:px-8">
+          {/* Animated Timeline Line */}
+          <div className="absolute left-[39px] top-10 bottom-10 w-[2px] bg-gradient-to-b from-primary via-primary/50 to-orange-500/20 sm:left-[47px]" />
 
-            <ul className="relative flex flex-col gap-0">
-              {card.destinations.map((d, i) => (
-                <motion.li
-                  key={d.city}
-                  initial={{ opacity: 0, x: 16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: 0.48 + i * 0.1,
-                    duration: 0.45,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className={cn(
-                    "relative flex gap-4 pb-8 pl-10 sm:gap-5 sm:pb-9 sm:pl-11",
-                    i === card.destinations.length - 1 && "pb-2 sm:pb-2"
-                  )}
-                >
-                  <span
-                    className="absolute left-2 top-2.5 z-[1] grid size-4 place-items-center rounded-full border-2 border-background bg-primary shadow-[0_0_0_3px_color-mix(in_oklch,var(--primary)_35%,transparent)] sm:left-[11px] sm:top-2.5 sm:size-[18px]"
-                    aria-hidden
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2 gap-y-1">
-                      <div className="flex min-w-0 items-baseline gap-2">
-                        <span className="font-mono text-[11px] font-bold tabular-nums tracking-[0.2em] text-primary sm:text-xs">
-                          {d.code}
-                        </span>
-                        <span className="font-heading text-base font-bold tracking-tight sm:text-lg">
-                          {d.city}
-                        </span>
-                      </div>
-                      <span className="max-w-full rounded-md border border-border/50 bg-muted/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {d.tag}
+          <ul className="relative flex flex-col gap-0">
+            {card.destinations.map((d: any, i: number) => (
+              <li
+                key={d.city}
+                className={cn(
+                  "relative flex gap-6 pb-10 pl-14 sm:gap-8 sm:pb-12 sm:pl-16 group/item",
+                  i === card.destinations.length - 1 && "pb-2 sm:pb-2",
+                )}
+              >
+                {/* Timeline Dot */}
+                <span className="absolute left-0 top-1.5 z-10 flex size-5 items-center justify-center sm:top-1.5 sm:size-6">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-20"></span>
+                  <span className="relative inline-flex size-3 rounded-full border-2 border-background bg-primary sm:size-3.5 shadow-[0_0_10px_var(--primary)] group-hover/item:scale-150 transition-transform duration-300"></span>
+                </span>
+
+                <div className="min-w-0 flex-1 transform transition-all duration-300 group-hover/item:translate-x-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <span className="rounded bg-primary/10 px-2 py-1 font-mono text-xs font-bold text-primary border border-primary/20">
+                        {d.code}
+                      </span>
+                      <span className="font-heading text-lg font-bold text-white sm:text-xl">
+                        {d.city}
                       </span>
                     </div>
-                    <p className="mt-1.5 text-sm leading-snug text-muted-foreground">
-                      {d.note}
-                    </p>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground backdrop-blur-md">
+                      {d.tag}
+                    </span>
                   </div>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
+                  <p className="mt-2 text-sm text-muted-foreground/80 leading-relaxed">
+                    {d.note}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="relative border-t border-dashed border-border/55 bg-muted/15 px-5 py-4 sm:px-6">
-          <p className="text-center text-[12px] leading-relaxed text-muted-foreground sm:text-left">
-            <span className="font-semibold text-foreground">{card.footer.bold}</span>
+        {/* Footer Area */}
+        <div className="relative border-t border-white/10 bg-black/50 px-6 py-5 sm:px-8 backdrop-blur-xl">
+          <p className="text-center text-xs leading-relaxed text-muted-foreground sm:text-left flex items-center gap-2">
+            <span className="flex size-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="font-semibold text-white">{card.footer.bold}</span>
             {card.footer.text}
           </p>
         </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, x: -12, y: 14 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ delay: 1.05, duration: 0.55 }}
-        className="absolute -left-3 -top-3 z-[2] hidden sm:block"
-      >
-        <div className="motion-reduce:animate-none rotate-[-8deg] rounded-lg border-2 border-primary/40 bg-background/95 px-2.5 py-1.5 shadow-lg shadow-primary/15 ring-2 ring-background animate-float">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="size-4 text-primary" aria-hidden />
+      {/* Floating Stamp / Badge (GSAP bilan sekin harakatlanuvchi qilib qoyilsa ham bo'ladi, hozir CSS float bor) */}
+      <div className="absolute -left-6 -top-6 z-20 hidden sm:block animate-float">
+        <div className="rotate-[-10deg] rounded-xl border border-white/20 bg-black/80 px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+          <div className="flex items-center gap-3">
+            <div className="rounded-full bg-primary/20 p-2 border border-primary/30">
+              <GraduationCap className="size-5 text-primary" />
+            </div>
             <div className="leading-tight">
-              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
                 {card.stamp.eyebrow}
               </p>
-              <p className="font-heading text-xs font-bold">{card.stamp.text}</p>
+              <p className="font-heading text-sm font-bold text-white">
+                {card.stamp.text}
+              </p>
             </div>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
