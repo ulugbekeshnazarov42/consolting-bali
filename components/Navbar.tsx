@@ -62,7 +62,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const scrollRaf = React.useRef(0);
 
-  // Hover bo'lgan menyu elementini kuzatish uchun state
   const [hoveredPath, setHoveredPath] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -92,6 +91,9 @@ export default function Navbar() {
     };
   }, [open]);
 
+  // Header har doim menyu ochilganda yoki scroll bo'lganda qorayib turishi uchun
+  const isSolid = scrolled || open;
+
   return (
     <motion.header
       initial={{ y: -100, opacity: 0 }}
@@ -100,39 +102,31 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500",
         "pt-[env(safe-area-inset-top,0px)]",
-        scrolled
-          ? "border-b border-white/10 bg-black/60 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-2"
+        isSolid
+          ? "border-b border-border/50 bg-background/95 backdrop-blur-xl shadow-sm py-2 dark:border-white/10 dark:bg-black/80"
           : "border-b border-transparent bg-transparent py-4",
       )}
     >
-      {/* Scroll Background Ambient Glow */}
-      <div
-        className={cn(
-          "absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-orange-500/5 transition-opacity duration-500 pointer-events-none",
-          scrolled ? "opacity-100" : "opacity-0",
-        )}
-      />
-
       <div className="container relative mx-auto flex items-center justify-between gap-3 px-4 md:px-6 z-10">
         {/* LOGO */}
-        <div className="relative z-50">
+        <div className="relative z-50" onClick={() => setOpen(false)}>
           <Logo />
         </div>
 
-        {/* DESKTOP NAV LINKS (Sliding Pill Effect) */}
-        <nav className="hidden items-center gap-1 lg:flex bg-white/5 border border-white/10 rounded-full px-2 py-1.5 backdrop-blur-md shadow-inner">
+        {/* DESKTOP NAV LINKS */}
+        <nav className="hidden items-center gap-1 lg:flex bg-muted/50 border border-border/50 rounded-full px-2 py-1.5 backdrop-blur-md dark:bg-white/5 dark:border-white/10">
           {content.nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
               onMouseEnter={() => setHoveredPath(item.href)}
               onMouseLeave={() => setHoveredPath(null)}
-              className="relative px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-white"
+              className="relative px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground dark:hover:text-white"
             >
               {hoveredPath === item.href && (
                 <motion.div
                   layoutId="navbar-hover-pill"
-                  className="absolute inset-0 z-0 rounded-full bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                  className="absolute inset-0 z-0 rounded-full bg-background shadow-md dark:bg-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
@@ -173,7 +167,7 @@ export default function Navbar() {
             variant="outline"
             size="icon"
             aria-label={content.navbar.menuLabel}
-            className="size-11 shrink-0 rounded-full border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 lg:hidden relative overflow-hidden"
+            className="size-11 shrink-0 rounded-full border-border/50 bg-background/50 backdrop-blur-md hover:bg-muted text-foreground dark:border-white/20 dark:bg-white/5 lg:hidden relative overflow-hidden transition-colors"
             onClick={() => setOpen((v) => !v)}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -183,7 +177,7 @@ export default function Navbar() {
                 animate={{ rotate: 0, scale: 1, opacity: 1 }}
                 exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center justify-center text-foreground"
+                className="flex items-center justify-center"
               >
                 {open ? <X className="size-5" /> : <Menu className="size-5" />}
               </motion.span>
@@ -192,56 +186,44 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MOBILE FULL-SCREEN GLASS MENU */}
+      {/* MOBILE FULL-SCREEN MENU (v2.2 Clean Design) */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={{
-              opacity: 0,
-              y: -20,
-              filter: "blur(10px)",
-              transition: { duration: 0.3 },
-            }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-full left-0 w-full h-[100dvh] lg:hidden"
+            // Light modeda fonga 98% rang beriladi, shunda orqadagi yozuvlar umuman xalaqit qilmaydi
+            className="fixed inset-x-0 bottom-0 top-[60px] z-40 bg-background/98 backdrop-blur-xl dark:bg-black/90 lg:hidden overflow-y-auto"
           >
-            {/* Background Blur Overlay */}
-            <div
-              className="absolute inset-0 bg-black/80 backdrop-blur-2xl"
-              onClick={() => setOpen(false)}
-            />
+            {/* Dark mode uchun mayin nurlar */}
+            <div className="absolute top-10 left-10 size-40 rounded-full bg-primary/10 blur-[60px] hidden dark:block pointer-events-none" />
+            <div className="absolute bottom-40 right-10 size-40 rounded-full bg-orange-500/10 blur-[60px] hidden dark:block pointer-events-none" />
 
-            {/* Floating Orbs inside mobile menu */}
-            <div className="absolute top-10 left-10 size-40 rounded-full bg-primary/20 blur-[60px]" />
-            <div className="absolute bottom-40 right-10 size-40 rounded-full bg-orange-500/20 blur-[60px]" />
-
-            <div className="relative container mx-auto px-4 py-8 flex flex-col h-full">
-              <nav className="flex flex-col gap-2">
+            <div className="relative container mx-auto px-4 py-8 flex flex-col min-h-full">
+              <nav className="flex flex-col gap-3">
                 {content.nav.map((item, i) => (
                   <motion.a
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    initial={{ opacity: 0, x: -30 }}
+                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
+                    exit={{ opacity: 0, x: -10 }}
                     transition={{
-                      delay: i * 0.08,
-                      duration: 0.4,
+                      delay: i * 0.05,
+                      duration: 0.3,
                       ease: "easeOut",
                     }}
-                    className="group relative flex items-center justify-between overflow-hidden rounded-2xl border border-white/5 bg-white/5 px-6 py-4 text-lg font-bold text-white/80 transition-all hover:bg-white/10 hover:text-white hover:border-primary/30"
+                    // Linklar endi toza card ko'rinishida
+                    className="group relative flex items-center justify-between rounded-2xl border border-border/60 bg-card px-5 py-4 shadow-sm transition-all hover:border-primary/40 hover:bg-muted/50 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
                   >
-                    <span className="relative z-10 flex items-center gap-3">
+                    <span className="relative z-10 flex items-center gap-3 text-[1.05rem] font-bold text-foreground dark:text-white/90">
                       <Sparkles className="size-4 text-primary opacity-0 transition-opacity group-hover:opacity-100" />
                       {item.label}
                     </span>
-                    <ArrowUpRight className="size-5 text-white/30 transition-all group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1" />
-
-                    {/* Hover gradient line */}
-                    <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-primary to-orange-500 transition-all duration-300 group-hover:w-full" />
+                    <ArrowUpRight className="size-5 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 dark:text-white/30" />
                   </motion.a>
                 ))}
               </nav>
@@ -249,13 +231,13 @@ export default function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: content.nav.length * 0.08 + 0.1 }}
-                className="mt-auto mb-20"
+                transition={{ delay: content.nav.length * 0.05 + 0.1 }}
+                className="mt-10 mb-8"
               >
                 <Button
                   asChild
                   size="lg"
-                  className="w-full rounded-2xl bg-primary h-16 text-lg font-bold text-primary-foreground shadow-[0_0_30px_-5px_var(--primary)] border border-primary/50 relative overflow-hidden group"
+                  className="w-full rounded-2xl bg-primary h-14 text-lg font-bold text-primary-foreground shadow-[0_0_30px_-5px_var(--primary)] border border-primary/50 relative overflow-hidden group"
                   onClick={() => setOpen(false)}
                 >
                   <a href="#contact">
