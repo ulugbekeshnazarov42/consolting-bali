@@ -50,30 +50,57 @@ function ReelVideoBody({
   const sources = REEL_FALLBACK_SOURCES;
 
   return (
-    <div className="relative w-full overflow-hidden bg-black">
-      <div className="relative mx-auto aspect-9/16 max-h-[min(72vh,620px)] w-full max-w-sm md:max-w-md">
-        <video
-          ref={videoRef}
-          poster={item.image}
-          controls
-          playsInline
-          preload="metadata"
-          className="absolute inset-0 size-full object-cover"
-        >
-          {sources.map((s) => (
-            <source key={s.src} src={s.src} type={s.type} />
-          ))}
-          {reelsContent.fallbackNotice}
-        </video>
+    <div className="relative w-full overflow-hidden rounded-2xl border border-border/50 bg-card shadow-[0_12px_40px_-20px_color-mix(in_oklch,var(--foreground)_14%,transparent)]">
+      <div className="relative bg-black">
+        <div className="relative mx-auto aspect-9/16 max-h-[min(72vh,620px)] w-full max-w-sm md:max-w-md">
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-linear-to-t from-black/55 to-transparent"
+            aria-hidden
+          />
+          <video
+            ref={videoRef}
+            poster={item.image}
+            controls
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 size-full object-cover"
+          >
+            {sources.map((s) => (
+              <source key={s.src} src={s.src} type={s.type} />
+            ))}
+            {reelsContent.fallbackNotice}
+          </video>
+        </div>
       </div>
-      <div className="border-t border-border/60 bg-popover px-4 py-4 text-left md:px-5">
-        <p className="font-heading text-base font-semibold text-foreground md:text-lg">
-          {item.name}
-        </p>
-        <p className="text-sm text-muted-foreground">{item.program}</p>
-        <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground md:text-[0.95rem]">
-          &ldquo;{item.quote}&rdquo;
-        </p>
+
+      <div className="relative overflow-hidden border-t border-primary/20 bg-card text-left">
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_0%_0%,color-mix(in_oklch,var(--primary)_14%,transparent),transparent_52%),radial-gradient(90%_60%_at_100%_100%,color-mix(in_oklch,var(--foreground)_6%,transparent),transparent_55%)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.4] mix-blend-soft-light [background-image:repeating-linear-gradient(-18deg,transparent,transparent_4px,color-mix(in_oklch,var(--foreground)_4%,transparent)_4px,color-mix(in_oklch,var(--foreground)_4%,transparent)_5px)]"
+          aria-hidden
+        />
+
+        <div className="relative px-5 pb-6 pt-5 md:px-7 md:pb-8 md:pt-6">
+          <span
+            className="pointer-events-none absolute right-4 top-2 font-heading text-[4.5rem] font-extrabold leading-none text-primary/7 select-none dark:text-primary/11 md:right-6 md:text-[5.25rem]"
+            aria-hidden
+          >
+            &ldquo;
+          </span>
+
+          <p className="relative z-10 font-heading text-lg font-extrabold tracking-tight text-foreground md:text-xl">
+            {item.name}
+          </p>
+
+          <blockquote className="relative z-10 mt-3 border-l-[3px] border-primary/55 pl-4 md:mt-4 md:pl-5">
+            <p className="text-pretty font-heading text-[0.95rem] font-medium leading-[1.55] text-foreground/92 md:text-base md:leading-relaxed">
+              {item.quote}
+            </p>
+          </blockquote>
+        </div>
       </div>
     </div>
   );
@@ -132,7 +159,6 @@ function ReelCard({
         </p>
         <p className="mt-2 text-xs font-medium text-muted-foreground sm:text-[13px]">
           <span className="text-foreground/90">{item.name}</span>
-          <span className="text-muted-foreground/80"> · {item.program}</span>
         </p>
       </div>
     </button>
@@ -284,23 +310,29 @@ export default function StudentVoicesReels() {
         </Dialog>
       ) : selected && open && !useDialogShell ? (
         <Drawer open onOpenChange={handleOpenChange} repositionInputs={false}>
-          <DrawerContent className="max-h-[92vh] rounded-t-2xl border-border/60 p-0 [&>div:first-child]:mt-3">
+          <DrawerContent
+            className={cn(
+              "max-h-[92vh] overflow-hidden rounded-t-[1.35rem] border border-border/50 bg-card p-0 shadow-[0_-20px_60px_-24px_color-mix(in_oklch,var(--foreground)_18%,transparent)]",
+              "ring-1 ring-inset ring-white/10 dark:ring-white/5",
+              "[&>div:first-child]:mt-3"
+            )}
+          >
             <DrawerHeader className="sr-only">
               <DrawerTitle>{selected.name}</DrawerTitle>
               <DrawerDescription>
                 {selected.program}
               </DrawerDescription>
             </DrawerHeader>
-            <div className="relative max-h-[calc(92vh-1rem)] overflow-y-auto">
+            <div className="relative max-h-[calc(92vh-1rem)] overflow-y-auto overscroll-contain">
               <DrawerClose asChild>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute top-1 right-3 z-20 size-10 rounded-full border border-border/50 bg-background/85 text-foreground shadow-sm backdrop-blur-md hover:bg-background"
+                  className="absolute top-3 right-4 z-20 size-11 rounded-full border border-border/55 bg-background/90 text-foreground shadow-md shadow-black/10 backdrop-blur-md hover:border-primary/35 hover:bg-background"
                   aria-label={reelsContent.closeLabel}
                 >
-                  <X className="size-4" />
+                  <X className="size-4" strokeWidth={2.25} />
                 </Button>
               </DrawerClose>
               <ReelVideoBody
