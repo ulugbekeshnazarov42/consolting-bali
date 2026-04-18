@@ -470,7 +470,7 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
                     />
                   </span>
                   <span className="min-w-0 flex-1 text-left">
-                    <span className="block truncate font-heading text-sm font-bold uppercase tracking-wide">
+                    <span className="block truncate font-heading text-sm font-bold capitalize tracking-tight">
                       {item.name}
                     </span>
                     <span className="mt-0.5 block truncate text-xs font-medium text-background/75">

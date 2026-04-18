@@ -103,7 +103,7 @@ export default function Services() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold uppercase tracking-wide">{title}</h3>
+                  <h3 className="text-xl font-bold capitalize tracking-tight">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {desc}
                   </p>

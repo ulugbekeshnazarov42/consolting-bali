@@ -44,7 +44,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h4 className="mb-4 text-sm font-semibold capitalize tracking-tight text-foreground">
               {siteCol.title}
             </h4>
             <ul className="space-y-2.5">
@@ -62,7 +62,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h4 className="mb-4 text-sm font-semibold capitalize tracking-tight text-foreground">
               {servicesCol.title}
             </h4>
             <ul className="space-y-2.5">
@@ -80,7 +80,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h4 className="mb-4 text-sm font-semibold capitalize tracking-tight text-foreground">
               {contactCol.title}
             </h4>
             <ul className="space-y-3 text-sm text-muted-foreground">

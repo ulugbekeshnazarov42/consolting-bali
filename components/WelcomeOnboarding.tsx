@@ -228,7 +228,7 @@ export default function WelcomeOnboarding() {
 
             <DialogTitle
               className={cn(
-                "text-center font-heading font-extrabold uppercase tracking-[0.04em] text-balance text-foreground",
+                "text-center font-heading font-extrabold capitalize tracking-tight text-balance text-foreground",
                 "text-[1.35rem] leading-[1.2] sm:text-[1.65rem] lg:text-[1.7rem] xl:text-[1.8rem]"
               )}
             >

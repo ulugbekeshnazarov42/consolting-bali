@@ -2,16 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import gsap from "gsap";
-import {
-  CheckCircle2,
-  Loader2,
-  Mail,
-  MapPin,
-  MessageSquare,
-  Phone,
-  Send,
-  Sparkles,
-} from "lucide-react";
+import { Mail, MapPin, MessageSquare, Phone, Sparkles } from "lucide-react";
+import { HiCheckCircle, HiPaperAirplane } from "react-icons/hi2";
+import { ImSpinner2 } from "react-icons/im";
 import { motion } from "motion/react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -298,7 +291,7 @@ export default function ContactForm() {
           >
             {/* Contact Links Box */}
             <div className="rounded-[2rem] border border-border/50 bg-card/60 p-6 backdrop-blur-2xl shadow-xl md:p-8 dark:bg-card/30 dark:border-white/10">
-              <h3 className="text-xl font-bold uppercase tracking-wide text-foreground">
+              <h3 className="text-xl font-bold capitalize tracking-tight text-foreground">
                 {form.side.title}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -335,7 +328,7 @@ export default function ContactForm() {
 
             {/* Working Hours Box */}
             <div className="rounded-[2rem] border border-primary/20 bg-gradient-to-br from-primary/10 via-card/50 to-orange-500/5 p-6 backdrop-blur-2xl shadow-lg md:p-8 dark:from-primary/20 dark:via-black/40 dark:to-orange-500/10 dark:shadow-[0_0_40px_-15px_var(--primary)]">
-              <h3 className="text-xl font-bold uppercase tracking-wide text-foreground">
+              <h3 className="text-xl font-bold capitalize tracking-tight text-foreground">
                 {form.side.hoursTitle}
               </h3>
               <div className="mt-4 space-y-2">
@@ -611,17 +604,26 @@ export default function ContactForm() {
                   <span className="relative z-10 flex items-center gap-3">
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="size-5 animate-spin" />
+                        <ImSpinner2
+                          className="size-5 shrink-0 animate-spin"
+                          aria-hidden
+                        />
                         {form.submit.loading}
                       </>
                     ) : submitted ? (
                       <>
-                        <CheckCircle2 className="size-5 text-green-300" />
+                        <HiCheckCircle
+                          className="size-5 shrink-0 text-green-300"
+                          aria-hidden
+                        />
                         {form.submit.done}
                       </>
                     ) : (
                       <>
-                        <Send className="size-5 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                        <HiPaperAirplane
+                          className="size-5 shrink-0 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+                          aria-hidden
+                        />
                         {form.submit.idle}
                       </>
                     )}

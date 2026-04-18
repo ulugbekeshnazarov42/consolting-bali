@@ -2,7 +2,7 @@
 
 import ScrollableCardStack from "@/components/smoothui/scrollable-card-stack";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { SectionCtaLink } from "@/components/section-cta-link";
 import { content, isExternalHref, resolveHref } from "@/lib/content";
 import {
   SECTION_HEADING_ACCENT_CLASS,
@@ -256,72 +256,38 @@ export default function NewsUpdates() {
 
             <div className="mt-10 flex w-full max-w-xl flex-col items-stretch justify-center gap-4 lg:max-w-none lg:flex-row lg:flex-wrap lg:items-center lg:justify-center">
               <MagneticElement strength={0.3}>
-                <Button
-                  asChild
-                  size="lg"
-                  className={cn(
-                    "group relative !h-14 min-h-14 w-full min-w-0 gap-0 overflow-hidden !rounded-full border-transparent !p-0 text-base font-semibold text-primary-foreground shadow-[0_0_30px_-10px_var(--primary)] transition-all duration-300 hover:shadow-[0_0_50px_-15px_var(--primary)]",
-                    "!inline-flex !items-stretch !justify-start text-left whitespace-normal",
-                    "lg:w-auto lg:min-w-[min(100%,17.5rem)]"
-                  )}
-                >
-                  <a
-                    href={news.primaryCta.href}
-                    className="flex min-h-14 w-full min-w-0 flex-1 flex-row items-stretch"
-                  >
-                    <span className="flex min-w-0 flex-1 items-center px-5 py-3 text-left leading-snug sm:px-6">
-                      {news.primaryCta.label}
-                    </span>
-                    <span
-                      className="mr-1.5 flex w-[3.35rem] shrink-0 flex-col self-stretch py-1.5 sm:w-14 sm:mr-2"
+                <SectionCtaLink
+                  href={news.primaryCta.href}
+                  label={news.primaryCta.label}
+                  variant="primary"
+                  className="lg:w-auto lg:min-w-[min(100%,17.5rem)]"
+                  icon={
+                    <HiArrowUpRight
+                      className="size-5 shrink-0 text-primary-foreground"
                       aria-hidden
-                    >
-                      <span className="flex min-h-0 flex-1 items-center justify-center rounded-full bg-black/25 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                        <HiArrowUpRight
-                          className="size-[1.35rem] shrink-0 text-primary-foreground sm:size-6"
-                          aria-hidden
-                        />
-                      </span>
-                    </span>
-                  </a>
-                </Button>
+                    />
+                  }
+                />
               </MagneticElement>
 
               <MagneticElement strength={0.2}>
-                <Button
-                  asChild
-                  size="lg"
+                <SectionCtaLink
+                  href={secondaryHref}
+                  label={news.secondaryCta.label}
                   variant="outline"
-                  className={cn(
-                    "group !h-14 min-h-14 w-full min-w-0 gap-0 overflow-hidden !rounded-full border-white/20 bg-white/5 !p-0 text-base font-medium text-foreground backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/30",
-                    "!inline-flex !items-stretch !justify-start text-left whitespace-normal",
-                    "lg:w-auto lg:min-w-[min(100%,17.5rem)]"
-                  )}
-                >
-                  <a
-                    href={secondaryHref}
-                    target={secondaryIsExternal ? "_blank" : undefined}
-                    rel={
-                      secondaryIsExternal ? "noopener noreferrer" : undefined
-                    }
-                    className="flex min-h-14 w-full min-w-0 flex-1 flex-row items-stretch"
-                  >
-                    <span className="flex min-w-0 flex-1 items-center px-5 py-3 text-left leading-snug sm:px-6">
-                      {news.secondaryCta.label}
-                    </span>
-                    <span
-                      className="mr-1.5 flex w-[3.35rem] shrink-0 flex-col self-stretch py-1.5 sm:w-14 sm:mr-2"
+                  tone="onDark"
+                  className="lg:w-auto lg:min-w-[min(100%,17.5rem)]"
+                  target={secondaryIsExternal ? "_blank" : undefined}
+                  rel={
+                    secondaryIsExternal ? "noopener noreferrer" : undefined
+                  }
+                  icon={
+                    <FaTelegramPlane
+                      className="size-5 shrink-0 text-primary"
                       aria-hidden
-                    >
-                      <span className="flex min-h-0 flex-1 items-center justify-center rounded-full border border-white/15 bg-white/10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                        <FaTelegramPlane
-                          className="size-[1.35rem] shrink-0 text-primary sm:size-6"
-                          aria-hidden
-                        />
-                      </span>
-                    </span>
-                  </a>
-                </Button>
+                    />
+                  }
+                />
               </MagneticElement>
             </div>
           </motion.div>

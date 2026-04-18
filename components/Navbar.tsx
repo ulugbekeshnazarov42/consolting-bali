@@ -1,12 +1,14 @@
 "use client";
 
 import Logo from "@/components/Logo";
+import { SectionCtaLink } from "@/components/section-cta-link";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { content } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
-import { ArrowUpRight, Menu, Sparkles, X } from "lucide-react";
+import { Menu, Sparkles, X } from "lucide-react";
+import { HiArrowUpRight } from "react-icons/hi2";
 import { AnimatePresence, motion } from "motion/react";
 import * as React from "react";
 
@@ -148,23 +150,19 @@ export default function Navbar() {
           {/* GSAP Magnetic Desktop CTA */}
           <div className="hidden sm:block">
             <MagneticNavElement>
-              <Button
-                asChild
-                className="group relative rounded-full bg-primary px-6 py-5 font-semibold text-primary-foreground overflow-hidden border border-primary/50 shadow-[0_0_20px_-5px_var(--primary)] transition-all hover:shadow-[0_0_30px_-5px_var(--primary)] hover:scale-105"
-              >
-                <a href="#contact" aria-label={content.navbar.ctaLabel}>
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-orange-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
-                  <span className="relative z-10 flex items-center gap-2">
-                    {content.navbar.ctaLabel}
-                    <span className="flex size-6 items-center justify-center rounded-full bg-black/20 group-hover:bg-black/40 transition-colors">
-                      <ArrowUpRight
-                        className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                        aria-hidden
-                      />
-                    </span>
-                  </span>
-                </a>
-              </Button>
+              <SectionCtaLink
+                href="#contact"
+                label={content.navbar.ctaLabel}
+                variant="primary"
+                buttonSize="md"
+                aria-label={content.navbar.ctaLabel}
+                icon={
+                  <HiArrowUpRight
+                    className="size-4 shrink-0 text-primary-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden
+                  />
+                }
+              />
             </MagneticNavElement>
           </div>
 
@@ -236,7 +234,7 @@ export default function Navbar() {
                       <Sparkles className="size-4 text-primary opacity-0 transition-opacity group-hover:opacity-100" />
                       {item.label}
                     </span>
-                    <ArrowUpRight className="size-5 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 dark:text-white/30" />
+                    <HiArrowUpRight className="size-5 shrink-0 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 dark:text-white/30" />
                   </motion.a>
                 ))}
               </nav>
@@ -247,20 +245,20 @@ export default function Navbar() {
                 transition={{ delay: content.nav.length * 0.05 + 0.1 }}
                 className="mt-10 mb-8"
               >
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full rounded-2xl bg-primary h-14 text-lg font-bold text-primary-foreground shadow-[0_0_30px_-5px_var(--primary)] border border-primary/50 relative overflow-hidden group"
+                <SectionCtaLink
+                  href="#contact"
+                  label={content.navbar.mobileCtaLabel}
+                  variant="primary"
+                  buttonSize="md"
+                  className="w-full text-lg font-bold shadow-[0_0_30px_-5px_var(--primary)]"
                   onClick={() => setOpen(false)}
-                >
-                  <a href="#contact">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary via-orange-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <span className="relative z-10 flex items-center gap-2">
-                      {content.navbar.mobileCtaLabel}
-                      <ArrowUpRight className="size-5" />
-                    </span>
-                  </a>
-                </Button>
+                  icon={
+                    <HiArrowUpRight
+                      className="size-4 shrink-0 text-primary-foreground"
+                      aria-hidden
+                    />
+                  }
+                />
               </motion.div>
             </div>
           </motion.div>

@@ -77,7 +77,7 @@ export default function WhyChooseUs() {
                   <Icon className="size-5" />
                 </span>
                 <div>
-                  <h3 className="text-lg font-bold uppercase tracking-wide">{title}</h3>
+                  <h3 className="text-lg font-bold capitalize tracking-tight">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {desc}
                   </p>

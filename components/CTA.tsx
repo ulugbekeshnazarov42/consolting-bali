@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ArrowUpRight, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FaTelegramPlane } from "react-icons/fa";
+import { HiArrowUpRight } from "react-icons/hi2";
+
+import { SectionCtaLink } from "@/components/section-cta-link";
 import { content, resolveHref, isExternalHref } from "@/lib/content";
 import {
   SECTION_HEADING_ACCENT_CLASS,
@@ -57,32 +59,36 @@ export default function CTA() {
               {cta.paragraph}
             </p>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button
-                asChild
-                size="lg"
-                className="group h-12 gap-2 rounded-full bg-primary px-7 text-base font-semibold shadow-xl shadow-primary/30 hover:bg-primary/90"
-              >
-                <a href={cta.primaryCta.href}>
-                  {cta.primaryCta.label}
-                  <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
+            <div className="mx-auto mt-10 flex w-full max-w-xl flex-col gap-3 md:max-w-none md:flex-row md:items-stretch md:gap-3">
+              <SectionCtaLink
+                href={cta.primaryCta.href}
+                label={cta.primaryCta.label}
+                variant="primary"
+                className="shadow-xl shadow-primary/30 md:flex-1"
+                icon={
+                  <HiArrowUpRight
+                    className="size-5 shrink-0 text-primary-foreground"
+                    aria-hidden
+                  />
+                }
+              />
+
+              <SectionCtaLink
+                href={secondaryHref}
+                label={cta.secondaryCta.label}
                 variant="outline"
-                className="h-12 gap-2 rounded-full border-border/60 bg-background/40 px-7 text-base font-medium backdrop-blur hover:bg-muted/60"
-              >
-                <a
-                  href={secondaryHref}
-                  target={secondaryIsExternal ? "_blank" : undefined}
-                  rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
-                >
-                  <Send className="size-4 text-primary" />
-                  {cta.secondaryCta.label}
-                </a>
-              </Button>
+                className="bg-background/40 md:flex-1"
+                target={secondaryIsExternal ? "_blank" : undefined}
+                rel={
+                  secondaryIsExternal ? "noopener noreferrer" : undefined
+                }
+                icon={
+                  <FaTelegramPlane
+                    className="size-5 shrink-0 text-primary"
+                    aria-hidden
+                  />
+                }
+              />
             </div>
           </div>
         </motion.div>
