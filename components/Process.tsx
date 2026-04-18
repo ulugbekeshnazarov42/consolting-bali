@@ -66,7 +66,7 @@ export default function Process() {
                     </span>
                   </div>
 
-                  <h3 className="mt-5 text-lg font-bold tracking-tight lg:mt-6 lg:text-xl xl:mt-7 xl:text-2xl xl:leading-snug">
+                  <h3 className="mt-5 text-lg font-bold uppercase tracking-wide lg:mt-6 lg:text-xl xl:mt-7 xl:text-2xl xl:leading-snug">
                     {title}
                   </h3>
                   <p className="mt-2 min-w-0 flex-1 text-pretty text-sm leading-relaxed wrap-break-word text-muted-foreground lg:mt-3 lg:text-base lg:leading-relaxed xl:text-[1.0625rem] xl:leading-relaxed">

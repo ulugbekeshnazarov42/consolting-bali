@@ -267,7 +267,7 @@ export default function Hero() {
           <motion.h1
             variants={headlineBlock}
             className={cn(
-              "group/headline relative font-heading text-balance font-extrabold tracking-tight text-foreground",
+              "group/headline relative font-heading text-balance font-extrabold uppercase tracking-[0.02em] text-foreground sm:tracking-[0.028em] md:tracking-[0.032em]",
               "text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] lg:leading-[1.05]",
             )}
           >
@@ -281,7 +281,7 @@ export default function Hero() {
             >
               <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-orange-500/20 blur-xl transition-all duration-500 group-hover:blur-2xl group-hover:opacity-100 opacity-70" />
               <span className="pointer-events-none absolute inset-[-0.05em_-0.15em] -z-10 rounded-xl bg-background/50 border border-primary/30 backdrop-blur-sm" />
-              <span className="text-gradient-orange relative z-1 px-2 inline-block drop-shadow-md">
+              <span className="text-gradient-orange relative z-1 inline-block rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 drop-shadow-md">
                 {hero.headline.accent}
               </span>
             </motion.span>
@@ -403,7 +403,7 @@ function HeroCard({ card }: { card: any }) {
                 <p className="text-[11px] font-bold uppercase tracking-widest text-primary/80">
                   {card.eyebrow}
                 </p>
-                <p className="mt-1 font-heading text-xl font-bold tracking-tight text-white">
+                <p className="mt-1 font-heading text-xl font-bold uppercase tracking-wide text-white">
                   {card.title}
                 </p>
               </div>
@@ -441,7 +441,7 @@ function HeroCard({ card }: { card: any }) {
                       <span className="rounded bg-primary/10 px-2 py-1 font-mono text-xs font-bold text-primary border border-primary/20">
                         {d.code}
                       </span>
-                      <span className="font-heading text-lg font-bold text-white sm:text-xl">
+                      <span className="font-heading text-lg font-bold uppercase tracking-wide text-white sm:text-xl">
                         {d.city}
                       </span>
                     </div>
@@ -479,7 +479,7 @@ function HeroCard({ card }: { card: any }) {
               <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
                 {card.stamp.eyebrow}
               </p>
-              <p className="font-heading text-sm font-bold text-white">
+              <p className="font-heading text-sm font-bold uppercase tracking-wide text-white">
                 {card.stamp.text}
               </p>
             </div>

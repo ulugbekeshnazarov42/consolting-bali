@@ -10,9 +10,11 @@ import {
 } from "@/lib/section-heading";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
-import { ArrowUpRight, Send, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { motion } from "motion/react"; // Yoki framer-motion
 import * as React from "react";
+import { FaTelegramPlane } from "react-icons/fa";
+import { HiArrowUpRight } from "react-icons/hi2";
 
 const news = content.news;
 const resolvedCards = news.cards.map((c) => ({
@@ -257,16 +259,28 @@ export default function NewsUpdates() {
                 <Button
                   asChild
                   size="lg"
-                  className="group relative h-14 w-full min-w-0 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_50px_-15px_var(--primary)] transition-all duration-300 lg:w-auto lg:min-w-0"
+                  className={cn(
+                    "group relative !h-14 min-h-14 w-full min-w-0 gap-0 overflow-hidden !rounded-full border-transparent !p-0 text-base font-semibold text-primary-foreground shadow-[0_0_30px_-10px_var(--primary)] transition-all duration-300 hover:shadow-[0_0_50px_-15px_var(--primary)]",
+                    "!inline-flex !items-stretch !justify-start text-left whitespace-normal",
+                    "lg:w-auto lg:min-w-[min(100%,17.5rem)]"
+                  )}
                 >
                   <a
                     href={news.primaryCta.href}
-                    className="flex w-full items-center justify-center gap-2 lg:inline-flex lg:w-auto"
+                    className="flex min-h-14 w-full min-w-0 flex-1 flex-row items-stretch"
                   >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
+                    <span className="flex min-w-0 flex-1 items-center px-5 py-3 text-left leading-snug sm:px-6">
                       {news.primaryCta.label}
-                      <span className="flex size-6 items-center justify-center rounded-full bg-black/20 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-                        <ArrowUpRight className="size-3.5" />
+                    </span>
+                    <span
+                      className="mr-1.5 flex w-[3.35rem] shrink-0 flex-col self-stretch py-1.5 sm:w-14 sm:mr-2"
+                      aria-hidden
+                    >
+                      <span className="flex min-h-0 flex-1 items-center justify-center rounded-full bg-black/25 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                        <HiArrowUpRight
+                          className="size-[1.35rem] shrink-0 text-primary-foreground sm:size-6"
+                          aria-hidden
+                        />
                       </span>
                     </span>
                   </a>
@@ -278,7 +292,11 @@ export default function NewsUpdates() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="group h-14 w-full min-w-0 rounded-full border-white/20 bg-white/5 px-8 text-base font-medium backdrop-blur-md hover:bg-white/10 hover:border-white/30 transition-all duration-300 lg:w-auto lg:min-w-0"
+                  className={cn(
+                    "group !h-14 min-h-14 w-full min-w-0 gap-0 overflow-hidden !rounded-full border-white/20 bg-white/5 !p-0 text-base font-medium text-foreground backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/30",
+                    "!inline-flex !items-stretch !justify-start text-left whitespace-normal",
+                    "lg:w-auto lg:min-w-[min(100%,17.5rem)]"
+                  )}
                 >
                   <a
                     href={secondaryHref}
@@ -286,10 +304,22 @@ export default function NewsUpdates() {
                     rel={
                       secondaryIsExternal ? "noopener noreferrer" : undefined
                     }
-                    className="flex w-full items-center justify-center gap-2 lg:inline-flex lg:w-auto"
+                    className="flex min-h-14 w-full min-w-0 flex-1 flex-row items-stretch"
                   >
-                    <Send className="size-4 text-primary transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-                    {news.secondaryCta.label}
+                    <span className="flex min-w-0 flex-1 items-center px-5 py-3 text-left leading-snug sm:px-6">
+                      {news.secondaryCta.label}
+                    </span>
+                    <span
+                      className="mr-1.5 flex w-[3.35rem] shrink-0 flex-col self-stretch py-1.5 sm:w-14 sm:mr-2"
+                      aria-hidden
+                    >
+                      <span className="flex min-h-0 flex-1 items-center justify-center rounded-full border border-white/15 bg-white/10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                        <FaTelegramPlane
+                          className="size-[1.35rem] shrink-0 text-primary sm:size-6"
+                          aria-hidden
+                        />
+                      </span>
+                    </span>
                   </a>
                 </Button>
               </MagneticElement>

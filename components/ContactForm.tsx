@@ -298,7 +298,7 @@ export default function ContactForm() {
           >
             {/* Contact Links Box */}
             <div className="rounded-[2rem] border border-border/50 bg-card/60 p-6 backdrop-blur-2xl shadow-xl md:p-8 dark:bg-card/30 dark:border-white/10">
-              <h3 className="text-xl font-bold tracking-tight text-foreground">
+              <h3 className="text-xl font-bold uppercase tracking-wide text-foreground">
                 {form.side.title}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -335,7 +335,7 @@ export default function ContactForm() {
 
             {/* Working Hours Box */}
             <div className="rounded-[2rem] border border-primary/20 bg-gradient-to-br from-primary/10 via-card/50 to-orange-500/5 p-6 backdrop-blur-2xl shadow-lg md:p-8 dark:from-primary/20 dark:via-black/40 dark:to-orange-500/10 dark:shadow-[0_0_40px_-15px_var(--primary)]">
-              <h3 className="text-xl font-bold tracking-tight text-foreground">
+              <h3 className="text-xl font-bold uppercase tracking-wide text-foreground">
                 {form.side.hoursTitle}
               </h3>
               <div className="mt-4 space-y-2">

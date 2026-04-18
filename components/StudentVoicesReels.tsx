@@ -95,7 +95,7 @@ function ReelVideoBody({
             <span className="flex size-6 items-center justify-center rounded-full bg-primary/20 border border-primary/30">
               <Sparkles className="size-3 text-primary" />
             </span>
-            <p className="relative z-10 font-heading text-xl font-extrabold tracking-tight text-white md:text-2xl drop-shadow-md">
+            <p className="relative z-10 font-heading text-xl font-extrabold uppercase tracking-wide text-white md:text-2xl drop-shadow-md">
               {item.name}
             </p>
           </div>
@@ -368,7 +368,9 @@ export default function StudentVoicesReels() {
             className="max-w-[min(calc(100vw-1rem),28rem)] gap-0 overflow-visible rounded-[2rem] border-0 bg-transparent p-0"
           >
             <DialogHeader className="sr-only">
-              <DialogTitle>{selected.name}</DialogTitle>
+              <DialogTitle className="uppercase tracking-wide">
+                {selected.name}
+              </DialogTitle>
               <DialogDescription>{selected.program}</DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
@@ -399,7 +401,9 @@ export default function StudentVoicesReels() {
             )}
           >
             <DrawerHeader className="sr-only">
-              <DrawerTitle>{selected.name}</DrawerTitle>
+              <DrawerTitle className="uppercase tracking-wide">
+                {selected.name}
+              </DrawerTitle>
               <DrawerDescription>{selected.program}</DrawerDescription>
             </DrawerHeader>
             <div className="relative max-h-[calc(95vh-1rem)] overflow-y-auto overscroll-contain bg-black/40">
