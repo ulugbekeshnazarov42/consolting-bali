@@ -17,6 +17,7 @@ function MagneticNavElement({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const element = ref.current;
     if (!element) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const xTo = gsap.quickTo(element, "x", {
       duration: 1,
@@ -100,21 +101,25 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500",
-        "pt-[env(safe-area-inset-top,0px)]",
+        "fixed left-0 right-0 top-0 w-full transition-all duration-500",
+        "flex flex-col pt-[env(safe-area-inset-top,0px)]",
+        open
+          ? "bottom-0 z-100 min-h-0 h-dvh max-h-dvh"
+          : "z-50",
         isSolid
           ? "border-b border-border/50 bg-background/95 backdrop-blur-xl shadow-sm py-2 dark:border-white/10 dark:bg-black/80"
           : "border-b border-transparent bg-transparent py-4",
       )}
     >
-      <div className="container relative mx-auto flex items-center justify-between gap-3 px-4 md:px-6 z-10">
+      <div className="container relative z-10 mx-auto flex min-w-0 shrink-0 items-center justify-between gap-2 px-4 sm:gap-3 md:px-6">
         {/* LOGO */}
         <div className="relative z-50" onClick={() => setOpen(false)}>
           <Logo />
         </div>
 
         {/* DESKTOP NAV LINKS */}
-        <nav className="hidden items-center gap-1 lg:flex bg-muted/50 border border-border/50 rounded-full px-2 py-1.5 backdrop-blur-md dark:bg-white/5 dark:border-white/10">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
+          <div className="flex items-center gap-1 rounded-full border border-border/50 bg-muted/50 px-2 py-1.5 backdrop-blur-md dark:border-white/10 dark:bg-white/5">
           {content.nav.map((item) => (
             <a
               key={item.href}
@@ -133,10 +138,11 @@ export default function Navbar() {
               <span className="relative z-10">{item.label}</span>
             </a>
           ))}
+          </div>
         </nav>
 
         {/* ACTION BUTTONS */}
-        <div className="flex items-center gap-3 relative z-50">
+        <div className="relative z-50 flex shrink-0 items-center gap-2 sm:gap-3">
           <ThemeToggle />
 
           {/* GSAP Magnetic Desktop CTA */}
@@ -166,8 +172,11 @@ export default function Navbar() {
           <Button
             variant="outline"
             size="icon"
+            type="button"
+            aria-expanded={open}
+            aria-controls="mobile-nav-panel"
             aria-label={content.navbar.menuLabel}
-            className="size-11 shrink-0 rounded-full border-border/50 bg-background/50 backdrop-blur-md hover:bg-muted text-foreground dark:border-white/20 dark:bg-white/5 lg:hidden relative overflow-hidden transition-colors"
+            className="relative size-11 shrink-0 overflow-hidden rounded-full border-border/50 bg-background/50 backdrop-blur-md text-foreground transition-colors hover:bg-muted dark:border-white/20 dark:bg-white/5 lg:hidden"
             onClick={() => setOpen((v) => !v)}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -186,22 +195,26 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MOBILE FULL-SCREEN MENU (v2.2 Clean Design) */}
+      {/* Mobil: butun qolgan balandlik — top-[60px] emas, flex bilan z-index FloatingDock ustida */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            key="mobile-nav-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label={content.navbar.menuLabel}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            // Light modeda fonga 98% rang beriladi, shunda orqadagi yozuvlar umuman xalaqit qilmaydi
-            className="fixed inset-x-0 bottom-0 top-[60px] z-40 bg-background/98 backdrop-blur-xl dark:bg-black/90 lg:hidden overflow-y-auto"
+            exit={{ opacity: 0, y: 8, transition: { duration: 0.2 } }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-1 flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain border-t border-border/40 bg-background/98 backdrop-blur-xl dark:border-white/10 dark:bg-black/90 lg:hidden"
+            id="mobile-nav-panel"
           >
             {/* Dark mode uchun mayin nurlar */}
             <div className="absolute top-10 left-10 size-40 rounded-full bg-primary/10 blur-[60px] hidden dark:block pointer-events-none" />
             <div className="absolute bottom-40 right-10 size-40 rounded-full bg-orange-500/10 blur-[60px] hidden dark:block pointer-events-none" />
 
-            <div className="relative container mx-auto px-4 py-8 flex flex-col min-h-full">
+            <div className="relative container mx-auto flex min-h-0 flex-1 flex-col px-4 py-8">
               <nav className="flex flex-col gap-3">
                 {content.nav.map((item, i) => (
                   <motion.a

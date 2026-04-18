@@ -125,13 +125,14 @@
   * {
     @apply border-border outline-ring/50;
     scroll-behavior: smooth;
+
     scrollbar-width: 0px;
     scrollbar-color: transparent transparent;
   }
   html {
     /* scroll-smooth butun sahifada scrollni og‘irlashtiradi; anchor uchun brauzer default */
     @apply font-sans antialiased;
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground overflow-x-hidden;

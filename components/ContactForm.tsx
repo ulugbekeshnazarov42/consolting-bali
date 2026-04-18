@@ -32,6 +32,10 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { content } from "@/lib/content";
 import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
+import {
   ageLabels,
   contactSchema,
   serviceLabels,
@@ -266,10 +270,12 @@ export default function ContactForm() {
             <Sparkles className="size-4" />
             {form.badge}
           </Badge>
-          <h2 className="w-full text-balance font-heading text-4xl font-extrabold tracking-tight text-foreground md:text-6xl lg:text-7xl lg:leading-[1.1]">
+          <h2 className={sectionHeadingClassName({ className: "w-full" })}>
             <span className="relative inline-block my-1 group">
               <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-xl bg-gradient-to-r from-primary/20 to-orange-500/20 blur-xl opacity-60 dark:opacity-80" />
-              <span className="text-gradient-orange drop-shadow-sm">
+              <span
+                className={cn(SECTION_HEADING_ACCENT_CLASS, "drop-shadow-sm")}
+              >
                 {form.heading.accent}
               </span>
             </span>{" "}

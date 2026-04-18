@@ -4,6 +4,10 @@ import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { content } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 import { getIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
@@ -49,9 +53,11 @@ export default function Services() {
           <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             {services.badge}
           </Badge>
-          <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl">
+          <h2 className={sectionHeadingClassName()}>
             {services.heading.before}{" "}
-            <span className="text-gradient-orange">{services.heading.accent}</span>
+            <span className={SECTION_HEADING_ACCENT_CLASS}>
+              {services.heading.accent}
+            </span>
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
             {services.paragraph}

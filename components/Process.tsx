@@ -3,6 +3,10 @@
 import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { content } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 import { getIcon } from "@/lib/icons";
 
 const process = content.process;
@@ -24,8 +28,10 @@ export default function Process() {
           <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             {process.badge}
           </Badge>
-          <h2 className="text-balance text-5xl font-extrabold leading-[1.05] tracking-tight md:text-6xl md:leading-[1.04] lg:text-6xl lg:leading-[1.05] xl:text-7xl xl:leading-[1.03]">
-            <span className="text-gradient-orange">{process.heading.accent}</span>{" "}
+          <h2 className={sectionHeadingClassName()}>
+            <span className={SECTION_HEADING_ACCENT_CLASS}>
+              {process.heading.accent}
+            </span>{" "}
             {process.heading.after}
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">

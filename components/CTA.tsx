@@ -4,6 +4,10 @@ import { motion } from "motion/react";
 import { ArrowUpRight, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { content, resolveHref, isExternalHref } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 
 const cta = content.cta;
 
@@ -43,9 +47,11 @@ export default function CTA() {
               {cta.eyebrow}
             </span>
 
-            <h2 className="mt-6 text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
+            <h2 className={sectionHeadingClassName({ className: "mt-6" })}>
               {cta.heading.before}{" "}
-              <span className="text-gradient-orange">{cta.heading.accent}</span>
+              <span className={SECTION_HEADING_ACCENT_CLASS}>
+                {cta.heading.accent}
+              </span>
             </h2>
             <p className="mt-6 text-lg text-muted-foreground">
               {cta.paragraph}

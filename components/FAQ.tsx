@@ -10,6 +10,10 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { content } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 
 const faq = content.faq;
 
@@ -31,9 +35,9 @@ export default function FAQ() {
             <HelpCircle className="size-3.5" />
             {faq.badge}
           </Badge>
-          <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl">
+          <h2 className={sectionHeadingClassName()}>
             {faq.heading.before}{" "}
-            <span className="text-gradient-orange">{faq.heading.accent}</span>
+            <span className={SECTION_HEADING_ACCENT_CLASS}>{faq.heading.accent}</span>
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
             {faq.paragraph}

@@ -6,6 +6,10 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight, Quote, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 import { cn } from "@/lib/utils";
 
 const testimonials = [
@@ -91,9 +95,11 @@ export default function Testimonials() {
             <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               Mijozlar fikri
             </Badge>
-            <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl">
+            <h2 className={sectionHeadingClassName()}>
               Natijalar{" "}
-              <span className="text-gradient-orange">o'z-o'zidan gapiradi</span>
+              <span className={SECTION_HEADING_ACCENT_CLASS}>
+                o&apos;z-o&apos;zidan gapiradi
+              </span>
             </h2>
             <p className="mt-5 text-lg text-muted-foreground">
               Biz bilan ishlagan yetakchi kompaniyalarning haqiqiy tajribasi.

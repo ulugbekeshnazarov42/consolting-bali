@@ -4,6 +4,11 @@ import ScrollableCardStack from "@/components/smoothui/scrollable-card-stack";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { content, isExternalHref, resolveHref } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
+import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { ArrowUpRight, Send, Sparkles } from "lucide-react";
 import { motion } from "motion/react"; // Yoki framer-motion
@@ -199,42 +204,66 @@ export default function NewsUpdates() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="order-1 flex w-full min-w-0 max-w-none flex-col items-start self-center lg:order-1 lg:col-span-6 lg:col-start-1"
+            className="order-1 flex w-full min-w-0 max-w-none flex-col items-center self-center text-center lg:order-1 lg:col-span-6 lg:col-start-1"
           >
             <Badge className="mb-6 w-fit gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium tracking-wide text-primary shadow-sm backdrop-blur-md hover:bg-primary/20 transition-colors">
               <Sparkles className="size-4" />
               {news.badge}
             </Badge>
 
-            <h2 className="text-balance font-heading text-[2.75rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[4rem] lg:leading-[1.1]">
-              <span className="block mb-2 text-white/90">
-                {news.heading.before}
-              </span>
-              <span className="relative inline-block my-1 group">
-                {/* Neon Glow under accent text */}
-                <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-xl bg-gradient-to-r from-primary/30 to-orange-500/30 blur-xl opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
-                <span className="text-gradient-orange drop-shadow-md">
-                  {news.heading.accent}
+            <h2
+              className={sectionHeadingClassName({
+                inverse: true,
+                variant: "news",
+                className: "relative w-full text-balance text-center",
+              })}
+            >
+              <span className="mx-auto flex w-full max-w-4xl flex-col items-center px-1 sm:px-2">
+                <span
+                  className="mb-4 h-1 w-14 shrink-0 rounded-full bg-linear-to-r from-primary via-orange-400 to-primary/30 sm:mb-5 sm:w-16"
+                  aria-hidden
+                />
+                <span className="inline-block max-w-full">
+                  <span className="text-white/94">
+                    {news.heading.before}
+                  </span>{" "}
+                  <span className="relative inline-block group align-baseline">
+                    <span
+                      className="pointer-events-none absolute inset-[-0.12em_-0.25em] -z-10 rounded-2xl bg-linear-to-r from-primary/35 via-orange-500/25 to-transparent blur-2xl opacity-80 transition-opacity duration-500 group-hover:opacity-100"
+                      aria-hidden
+                    />
+                    <span
+                      className={cn(
+                        SECTION_HEADING_ACCENT_CLASS,
+                        "relative drop-shadow-[0_2px_18px_rgba(0,0,0,0.35)]"
+                      )}
+                    >
+                      {news.heading.accent}
+                    </span>
+                  </span>
+                  <span className="mt-3 block text-[0.78em] font-semibold leading-snug tracking-[-0.02em] text-white/72 md:mt-3.5 md:text-[0.76em]">
+                    {news.heading.after}
+                  </span>
                 </span>
-              </span>{" "}
-              <span className="block mt-2 text-white/80">
-                {news.heading.after}
               </span>
             </h2>
 
-            <p className="mt-6 text-lg leading-relaxed text-white/70 md:mt-8 md:text-xl max-w-lg">
+            <p className="mt-6 w-full max-w-2xl text-lg leading-relaxed text-white/70 md:mt-8 md:text-xl">
               {news.paragraph}
             </p>
 
-            <div className="mt-10 flex w-full flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="mt-10 flex w-full max-w-xl flex-col items-stretch justify-center gap-4 lg:max-w-none lg:flex-row lg:flex-wrap lg:items-center lg:justify-center">
               <MagneticElement strength={0.3}>
                 <Button
                   asChild
                   size="lg"
-                  className="group relative h-14 w-full sm:w-auto rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_50px_-15px_var(--primary)] transition-all duration-300"
+                  className="group relative h-14 w-full min-w-0 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_50px_-15px_var(--primary)] transition-all duration-300 lg:w-auto lg:min-w-0"
                 >
-                  <a href={news.primaryCta.href}>
-                    <span className="relative z-10 flex items-center gap-2">
+                  <a
+                    href={news.primaryCta.href}
+                    className="flex w-full items-center justify-center gap-2 lg:inline-flex lg:w-auto"
+                  >
+                    <span className="relative z-10 flex items-center justify-center gap-2">
                       {news.primaryCta.label}
                       <span className="flex size-6 items-center justify-center rounded-full bg-black/20 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
                         <ArrowUpRight className="size-3.5" />
@@ -249,7 +278,7 @@ export default function NewsUpdates() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="group h-14 w-full sm:w-auto rounded-full border-white/20 bg-white/5 px-8 text-base font-medium backdrop-blur-md hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                  className="group h-14 w-full min-w-0 rounded-full border-white/20 bg-white/5 px-8 text-base font-medium backdrop-blur-md hover:bg-white/10 hover:border-white/30 transition-all duration-300 lg:w-auto lg:min-w-0"
                 >
                   <a
                     href={secondaryHref}
@@ -257,7 +286,7 @@ export default function NewsUpdates() {
                     rel={
                       secondaryIsExternal ? "noopener noreferrer" : undefined
                     }
-                    className="inline-flex items-center gap-2"
+                    className="flex w-full items-center justify-center gap-2 lg:inline-flex lg:w-auto"
                   >
                     <Send className="size-4 text-primary transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
                     {news.secondaryCta.label}

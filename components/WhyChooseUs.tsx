@@ -3,6 +3,10 @@
 import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { content } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 import { getIcon } from "@/lib/icons";
 
 const why = content.whyChooseUs;
@@ -43,9 +47,9 @@ export default function WhyChooseUs() {
           <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             {why.badge}
           </Badge>
-          <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl">
+          <h2 className={sectionHeadingClassName()}>
             {why.heading.before}{" "}
-            <span className="text-gradient-orange">{why.heading.accent}</span>
+            <span className={SECTION_HEADING_ACCENT_CLASS}>{why.heading.accent}</span>
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
             {why.paragraph}

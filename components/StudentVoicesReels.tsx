@@ -19,6 +19,10 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { content } from "@/lib/content";
+import {
+  SECTION_HEADING_ACCENT_CLASS,
+  sectionHeadingClassName,
+} from "@/lib/section-heading";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { MessagesSquare, Play, Sparkles, X } from "lucide-react";
@@ -278,12 +282,12 @@ export default function StudentVoicesReels() {
           </Badge>
           <h2
             id="fikrlar-heading"
-            className="text-balance text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
+            className={sectionHeadingClassName({ inverse: true })}
           >
             {reelsContent.heading.before}{" "}
             <span className="relative inline-block">
               <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-xl bg-gradient-to-r from-primary/20 to-orange-500/20 blur-xl opacity-70" />
-              <span className="text-gradient-orange">
+              <span className={SECTION_HEADING_ACCENT_CLASS}>
                 {reelsContent.heading.accent}
               </span>
             </span>
