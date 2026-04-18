@@ -6,60 +6,11 @@ import { ArrowUpRight, Newspaper, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ScrollableCardStack from "@/components/smoothui/scrollable-card-stack";
-import { site } from "@/lib/site";
+import { content, resolveHref, isExternalHref } from "@/lib/content";
 
-const newsCards = [
-  {
-    id: "singapore-intake",
-    name: "Singapur qabul oynalari",
-    handle: "Universitet · 2026",
-    image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80",
-    avatar:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=64&h=64&q=80",
-    href: "#contact",
-  },
-  {
-    id: "bali-pathway",
-    name: "Bali: tayyorgarlik va til",
-    handle: "Qisqa muddat · moslashuv",
-    image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80",
-    avatar:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=64&h=64&q=80",
-    href: "#contact",
-  },
-  {
-    id: "visa-docs",
-    name: "Talabalik vizasi hujjatlari",
-    handle: "Ro'yxat · intervyu",
-    image:
-      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=80",
-    avatar:
-      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=64&h=64&q=80",
-    href: "#contact",
-  },
-  {
-    id: "gulf-future",
-    name: "Qatar va Dubay — keyingi qadam",
-    handle: "Karyera · yo'l-yo'riq",
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=80",
-    avatar:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=64&h=64&q=80",
-    href: "#contact",
-  },
-  {
-    id: "free-chat",
-    name: "Birinchi suhbat — bepul",
-    handle: "Telegram · tez javob",
-    image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
-    avatar:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=64&h=64&q=80",
-    href: site.social.telegram,
-  },
-];
+const news = content.news;
+
+const resolvedCards = news.cards.map((c) => ({ ...c, href: resolveHref(c.href) }));
 
 function useNewsCardHeight() {
   const [height, setHeight] = React.useState(400);
@@ -86,6 +37,8 @@ function useNewsCardHeight() {
 
 export default function NewsUpdates() {
   const cardHeight = useNewsCardHeight();
+  const secondaryHref = resolveHref(news.secondaryCta.href);
+  const secondaryIsExternal = isExternalHref(news.secondaryCta.href);
 
   return (
     <section
@@ -103,7 +56,6 @@ export default function NewsUpdates() {
 
       <div className="container relative mx-auto px-4 md:px-6">
         <div className="grid content-start items-start gap-10 lg:grid-cols-12 lg:gap-14 xl:gap-16">
-          {/* Mobil: matn tepada; lg: kartalar o'ngda */}
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +72,7 @@ export default function NewsUpdates() {
                 <div className="rounded-[1.65rem] bg-background/40 p-3 pb-12 ring-1 ring-inset ring-white/5 dark:bg-background/25 md:p-5 md:pb-14 md:rounded-[1.75rem]">
                   <ScrollableCardStack
                     cardHeight={cardHeight}
-                    items={newsCards}
+                    items={resolvedCards}
                     perspective={1300}
                     transitionDuration={200}
                     showArrowNav
@@ -140,16 +92,15 @@ export default function NewsUpdates() {
           >
             <Badge className="mb-5 w-fit gap-2 rounded-full border border-primary/35 bg-primary/12 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-primary shadow-sm shadow-primary/10 sm:mb-6">
               <Newspaper className="size-3.5" />
-              Yangiliklar
+              {news.badge}
             </Badge>
             <h2 className="text-balance font-heading text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.04] lg:text-6xl lg:leading-[1.05] xl:text-7xl xl:leading-[1.03]">
-              Oxirgi{" "}
-              <span className="text-gradient-orange">yangiliklar</span> va
-              yo'l-yo'riqlar
+              {news.heading.before}{" "}
+              <span className="text-gradient-orange">{news.heading.accent}</span>{" "}
+              {news.heading.after}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground md:mt-6 md:text-lg lg:text-xl">
-              Qabul muddatlari, hujjatlar va yo'nalishlar bo'yicha qisqa
-              eslatmalar.
+              {news.paragraph}
             </p>
 
             <div className="mt-7 flex w-full flex-col gap-3 sm:mt-8 md:mt-8">
@@ -158,8 +109,8 @@ export default function NewsUpdates() {
                 size="lg"
                 className="group h-12 w-full gap-2 rounded-full bg-primary px-7 text-base font-semibold shadow-lg shadow-primary/30 transition-shadow hover:shadow-xl hover:shadow-primary/35 sm:h-14"
               >
-                <a href="#contact">
-                  Maslahat olish
+                <a href={news.primaryCta.href}>
+                  {news.primaryCta.label}
                   <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               </Button>
@@ -170,13 +121,13 @@ export default function NewsUpdates() {
                 className="h-12 w-full rounded-full border-border/70 bg-background/50 px-7 text-base font-medium backdrop-blur-sm hover:border-primary/40 hover:bg-muted/50 sm:h-14"
               >
                 <a
-                  href={site.social.telegram}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={secondaryHref}
+                  target={secondaryIsExternal ? "_blank" : undefined}
+                  rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
                   className="inline-flex items-center gap-2"
                 >
                   <Send className="size-4 text-primary" />
-                  Telegram
+                  {news.secondaryCta.label}
                 </a>
               </Button>
             </div>

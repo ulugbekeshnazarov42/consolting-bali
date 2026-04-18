@@ -1,21 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import {
-  ArrowUpRight,
-  Sparkles,
-  GraduationCap,
-  ShieldCheck,
-  Heart,
-  Send,
-  Plane,
-  Route,
-} from "lucide-react";
+import { ArrowUpRight, Sparkles, GraduationCap, Send, Plane, Route } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { site } from "@/lib/site";
+import { content, resolveHref, isExternalHref } from "@/lib/content";
+import { getIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { usePrefersFinePointer } from "@/hooks/use-prefers-fine-pointer";
+
+const hero = content.hero;
 
 const container = {
   hidden: { opacity: 0 },
@@ -34,22 +29,87 @@ const item = {
   },
 };
 
+const headlineBlock = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.09,
+      delayChildren: 0.06,
+      when: "beforeChildren" as const,
+    },
+  },
+};
+
 export default function Hero() {
   const reduceMotion = useReducedMotion();
   const finePointer = usePrefersFinePointer();
+
+  const headlineLine = useMemo(
+    () => ({
+      hidden: reduceMotion
+        ? { opacity: 0 }
+        : { opacity: 0, y: 20, filter: "blur(7px)" as const },
+      show: {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        transition: {
+          duration: reduceMotion ? 0.2 : 0.62,
+          ease: [0.16, 1, 0.3, 1] as const,
+        },
+      },
+    }),
+    [reduceMotion]
+  );
+
+  const headlineAccentMotion = useMemo(
+    () => ({
+      hidden: reduceMotion
+        ? { opacity: 0 }
+        : { opacity: 0, y: 26, filter: "blur(8px)" as const, scale: 0.98 },
+      show: {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        scale: 1,
+        transition: {
+          duration: reduceMotion ? 0.2 : 0.68,
+          ease: [0.14, 1, 0.28, 1] as const,
+        },
+      },
+    }),
+    [reduceMotion]
+  );
+
   const headlineHover =
     !reduceMotion && finePointer
       ? {
-          scale: 1.016,
-          y: -2,
+          y: -3,
           transition: {
             type: "spring" as const,
-            stiffness: 380,
-            damping: 32,
-            mass: 0.82,
+            stiffness: 420,
+            damping: 34,
+            mass: 0.78,
           },
         }
       : undefined;
+
+  const accentHover =
+    !reduceMotion && finePointer
+      ? {
+          y: -1,
+          scale: 1.025,
+          transition: {
+            type: "spring" as const,
+            stiffness: 460,
+            damping: 28,
+          },
+        }
+      : undefined;
+
+  const secondaryHref = resolveHref(hero.secondaryCta.href);
+  const secondaryIsExternal = isExternalHref(hero.secondaryCta.href);
 
   return (
     <section
@@ -77,50 +137,66 @@ export default function Hero() {
           <motion.div variants={item}>
             <Badge className="gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/15">
               <Sparkles className="size-3.5" />
-              Xorijda ta'lim bo'yicha shaxsiy maslahat
+              {hero.badge}
             </Badge>
           </motion.div>
 
           <motion.h1
-            variants={item}
+            variants={headlineBlock}
             className={cn(
-              "group/headline text-balance font-extrabold tracking-tight",
+              "group/headline font-heading text-balance font-extrabold tracking-[-0.02em]",
               finePointer ? "cursor-default" : "cursor-text",
-              // 320px (eski Android) — 17 Pro Max / katta noutbuk: fluid + clamp
               "text-[clamp(1.75rem,6vw+0.35rem,2.45rem)] leading-[1.08]",
               "min-[375px]:text-[clamp(1.9rem,5.5vw+0.5rem,2.75rem)] min-[375px]:leading-[1.06]",
               "sm:text-[clamp(2.1rem,4.2vw+0.75rem,3.25rem)] sm:leading-[1.04]",
               "md:text-6xl md:leading-[1.02]",
-              "lg:text-7xl lg:leading-[0.99]",
+              "lg:text-7xl lg:leading-[0.99] lg:tracking-[-0.03em]",
               "xl:text-8xl xl:leading-[0.98]",
               "2xl:max-w-[min(100%,52rem)] 2xl:text-[clamp(3.5rem,2.8vw+2rem,5.75rem)] 2xl:leading-[0.96]",
-              "min-[1920px]:max-w-[min(100%,58rem)] min-[1920px]:text-[clamp(4rem,2.2vw+2.5rem,6.25rem)]"
+              "min-[1920px]:max-w-[min(100%,58rem)] min-[1920px]:text-[clamp(4rem,2.2vw+2.5rem,6.25rem)]",
+              "[text-shadow:0_1px_0_color-mix(in_oklch,var(--background)_88%,transparent),0_18px_48px_-28px_color-mix(in_oklch,var(--foreground)_22%,transparent)]",
+              "dark:[text-shadow:0_1px_0_color-mix(in_oklch,var(--background)_35%,transparent),0_22px_56px_-24px_color-mix(in_oklch,var(--primary)_18%,transparent)]"
             )}
-            style={{ transformOrigin: "0% 45%" }}
+            style={{ transformOrigin: "0% 52%" }}
             whileHover={headlineHover}
           >
-            Orzuingizdagi{" "}
-            <span
+            <motion.span variants={headlineLine} className="inline-block">
+              {hero.headline.before}
+            </motion.span>{" "}
+            <motion.span
+              variants={headlineAccentMotion}
+              whileHover={accentHover}
               className={cn(
-                "text-gradient-orange relative inline-block",
-                "transition-[filter,transform] duration-300 ease-out",
-                finePointer &&
-                  "group-hover/headline:-translate-y-px group-hover/headline:brightness-110",
-                "motion-reduce:transition-none motion-reduce:group-hover/headline:translate-y-0 motion-reduce:group-hover/headline:brightness-100"
+                "relative inline-block pb-0.5",
+                "after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:rounded-full",
+                "after:bg-gradient-to-r after:from-transparent after:via-primary/55 after:to-transparent",
+                "after:opacity-0 after:transition-opacity after:duration-500 after:ease-out",
+                finePointer && "after:group-hover/headline:opacity-100",
+                "motion-reduce:after:opacity-0"
               )}
             >
-              ta'lim yo'lini
-            </span>{" "}
-            birga quramiz
+              <span
+                className={cn(
+                  "text-gradient-orange relative z-1 inline-block",
+                  "drop-shadow-[0_2px_14px_color-mix(in_oklch,var(--primary)_28%,transparent)]",
+                  "transition-[filter] duration-300 ease-out",
+                  finePointer && "group-hover/headline:brightness-[1.08]",
+                  "motion-reduce:transition-none motion-reduce:group-hover/headline:brightness-100"
+                )}
+              >
+                {hero.headline.accent}
+              </span>
+            </motion.span>{" "}
+            <motion.span variants={headlineLine} className="inline-block">
+              {hero.headline.after}
+            </motion.span>
           </motion.h1>
 
           <motion.p
             variants={item}
             className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            Guzal Opa yosh talabalarga Singapur, Bali va Qatar/Dubaydagi
-            imkoniyatlarni ochishda yordam beradi. Universitet tanlovidan
-            talabalik vizasigacha — har bosqichda yoningizda.
+            {hero.paragraph}
           </motion.p>
 
           <motion.div
@@ -132,8 +208,8 @@ export default function Hero() {
               size="lg"
               className="group h-12 w-full gap-2 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90 sm:w-auto"
             >
-              <a href="#contact">
-                Bepul maslahat olish
+              <a href={hero.primaryCta.href}>
+                {hero.primaryCta.label}
                 <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </a>
             </Button>
@@ -144,12 +220,12 @@ export default function Hero() {
               className="group h-12 w-full gap-2 rounded-full border-border/60 bg-background/40 px-6 text-base font-medium backdrop-blur hover:bg-muted/60 sm:w-auto"
             >
               <a
-                href={site.social.telegram}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={secondaryHref}
+                target={secondaryIsExternal ? "_blank" : undefined}
+                rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
               >
                 <Send className="size-4 text-primary" />
-                Telegramda yozish
+                {hero.secondaryCta.label}
               </a>
             </Button>
           </motion.div>
@@ -158,19 +234,18 @@ export default function Hero() {
             variants={item}
             className="flex flex-col gap-3 pt-4 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2"
           >
-            {[
-              { icon: Heart, text: "Shaxsiy yondashuv" },
-              { icon: ShieldCheck, text: "Shaffof jarayon" },
-              { icon: GraduationCap, text: "Yo'nalish bo'yicha ekspert" },
-            ].map(({ icon: Icon, text }) => (
-              <div
-                key={text}
-                className="flex w-full min-w-0 items-center gap-2 text-sm text-muted-foreground sm:w-auto"
-              >
-                <Icon className="size-4 shrink-0 text-primary" />
-                <span className="min-w-0">{text}</span>
-              </div>
-            ))}
+            {hero.features.map(({ icon, text }) => {
+              const Icon = getIcon(icon);
+              return (
+                <div
+                  key={text}
+                  className="flex w-full min-w-0 items-center gap-2 text-sm text-muted-foreground sm:w-auto"
+                >
+                  <Icon className="size-4 shrink-0 text-primary" />
+                  <span className="min-w-0">{text}</span>
+                </div>
+              );
+            })}
           </motion.div>
         </motion.div>
 
@@ -180,28 +255,9 @@ export default function Hero() {
   );
 }
 
-const destinations = [
-  {
-    code: "SGP",
-    city: "Singapur",
-    note: "Universitet va oliy ta'lim",
-    tag: "Asosiy yo'nalish",
-  },
-  {
-    code: "DPS",
-    city: "Bali",
-    note: "Tayyorgarlik dasturlari",
-    tag: "Boshlang'ich qadam",
-  },
-  {
-    code: "GCC",
-    city: "Qatar · Dubay",
-    note: "Kelajak imkoniyatlari",
-    tag: "Keyingi bosqich",
-  },
-] as const;
-
 function HeroCard() {
+  const card = hero.card;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 36, rotateX: -6 }}
@@ -210,7 +266,6 @@ function HeroCard() {
       className="relative lg:col-span-5"
       style={{ perspective: 1100 }}
     >
-      {/* Marshrut varag'i: timeline + “bilet” perforatsiyasi — gradient kartochkalardan boshqa */}
       <div
         className={cn(
           "relative overflow-hidden rounded-[1.65rem] border border-border/50 bg-card/90 shadow-[0_24px_80px_-24px_color-mix(in_oklch,var(--primary)_28%,transparent)]",
@@ -234,16 +289,16 @@ function HeroCard() {
               </span>
               <div>
                 <p className="font-heading text-[11px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-                  Marshrut xaritasi
+                  {card.eyebrow}
                 </p>
                 <p className="mt-1 font-heading text-lg font-extrabold leading-tight tracking-tight text-balance sm:text-xl">
-                  Uch nuqta — bitta yo‘l
+                  {card.title}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 self-start rounded-full border border-border/60 bg-background/50 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm sm:self-auto">
               <Plane className="size-3.5 shrink-0 text-primary" aria-hidden />
-              <span className="tabular-nums tracking-tight">3 · mamlakat</span>
+              <span className="tabular-nums tracking-tight">{card.badge}</span>
             </div>
           </div>
         </div>
@@ -256,7 +311,7 @@ function HeroCard() {
             />
 
             <ul className="relative flex flex-col gap-0">
-              {destinations.map((d, i) => (
+              {card.destinations.map((d, i) => (
                 <motion.li
                   key={d.city}
                   initial={{ opacity: 0, x: 16 }}
@@ -268,7 +323,7 @@ function HeroCard() {
                   }}
                   className={cn(
                     "relative flex gap-4 pb-8 pl-10 sm:gap-5 sm:pb-9 sm:pl-11",
-                    i === destinations.length - 1 && "pb-2 sm:pb-2"
+                    i === card.destinations.length - 1 && "pb-2 sm:pb-2"
                   )}
                 >
                   <span
@@ -301,9 +356,8 @@ function HeroCard() {
 
         <div className="relative border-t border-dashed border-border/55 bg-muted/15 px-5 py-4 sm:px-6">
           <p className="text-center text-[12px] leading-relaxed text-muted-foreground sm:text-left">
-            <span className="font-semibold text-foreground">Muhim: </span>
-            Kafolatlangan viza yoki qabul va’dasi bermaymiz — imkoniyatlaringizni
-            ochiq ko‘rsatamiz.
+            <span className="font-semibold text-foreground">{card.footer.bold}</span>
+            {card.footer.text}
           </p>
         </div>
       </div>
@@ -319,9 +373,9 @@ function HeroCard() {
             <GraduationCap className="size-4 text-primary" aria-hidden />
             <div className="leading-tight">
               <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                Hamroh
+                {card.stamp.eyebrow}
               </p>
-              <p className="font-heading text-xs font-bold">Har bosqichda</p>
+              <p className="font-heading text-xs font-bold">{card.stamp.text}</p>
             </div>
           </div>
         </div>

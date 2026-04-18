@@ -1,33 +1,18 @@
 import Logo from "@/components/Logo";
-import { site } from "@/lib/site";
+import { content } from "@/lib/content";
 import { Send, Mail, Phone, MapPin } from "lucide-react";
 import { FaInstagram, FaTelegramPlane, FaYoutube } from "react-icons/fa";
 
-const quickLinks = [
-  { label: "Xizmatlar", href: "#services" },
-  { label: "Yangiliklar", href: "#news" },
-  { label: "Jarayon", href: "#process" },
-  { label: "Talabalar", href: "#fikrlar" },
-  { label: "Nega biz", href: "#why" },
-  { label: "Savollar", href: "#faq" },
-  { label: "Bog'lanish", href: "#contact" },
-];
-
-const services = [
-  { label: "Singapurda o'qish", href: "#services" },
-  { label: "Universitetga kirish", href: "#services" },
-  { label: "Talabalik vizasi", href: "#services" },
-  { label: "Bali tayyorgarlik", href: "#services" },
-  { label: "Qatar / Dubay yo'nalishi", href: "#services" },
-];
-
 const socials = [
-  { label: "Telegram", href: site.social.telegram, Icon: FaTelegramPlane },
-  { label: "Instagram", href: site.social.instagram, Icon: FaInstagram },
-  { label: "YouTube", href: site.social.youtube, Icon: FaYoutube },
+  { label: "Telegram", href: content.social.telegram, Icon: FaTelegramPlane },
+  { label: "Instagram", href: content.social.instagram, Icon: FaInstagram },
+  { label: "YouTube", href: content.social.youtube, Icon: FaYoutube },
 ];
 
 export default function Footer() {
+  const { site: siteCol, services: servicesCol, contact: contactCol } =
+    content.footer.columns;
+
   return (
     <footer className="relative border-t border-border/60 bg-background max-lg:pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
       <div
@@ -40,7 +25,7 @@ export default function Footer() {
           <div className="space-y-6 md:col-span-4">
             <Logo />
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {site.description}
+              {content.brand.description}
             </p>
             <div className="flex items-center gap-2">
               {socials.map(({ label, href, Icon }) => (
@@ -60,10 +45,10 @@ export default function Footer() {
 
           <div className="md:col-span-2">
             <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
-              Saytda
+              {siteCol.title}
             </h4>
             <ul className="space-y-2.5">
-              {quickLinks.map((l) => (
+              {siteCol.links.map((l) => (
                 <li key={l.label}>
                   <a
                     href={l.href}
@@ -78,10 +63,10 @@ export default function Footer() {
 
           <div className="md:col-span-3">
             <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
-              Xizmatlar
+              {servicesCol.title}
             </h4>
             <ul className="space-y-2.5">
-              {services.map((l) => (
+              {servicesCol.links.map((l) => (
                 <li key={l.label}>
                   <a
                     href={l.href}
@@ -96,40 +81,40 @@ export default function Footer() {
 
           <div className="md:col-span-3">
             <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
-              Bog'lanish
+              {contactCol.title}
             </h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
-                <span>{site.contact.address}</span>
+                <span>{content.contact.address}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="size-4 shrink-0 text-primary" />
                 <a
-                  href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
+                  href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                   className="transition-colors hover:text-primary"
                 >
-                  {site.contact.phone}
+                  {content.contact.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="size-4 shrink-0 text-primary" />
                 <a
-                  href={`mailto:${site.contact.email}`}
+                  href={`mailto:${content.contact.email}`}
                   className="transition-colors hover:text-primary"
                 >
-                  {site.contact.email}
+                  {content.contact.email}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Send className="size-4 shrink-0 text-primary" />
                 <a
-                  href={site.social.telegram}
+                  href={content.social.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-colors hover:text-primary"
                 >
-                  {site.contact.telegram}
+                  {content.contact.telegram}
                 </a>
               </li>
             </ul>
@@ -138,15 +123,14 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-8 md:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {site.name}. Barcha huquqlar himoyalangan.
+            © {new Date().getFullYear()} {content.brand.name}. {content.footer.legal.copyright}
           </p>
           <div className="flex items-center gap-6 text-xs text-muted-foreground">
-            <a href="#" className="hover:text-primary">
-              Maxfiylik siyosati
-            </a>
-            <a href="#" className="hover:text-primary">
-              Foydalanish shartlari
-            </a>
+            {content.footer.legal.links.map((l) => (
+              <a key={l.label} href={l.href} className="hover:text-primary">
+                {l.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

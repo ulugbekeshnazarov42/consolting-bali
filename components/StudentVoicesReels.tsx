@@ -22,9 +22,11 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { content } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
-/** Namuna video (haqiqiy talaba videosi URL qo‘shilganda almashtirish mumkin). */
+const reelsContent = content.reels;
+
 const REEL_FALLBACK_SOURCES = [
   {
     src: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
@@ -36,82 +38,7 @@ const REEL_FALLBACK_SOURCES = [
   },
 ];
 
-type Reel = {
-  id: string;
-  name: string;
-  program: string;
-  quote: string;
-  image: string;
-  /** Bo‘sh bo‘lsa — `REEL_FALLBACK_SOURCES` ishlatiladi */
-  videoSources?: readonly { src: string; type: "video/webm" | "video/mp4" }[];
-};
-
-const reels: Reel[] = [
-  {
-    id: "a",
-    name: "Madina K.",
-    program: "NUS · bakalavr",
-    quote: "Hujjatlar tartibi tushunarli bo‘ldi, intervyuga ham birga tayyorlandik.",
-    image:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "b",
-    name: "Jasur T.",
-    program: "Polytechnic",
-    quote: "Telegramda tez javob — har safar chalkash joyni aniqlab berishardi.",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "c",
-    name: "Nilufar S.",
-    program: "Bali tayyorgarlik",
-    quote: "Singapurdan oldin Balida til va muhitga o‘rganib oldim, yengilroq bo‘ldi.",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "d",
-    name: "Behzod M.",
-    program: "Viza bosqichi",
-    quote: "Viza uchun ro‘yxat aniq edi, nimani qayerdan olishni bilmasdan qolmadi.",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "e",
-    name: "Shahnoza R.",
-    program: "SMU",
-    quote: "Motivatsion xat va SOP uchun bir necha marta suhbat qildik — natija yaxshi.",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "f",
-    name: "Timur A.",
-    program: "Qatar yo‘nalishi",
-    quote: "Kelajak rejasini ochiq ko‘rsatishdi, ortiqcha va’da qilmaydilar.",
-    image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "g",
-    name: "Dilnoza H.",
-    program: "Ingliz tili kursi",
-    quote: "Test va sertifikatlar bo‘yicha ham yo‘l-yo‘riq berishdi.",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-  {
-    id: "h",
-    name: "Oybek N.",
-    program: "Umumiy konsultatsiya",
-    quote: "Boshida yo‘nalish tanlashda ikkilanardim, birga tartibga solindi.",
-    image:
-      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=480&h=854&q=80",
-  },
-];
+type Reel = (typeof reelsContent.items)[number];
 
 function ReelVideoBody({
   item,
@@ -120,7 +47,7 @@ function ReelVideoBody({
   item: Reel;
   videoRef: React.RefObject<HTMLVideoElement | null>;
 }) {
-  const sources = item.videoSources ?? REEL_FALLBACK_SOURCES;
+  const sources = REEL_FALLBACK_SOURCES;
 
   return (
     <div className="relative w-full overflow-hidden bg-black">
@@ -136,7 +63,7 @@ function ReelVideoBody({
           {sources.map((s) => (
             <source key={s.src} src={s.src} type={s.type} />
           ))}
-          Brauzeringiz video tegini qo‘llab-quvvatlamaydi.
+          {reelsContent.fallbackNotice}
         </video>
       </div>
       <div className="border-t border-border/60 bg-popover px-4 py-4 text-left md:px-5">
@@ -171,7 +98,7 @@ function ReelCard({
       )}
     >
       <span className="sr-only">
-        {item.name} — video sharhni ochish
+        {item.name} — {reelsContent.openAriaSuffix}
       </span>
       <img
         src={item.image}
@@ -192,7 +119,7 @@ function ReelCard({
       <div className="pointer-events-none absolute inset-x-2.5 top-2.5 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
         <span className="rounded-full bg-black/45 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/95 ring-1 ring-white/25 backdrop-blur-sm sm:text-[10px]">
           <span className="mr-1 inline-block size-1.5 animate-pulse rounded-full bg-red-500 motion-reduce:animate-none" />
-          short
+          {reelsContent.liveLabel}
         </span>
         <span className="grid size-9 place-items-center rounded-full bg-white/20 text-white ring-1 ring-white/35 backdrop-blur-md sm:size-10">
           <Play className="size-4 translate-x-0.5 fill-current sm:size-[1.05rem]" aria-hidden />
@@ -214,7 +141,8 @@ function ReelCard({
 
 export default function StudentVoicesReels() {
   const reduceMotion = useReducedMotion();
-  const rowB = React.useMemo(() => [...reels].reverse(), []);
+  const reels = reelsContent.items;
+  const rowB = React.useMemo(() => [...reels].reverse(), [reels]);
 
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Reel | null>(null);
@@ -241,6 +169,7 @@ export default function StudentVoicesReels() {
       id="fikrlar"
       className="relative overflow-hidden border-b border-border/60 bg-muted/25 py-24 md:py-32 dark:bg-muted/10"
       aria-labelledby="fikrlar-heading"
+      aria-label={reelsContent.sectionAriaLabel}
     >
       <div
         className="pointer-events-none absolute inset-0 bg-dot mask-radial-fade opacity-20"
@@ -265,18 +194,17 @@ export default function StudentVoicesReels() {
         >
           <Badge className="mb-5 gap-1.5 rounded-full border border-primary/35 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
             <MessagesSquare className="size-3.5" />
-            Talabalar fikri
+            {reelsContent.badge}
           </Badge>
           <h2
             id="fikrlar-heading"
             className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-[2.75rem] lg:leading-tight"
           >
-            Reels uslubida{" "}
-            <span className="text-gradient-orange">jonli sharhlar</span>
+            {reelsContent.heading.before}{" "}
+            <span className="text-gradient-orange">{reelsContent.heading.accent}</span>
           </h2>
           <p className="mt-5 text-base text-muted-foreground md:text-lg">
-            Video qisqa formatdagi kartalar aylanib turadi — har biri haqiqiy
-            yo‘l-yo‘riq tajribasidan parcha.
+            {reelsContent.paragraph}
           </p>
         </motion.div>
 
@@ -333,7 +261,7 @@ export default function StudentVoicesReels() {
             <DialogHeader className="sr-only">
               <DialogTitle>{selected.name}</DialogTitle>
               <DialogDescription>
-                Talaba video sharhi — {selected.program}
+                {selected.program}
               </DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
@@ -342,7 +270,7 @@ export default function StudentVoicesReels() {
                 variant="ghost"
                 size="icon"
                 className="absolute top-2 right-2 z-20 size-10 rounded-full border border-border/50 bg-background/80 text-foreground shadow-sm backdrop-blur-md hover:bg-background"
-                aria-label="Yopish"
+                aria-label={reelsContent.closeLabel}
               >
                 <X className="size-4" />
               </Button>
@@ -360,7 +288,7 @@ export default function StudentVoicesReels() {
             <DrawerHeader className="sr-only">
               <DrawerTitle>{selected.name}</DrawerTitle>
               <DrawerDescription>
-                Talaba video sharhi — {selected.program}
+                {selected.program}
               </DrawerDescription>
             </DrawerHeader>
             <div className="relative max-h-[calc(92vh-1rem)] overflow-y-auto">
@@ -370,7 +298,7 @@ export default function StudentVoicesReels() {
                   variant="ghost"
                   size="icon"
                   className="absolute top-1 right-3 z-20 size-10 rounded-full border border-border/50 bg-background/85 text-foreground shadow-sm backdrop-blur-md hover:bg-background"
-                  aria-label="Yopish"
+                  aria-label={reelsContent.closeLabel}
                 >
                   <X className="size-4" />
                 </Button>

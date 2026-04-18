@@ -1,0 +1,628 @@
+{
+  "brand": {
+    "name": "Guzal Opa Education",
+    "shortName": "Guzal Opa",
+    "url": "https://guzalopa.uz",
+    "tagline": "Xorijda ta'lim bo'yicha ishonchli maslahatchingiz",
+    "description": "Guzal Opa Education — yosh talabalarga Singapur va Balidagi ta'lim imkoniyatlari bo'yicha shaxsiy yo'l-yo'riq. Universitetga kirish, hujjatlar tayyorlash va talabalik vizasi bo'yicha shaffof maslahat.",
+    "author": "Guzal Opa Education",
+    "locale": "uz_UZ",
+    "twitter": "@guzalopa_edu",
+    "keywords": [
+      "xorijda ta'lim",
+      "Singapurda o'qish",
+      "Balida o'qish",
+      "talabalik vizasi",
+      "universitetga kirish",
+      "hujjatlarni tayyorlash",
+      "motivatsion xat",
+      "Guzal Opa",
+      "Guzal Opa Education",
+      "study abroad Uzbekistan",
+      "Singapore study consulting",
+      "Bali study program"
+    ]
+  },
+  "contact": {
+    "phone": "+998 90 123 45 67",
+    "phoneLabel": "Telefon",
+    "email": "hello@guzalopa.uz",
+    "emailLabel": "Email",
+    "telegram": "@guzalopa_edu",
+    "telegramLabel": "Telegram",
+    "address": "Toshkent sh., O'zbekiston",
+    "addressLabel": "Manzil",
+    "hours": {
+      "weekdays": { "days": "Dushanba – Juma", "time": "09:00 – 19:00", "startHour": 9, "endHour": 19 },
+      "saturday": { "days": "Shanba", "time": "10:00 – 15:00", "startHour": 10, "endHour": 15 },
+      "sundayClosed": true,
+      "onlineBadge": "Hozir onlayn",
+      "offlineBadge": "Hozir offlayn — xabar qoldiring"
+    }
+  },
+  "social": {
+    "telegram": "https://t.me/guzalopa_edu",
+    "instagram": "https://instagram.com/guzalopa.edu",
+    "youtube": "https://youtube.com/@guzalopa"
+  },
+  "nav": [
+    { "label": "Bosh sahifa", "href": "#home" },
+    { "label": "Xizmatlar", "href": "#services" },
+    { "label": "Yangiliklar", "href": "#news" },
+    { "label": "Jarayon", "href": "#process" },
+    { "label": "Nega biz", "href": "#why" },
+    { "label": "Savollar", "href": "#faq" },
+    { "label": "Bog'lanish", "href": "#contact" }
+  ],
+  "navbar": {
+    "ctaLabel": "Konsultatsiya",
+    "menuLabel": "Menyu",
+    "mobileCtaLabel": "Bepul konsultatsiya"
+  },
+  "hero": {
+    "badge": "Xorijda ta'lim bo'yicha shaxsiy maslahat",
+    "headline": {
+      "before": "Orzuingizdagi",
+      "accent": "ta'lim yo'lini",
+      "after": "birga quramiz"
+    },
+    "paragraph": "Guzal Opa yosh talabalarga Singapur va Balidagi universitet imkoniyatlarini ochishda yordam beradi. Hujjatlarni tayyorlashdan talabalik vizasigacha — har bosqichda yoningizda.",
+    "primaryCta": { "label": "Bepul maslahat olish", "href": "#contact" },
+    "secondaryCta": { "label": "Telegramda yozish", "href": "telegram" },
+    "features": [
+      { "icon": "Heart", "text": "Shaxsiy yondashuv" },
+      { "icon": "ShieldCheck", "text": "Shaffof jarayon" },
+      { "icon": "GraduationCap", "text": "Yo'nalish bo'yicha ekspert" }
+    ],
+    "card": {
+      "eyebrow": "Marshrut xaritasi",
+      "title": "Ikki nuqta — bitta yo'l",
+      "badge": "2 · mamlakat",
+      "footer": {
+        "bold": "Muhim: ",
+        "text": "Kafolatlangan viza yoki qabul va'dasi bermaymiz — imkoniyatlaringizni ochiq ko'rsatamiz."
+      },
+      "stamp": { "eyebrow": "Hamroh", "text": "Har bosqichda" },
+      "destinations": [
+        {
+          "code": "SGP",
+          "city": "Singapur",
+          "note": "Universitet va oliy ta'lim",
+          "tag": "Asosiy yo'nalish"
+        },
+        {
+          "code": "DPS",
+          "city": "Bali",
+          "note": "Tayyorgarlik va til dasturlari",
+          "tag": "Boshlang'ich qadam"
+        }
+      ]
+    }
+  },
+  "services": {
+    "badge": "Xizmatlar",
+    "heading": { "before": "Har bir talaba uchun", "accent": "aniq yo'l" },
+    "paragraph": "Universitet tanlovidan hujjatlar va talabalik vizasigacha — maqsadingizga mos qadamlarni birga rejalashtiramiz.",
+    "items": [
+      {
+        "icon": "GraduationCap",
+        "title": "Singapurda o'qish",
+        "desc": "Singapurning yetakchi universitet va polytechniclarini tanlash, dastur va kirish talablari bo'yicha aniq yo'l-yo'riq.",
+        "tags": ["Universitet", "Polytechnic", "Ingliz tili"],
+        "span": "lg:col-span-2"
+      },
+      {
+        "icon": "School",
+        "title": "Universitetga kirish",
+        "desc": "Mos dasturni tanlash, motivatsion xat (SOP) va hujjatlar ro'yxatini tayyorlash, muddatlarni kuzatish.",
+        "tags": ["Ariza", "SOP", "Test"],
+        "span": ""
+      },
+      {
+        "icon": "FileCheck2",
+        "title": "Hujjatlar tayyorlash",
+        "desc": "Diplom, tarjima, moliyaviy isbot va boshqa hujjatlarni to'g'ri tartibda tayyorlashda yordam.",
+        "tags": ["Tarjima", "Tekshiruv", "Apostil"],
+        "span": ""
+      },
+      {
+        "icon": "Sprout",
+        "title": "Bali tayyorgarlik dasturi",
+        "desc": "Xorijiy muhitga dastlabki moslashish uchun Balidagi qisqa muddatli til va tayyorgarlik dasturlari.",
+        "tags": ["Til", "Tayyorgarlik", "Adaptatsiya"],
+        "span": "lg:col-span-2"
+      },
+      {
+        "icon": "BadgeCheck",
+        "title": "Talabalik vizasi",
+        "desc": "Viza uchun hujjatlar ro'yxati, suhbatga tayyorgarlik va shart-sharoitlarni tushunarli qilib tushuntirish.",
+        "tags": ["Viza", "Intervyu"],
+        "span": ""
+      },
+      {
+        "icon": "MessagesSquare",
+        "title": "Umumiy konsultatsiya",
+        "desc": "Qaysi yo'nalish sizga mos ekanini hali aniqlay olmaganingizda — birinchi qadamni birga tanlab olamiz.",
+        "tags": ["1:1", "Bepul"],
+        "span": "lg:col-span-2"
+      }
+    ],
+    "cardHrefTemplate": "#contact",
+    "srAriaAsk": "haqida so'rash"
+  },
+  "news": {
+    "badge": "Yangiliklar",
+    "heading": { "before": "Oxirgi", "accent": "yangiliklar", "after": "va yo'l-yo'riqlar" },
+    "paragraph": "Qabul muddatlari, hujjatlar va yo'nalishlar bo'yicha qisqa eslatmalar.",
+    "primaryCta": { "label": "Maslahat olish", "href": "#contact" },
+    "secondaryCta": { "label": "Telegram", "href": "telegram" },
+    "cards": [
+      {
+        "id": "singapore-intake",
+        "name": "Singapur qabul oynalari",
+        "handle": "Universitet · 2026",
+        "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80",
+        "avatar": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=64&h=64&q=80",
+        "href": "#contact"
+      },
+      {
+        "id": "bali-pathway",
+        "name": "Bali: tayyorgarlik va til",
+        "handle": "Qisqa muddat · moslashuv",
+        "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80",
+        "avatar": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=64&h=64&q=80",
+        "href": "#contact"
+      },
+      {
+        "id": "visa-docs",
+        "name": "Talabalik vizasi hujjatlari",
+        "handle": "Ro'yxat · intervyu",
+        "image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=80",
+        "avatar": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=64&h=64&q=80",
+        "href": "#contact"
+      },
+      {
+        "id": "sop-tips",
+        "name": "Motivatsion xat — qanday yozish",
+        "handle": "SOP · qo'llanma",
+        "image": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80",
+        "avatar": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=64&h=64&q=80",
+        "href": "#contact"
+      },
+      {
+        "id": "free-chat",
+        "name": "Birinchi suhbat — bepul",
+        "handle": "Telegram · tez javob",
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
+        "avatar": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=64&h=64&q=80",
+        "href": "telegram"
+      }
+    ]
+  },
+  "process": {
+    "badge": "Jarayon",
+    "heading": { "accent": "4 bosqich", "after": "— tanishuvdan ketishgacha" },
+    "paragraph": "Har bir bosqichda sizga nima kerak va nima bo'lishini oldindan tushuntiramiz. Yo'lda yolg'iz qolmaysiz.",
+    "steps": [
+      {
+        "icon": "MessageCircle",
+        "title": "Tanishuv va suhbat",
+        "desc": "Maqsadlaringiz, yoshingiz va imkoniyatlaringiz haqida ochiq suhbat. Birinchi uchrashuv — bepul.",
+        "duration": "30–45 daqiqa"
+      },
+      {
+        "icon": "Compass",
+        "title": "Yo'nalish tanlash",
+        "desc": "Singapur yoki Bali — sizga eng mos yo'nalishni birga tanlaymiz va aniq reja tuzamiz.",
+        "duration": "1–2 hafta"
+      },
+      {
+        "icon": "FileText",
+        "title": "Hujjatlar va viza",
+        "desc": "Ariza, motivatsion xat, tarjimalar va viza hujjatlarini bosqichma-bosqich birga tayyorlaymiz.",
+        "duration": "2–6 hafta"
+      },
+      {
+        "icon": "Plane",
+        "title": "Ketish va moslashish",
+        "desc": "Jo'nash oldidan brifing, borganidan keyin ham savollaringizga javob — yolg'iz qolmaysiz.",
+        "duration": "Davomiy qo'llab-quvvatlash"
+      }
+    ]
+  },
+  "reels": {
+    "badge": "Talabalar fikri",
+    "heading": { "before": "Reels uslubida", "accent": "jonli sharhlar" },
+    "paragraph": "Video qisqa formatdagi kartalar aylanib turadi — har biri haqiqiy yo'l-yo'riq tajribasidan parcha.",
+    "sectionAriaLabel": "Talabalar sharhlari",
+    "liveLabel": "short",
+    "openAriaSuffix": "video sharhni ochish",
+    "closeLabel": "Yopish",
+    "fallbackNotice": "Brauzeringiz video tegini qo'llab-quvvatlamaydi.",
+    "items": [
+      {
+        "id": "a",
+        "name": "Madina K.",
+        "program": "NUS · bakalavr",
+        "quote": "Hujjatlar tartibi tushunarli bo'ldi, intervyuga ham birga tayyorlandik.",
+        "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "b",
+        "name": "Jasur T.",
+        "program": "Singapur Polytechnic",
+        "quote": "Telegramda tez javob — har safar chalkash joyni aniqlab berishardi.",
+        "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "c",
+        "name": "Nilufar S.",
+        "program": "Bali tayyorgarlik",
+        "quote": "Singapurdan oldin Balida til va muhitga o'rganib oldim, yengilroq bo'ldi.",
+        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "d",
+        "name": "Behzod M.",
+        "program": "Viza bosqichi",
+        "quote": "Viza uchun ro'yxat aniq edi, nimani qayerdan olishni bilmasdan qolmadim.",
+        "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "e",
+        "name": "Shahnoza R.",
+        "program": "SMU · motivatsion xat",
+        "quote": "Motivatsion xat va SOP uchun bir necha marta suhbat qildik — natija yaxshi.",
+        "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "f",
+        "name": "Timur A.",
+        "program": "Bali — til kursi",
+        "quote": "Balidagi kurs oxiriga kelib o'zimda katta farqni ko'rdim, yaxshi poydevor bo'ldi.",
+        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "g",
+        "name": "Dilnoza H.",
+        "program": "Ingliz tili sertifikati",
+        "quote": "Test va sertifikatlar bo'yicha ham yo'l-yo'riq berishdi, qaysi birini qachon topshirishni aniq bilib oldim.",
+        "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=480&h=854&q=80"
+      },
+      {
+        "id": "h",
+        "name": "Oybek N.",
+        "program": "Umumiy konsultatsiya",
+        "quote": "Boshida yo'nalish tanlashda ikkilanardim, birga tartibga solindi.",
+        "image": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=480&h=854&q=80"
+      }
+    ]
+  },
+  "whyChooseUs": {
+    "badge": "Nega biz",
+    "heading": { "before": "Ishonch —", "accent": "eng muhim qadam" },
+    "paragraph": "Xorijda ta'lim — katta qaror. Shuning uchun shaffof, halol va insonga yaqin muloqot bilan ishlaymiz.",
+    "items": [
+      {
+        "icon": "Heart",
+        "title": "Shaxsiy yondashuv",
+        "desc": "Har bir talaba — alohida voqea. Konveyer usulida emas, haqiqiy suhbat bilan ishlaymiz."
+      },
+      {
+        "icon": "Eye",
+        "title": "Shaffoflik",
+        "desc": "Narx, muddat va imkoniyatlarni boshidanoq ochiq aytamiz. Yashirin to'lovlar yo'q."
+      },
+      {
+        "icon": "UserCheck",
+        "title": "Realistik va'dalar",
+        "desc": "Kafolatlangan viza yoki kirish va'da qilmaymiz — faqat haqiqiy imkoniyatni ko'rsatamiz."
+      },
+      {
+        "icon": "Send",
+        "title": "Telegramda tez javob",
+        "desc": "Asosiy aloqa — Telegram. Ish vaqtida savollaringizga bir necha soat ichida javob."
+      },
+      {
+        "icon": "Languages",
+        "title": "O'zbek va rus tilida",
+        "desc": "Murakkab hujjat va shartlarni o'zingizga tanish tilda sodda qilib tushuntiramiz."
+      },
+      {
+        "icon": "Handshake",
+        "title": "Ketgandan keyin ham",
+        "desc": "Siz borganingizdan keyin ham savollaringiz bo'lsa — aloqadamiz, tashlab ketmaymiz."
+      }
+    ]
+  },
+  "faq": {
+    "badge": "Savol-javoblar",
+    "heading": { "before": "Ko'p so'raladigan", "accent": "savollar" },
+    "paragraph": "Quyida eng ko'p uchraydigan savollarga javoblar. Javob topmasangiz — biz bilan bog'laning.",
+    "items": [
+      {
+        "q": "Birinchi konsultatsiya bepulmi?",
+        "a": "Ha — tanishuv va dastlabki yo'nalish suhbati bepul. Keyingi bosqichlarda (hujjat tayyorlash, kuzatuv) xizmat hajmi va vaqt bo'yicha oldindan kelishamiz."
+      },
+      {
+        "q": "Singapurda o'qish uchun nimadan boshlash kerak?",
+        "a": "Avvalo maqsad va fan yo'nalishingizni aniqlaymiz, keyin mos dasturlar va kirish talablarini ko'rib chiqamiz. IELTS/TOEFL va akademik hujjatlar ro'yxati har bir universitet bo'yicha farq qiladi — bularni birga tartibga solamiz."
+      },
+      {
+        "q": "Talabalik vizasini kafolat qilasizmi?",
+        "a": "Yo'q — hech kim vizani kafolatlay olmaydi. Biz hujjatlarni to'g'ri tartibda tayyorlash, talablarni tushuntirish va jarayonni rejalashtirishda yordam beramiz. Yakuniy qaror har doim viza organlari qo'lida."
+      },
+      {
+        "q": "Universitetga kirishni kafolat qilasizmi?",
+        "a": "Yo'q. Qabul qilishni universitet va dastur hal qiladi. Biz arizani kuchaytirish, motivatsion xat va strategiyani yaxshilashda yordam beramiz."
+      },
+      {
+        "q": "Bali dasturi nima uchun kerak?",
+        "a": "Bu qisqa muddatli tayyorgarlik va xorijiy muhitga moslashish uchun variant — til, intizom va keyingi bosqich (masalan, Singapur) uchun poydevor bo'ladi."
+      },
+      {
+        "q": "Hujjatlarni tayyorlashda nima yordam berasiz?",
+        "a": "Tarjima, notarial tasdiqlash, diplom va akademik transkriptni to'g'ri tartibda yig'ish, moliyaviy isbotlar — har birini ro'yxatga solib, qaysi biri qachon kerakligini aniqlab beramiz."
+      },
+      {
+        "q": "Hujjatlar va shaxsiy ma'lumotlar xavfsizligi qanday?",
+        "a": "Ma'lumotlaringiz faqat konsultatsiya maqsadida ishlatiladi va uchinchi shaxslarga sotilmaydi."
+      }
+    ]
+  },
+  "contactForm": {
+    "badge": "Bog'lanish",
+    "heading": { "accent": "Bepul", "after": "konsultatsiya uchun yozing" },
+    "paragraph": "Formani to'ldiring yoki Telegramdan yozing — qisqa javob va keyingi qadamlar bo'yicha yo'l-yo'riq olasiz.",
+    "side": {
+      "title": "To'g'ridan-to'g'ri bog'laning",
+      "paragraph": "Tezkor yordam kerakmi? Quyidagi kanallar orqali bevosita biz bilan aloqa o'rnating.",
+      "hoursTitle": "Ish vaqti"
+    },
+    "required": "*",
+    "fields": {
+      "name": {
+        "label": "Ism",
+        "placeholder": "To'liq ismingiz"
+      },
+      "phone": {
+        "label": "Telefon",
+        "placeholder": "+998 90 123 45 67"
+      },
+      "email": {
+        "label": "Email (ixtiyoriy)",
+        "placeholder": "siz@pochta.uz"
+      },
+      "service": {
+        "label": "Qiziqtirgan xizmat",
+        "placeholder": "Tanlang..."
+      },
+      "age": {
+        "label": "Yosh oralig'i",
+        "placeholder": "Tanlang..."
+      },
+      "message": {
+        "label": "Maqsad / savolingiz",
+        "placeholder": "Masalan: qaysi yo'nalish (Singapur yoki Bali) qiziq, qachon boshlashni rejalashtiryapsiz, til sertifikatingiz bormi..."
+      }
+    },
+    "serviceOptions": {
+      "singapore": "Singapurda o'qish",
+      "bali": "Bali tayyorgarlik dasturi",
+      "university": "Universitetga kirish",
+      "documents": "Hujjatlarni tayyorlash",
+      "visa": "Talabalik vizasi",
+      "other": "Boshqa / aniq bilmayman"
+    },
+    "ageOptions": {
+      "under18": "18 gacha",
+      "18-22": "18 – 22",
+      "23-27": "23 – 27",
+      "28+": "28+"
+    },
+    "submit": {
+      "idle": "So'rovni yuborish",
+      "loading": "Yuborilmoqda...",
+      "done": "Yuborildi"
+    },
+    "consent": {
+      "before": "Formani yuborish orqali siz ",
+      "link": "maxfiylik siyosati",
+      "linkHref": "/privacy",
+      "after": "ga rozilik bildirasiz. Ma'lumotlaringiz uchinchi shaxslarga oshkor qilinmaydi."
+    },
+    "toast": {
+      "successTitle": "So'rovingiz yuborildi!",
+      "successDesc": "Tez orada siz bilan bog'lanamiz — asosiy aloqa Telegram orqali.",
+      "errorTitle": "Yuborib bo'lmadi",
+      "errorFallback": "Tarmoq xatosi. Keyinroq urinib ko'ring."
+    },
+    "errors": {
+      "bodyInvalid": "So'rov formati noto'g'ri",
+      "validation": "Validatsiya xatosi",
+      "send": "Xabarni yuborib bo'lmadi. Keyinroq urinib ko'ring.",
+      "methodNotAllowed": "Method not allowed",
+      "name": {
+        "min": "Ism kamida 2 belgidan iborat bo'lishi kerak",
+        "max": "Ism juda uzun"
+      },
+      "phone": {
+        "min": "Telefon raqami to'g'ri kiritilmagan",
+        "max": "Telefon raqami juda uzun",
+        "regex": "Faqat raqam va +, -, ( ) belgilari"
+      },
+      "email": "Email manzil noto'g'ri",
+      "service": "Yo'nalishni tanlang",
+      "age": "Yoshingizni tanlang",
+      "message": {
+        "min": "Xabar kamida 10 belgidan iborat bo'lishi kerak",
+        "max": "Xabar juda uzun (max 2000)"
+      }
+    }
+  },
+  "cta": {
+    "eyebrow": "Keyingi qadam",
+    "heading": { "before": "Ta'lim yo'lingizni", "accent": "birga rejalashtiramiz" },
+    "paragraph": "Qisqa suhbatda maqsadingizni tinglaymiz va keyingi qadamlarni tushunarli qilib beramiz. Hech qanday majburiyat yo'q — faqat ochiq maslahat.",
+    "primaryCta": { "label": "Bepul konsultatsiya", "href": "#contact" },
+    "secondaryCta": { "label": "Telegramda yozish", "href": "telegram" }
+  },
+  "footer": {
+    "columns": {
+      "site": {
+        "title": "Saytda",
+        "links": [
+          { "label": "Xizmatlar", "href": "#services" },
+          { "label": "Yangiliklar", "href": "#news" },
+          { "label": "Jarayon", "href": "#process" },
+          { "label": "Talabalar", "href": "#fikrlar" },
+          { "label": "Nega biz", "href": "#why" },
+          { "label": "Savollar", "href": "#faq" },
+          { "label": "Bog'lanish", "href": "#contact" }
+        ]
+      },
+      "services": {
+        "title": "Xizmatlar",
+        "links": [
+          { "label": "Singapurda o'qish", "href": "#services" },
+          { "label": "Universitetga kirish", "href": "#services" },
+          { "label": "Hujjatlarni tayyorlash", "href": "#services" },
+          { "label": "Talabalik vizasi", "href": "#services" },
+          { "label": "Bali tayyorgarlik", "href": "#services" }
+        ]
+      },
+      "contact": { "title": "Bog'lanish" }
+    },
+    "legal": {
+      "copyright": "Barcha huquqlar himoyalangan.",
+      "links": [
+        { "label": "Maxfiylik siyosati", "href": "/privacy" },
+        { "label": "Foydalanish shartlari", "href": "/terms" }
+      ]
+    }
+  },
+  "floatingDock": {
+    "ariaLabel": "Tezkor aloqa va sahifa boshiga",
+    "scrollTopLabel": "Sahifa boshiga qaytish",
+    "toggleOpenLabel": "Ijtimoiy tarmoqlarni ochish",
+    "toggleCloseLabel": "Ijtimoiy tarmoqlarni yopish"
+  },
+  "themeToggle": {
+    "ariaLabel": "Mavzuni almashtirish"
+  },
+  "logo": {
+    "ariaLabel": "Guzal Opa Education bosh sahifa",
+    "primary": "Guzal Opa",
+    "secondary": "Education"
+  },
+  "onboarding": {
+    "storageKey": "guzalopa_welcome_onboarding_v1",
+    "skipLabel": "O'tkazib yuborish",
+    "nextLabel": "Keyingi",
+    "backLabel": "Orqaga",
+    "finishLabel": "Saytga kirish",
+    "stepLabels": ["Tanishuv", "Yo'nalishlar", "Xizmatlar", "Jarayon", "Ishonch", "Tayyorgarlik", "Aloqa"],
+    "stepsAriaLabel": "Bosqichlar",
+    "stepAriaTemplate": "{n}-bosqich",
+    "progressSrTemplate": "Onboarding bosqichi {step} / {total}. {title}",
+    "steps": [
+      {
+        "id": "welcome",
+        "title": "Xush kelibsiz",
+        "subtitle": "Guzal Opa Education",
+        "body": "Bu yerda xorijda o'qish — ayniqsa Singapur va Bali yo'nalishlari bo'yicha shaxsiy, shaffof maslahat olasiz. Maqsadingizni tinglaymiz, keyin sizga mos yo'nalish va realistik qadamlarni birga aniqlaymiz.",
+        "icon": "Heart",
+        "accent": "from-primary/35 via-orange-500/18 to-transparent",
+        "bullets": []
+      },
+      {
+        "id": "directions",
+        "title": "Qaysi yo'nalishlar?",
+        "subtitle": "Singapur va Bali",
+        "body": "Har bir mamlakatning o'z talablari, muddatlari va byudjeti bor. Biz sizning holatingizga mos variantlarni solishtirib, qayerda boshlash va qanday rivojlanishni aniqroq ko'rsatamiz — umumiy gap emas, amaliy yo'l-xarita.",
+        "icon": "Globe2",
+        "accent": "from-sky-500/18 via-primary/20 to-transparent",
+        "bullets": [
+          { "icon": "MapPin", "text": "Singapur — nufuzli universitetlar, qat'iy muddatlar va aniq hujjatlar ro'yxati" },
+          { "icon": "Globe2", "text": "Bali — tayyorgarlik va til dasturlari; keyingi bosqichga o'tish rejalari" },
+          { "icon": "Sparkles", "text": "Ikkalasi uchun ham — individual reja va realistik muddatlar" }
+        ]
+      },
+      {
+        "id": "what",
+        "title": "Nima qilamiz?",
+        "subtitle": "Amaliy yordam",
+        "body": null,
+        "icon": "Sparkles",
+        "accent": "from-orange-500/22 via-primary/18 to-transparent",
+        "bullets": [
+          { "icon": "GraduationCap", "text": "Universitet tanlovi, motivatsion xat va ariza tartibi" },
+          { "icon": "MapPin", "text": "Dastur va muddatlar bo'yicha aniq ma'lumot — qayerdan boshlash kerakligi" },
+          { "icon": "Send", "text": "Talabalik vizasi hujjatlari va suhbatga tayyorgarlik" },
+          { "icon": "Users", "text": "Ota-ona bilan birga qaror — alohida suhbat va tushuntirish" },
+          { "icon": "Sparkles", "text": "Byudjet va vaqt chegaralarini hisobga olgan holda reja tuzish" }
+        ]
+      },
+      {
+        "id": "process",
+        "title": "Qanday ishlaymiz?",
+        "subtitle": "Qisqa jarayon",
+        "body": "Avvalo — bepul tanishuv: maqsad, byudjet va vaqt. Keyin — sizga mos yo'nalish va hujjatlar ro'yxati. Jarayon davomida muntazam aloqa va yangilanishlar — nimada qayerdasiz, keyingi qadam nima.",
+        "icon": "ListChecks",
+        "accent": "from-violet-500/18 via-primary/18 to-transparent",
+        "bullets": [
+          { "icon": "ListChecks", "text": "1-bosqich: suhbat va yo'nalish tanlovi" },
+          { "icon": "ListChecks", "text": "2-bosqich: hujjatlar va ariza — qadam-baqadam tekshiruv" },
+          { "icon": "ListChecks", "text": "3-bosqich: topshirishdan keyin — kuzatuv va keyingi qadamlar" }
+        ]
+      },
+      {
+        "id": "trust",
+        "title": "Ishonch — asos",
+        "subtitle": "Realistik va'dalar",
+        "body": "Biz kafolatlangan viza yoki kafolatlangan qabul va'da qilmaymiz — yakuniy qaror har doim universitet va davlat organlari qo'lida. Vazifamiz — hujjatlaringizni kuchaytirish, talablarni tushuntirish va jarayonni shaffof boshqarish.",
+        "icon": "ShieldCheck",
+        "accent": "from-amber-500/25 via-primary/22 to-transparent",
+        "bullets": []
+      },
+      {
+        "id": "prep",
+        "title": "Tayyorgarlik",
+        "subtitle": "Nimalarni kutish mumkin",
+        "body": "Hujjatlar, til sertifikati, moliyaviy isbotlar — ro'yxat har bir yo'nalishga qarab farq qiladi. Oldindan reja tuzsak, stress kamayadi va vaqt yo'qotilmaydi.",
+        "icon": "BookOpen",
+        "accent": "from-emerald-500/16 via-primary/16 to-transparent",
+        "bullets": [
+          { "icon": "BookOpen", "text": "Asosiy hujjatlar: pasport, diplom/sertifikatlar, tarjimalar — qachon kerakligi" },
+          { "icon": "Clock", "text": "Muddatlar: ariza oynalari va vizaga ariza — kechikmasdan boshlash afzal" },
+          { "icon": "Users", "text": "Oila bilan kelishuv — kim nima topshiradi, qayerda yordam kerak" }
+        ]
+      },
+      {
+        "id": "contact",
+        "title": "Keyingi qadam",
+        "subtitle": "Aloqa va qabul",
+        "body": "Bepul tanishuvdan boshlash mumkin. Saytning pastidagi «Bog'lanish» bo'limida forma bor — yoki Telegram orqali yozing. Qisqa javob va keyingi uchrashuvni birga kelishamiz.",
+        "icon": "Calendar",
+        "accent": "from-primary/25 via-orange-500/20 to-transparent",
+        "bullets": [
+          { "icon": "Send", "text": "Telegram: {telegram} — tez savol-javob" },
+          { "icon": "Phone", "text": "Telefon: {phone} — qo'ng'iroq uchun qulay vaqt" },
+          { "icon": "Clock", "text": "Dush–juma 9:00–19:00 · Shanba 10:00–15:00" },
+          { "icon": "Calendar", "text": "{address} — uchrashuv oldindan kelishiladi" }
+        ]
+      }
+    ]
+  },
+  "telegram": {
+    "leadTitle": "🎓 Yangi so'rov — Guzal Opa Education",
+    "labels": {
+      "name": "Ism",
+      "phone": "Telefon",
+      "email": "Email",
+      "service": "Yo'nalish",
+      "age": "Yosh",
+      "message": "Xabar"
+    }
+  }
+}

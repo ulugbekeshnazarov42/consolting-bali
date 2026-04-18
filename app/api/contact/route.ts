@@ -1,9 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { contactSchema } from "@/lib/schemas";
 import { sendTelegramLead } from "@/lib/telegram";
+import { content } from "@/lib/content";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const errs = content.contactForm.errors;
 
 export async function POST(req: NextRequest) {
   let payload: unknown;
@@ -11,7 +14,7 @@ export async function POST(req: NextRequest) {
     payload = await req.json();
   } catch {
     return NextResponse.json(
-      { ok: false, error: "So'rov formati noto'g'ri" },
+      { ok: false, error: errs.bodyInvalid },
       { status: 400 }
     );
   }
@@ -21,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
-        error: "Validatsiya xatosi",
+        error: errs.validation,
         issues: parsed.error.issues.map((i) => ({
           path: i.path.join("."),
           message: i.message,
@@ -36,7 +39,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Telegram send failed:", err);
     return NextResponse.json(
-      { ok: false, error: "Xabarni yuborib bo'lmadi. Keyinroq urinib ko'ring." },
+      { ok: false, error: errs.send },
       { status: 502 }
     );
   }
@@ -46,7 +49,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   return NextResponse.json(
-    { ok: false, error: "Method not allowed" },
+    { ok: false, error: errs.methodNotAllowed },
     { status: 405 }
   );
 }

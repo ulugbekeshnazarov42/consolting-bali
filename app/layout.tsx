@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   creator: site.author,
   publisher: site.author,
   applicationName: site.name,
-  category: "Education",
+  category: "education",
   alternates: {
     canonical: "/",
   },
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
     images: ["/og.jpg"],
-    creator: "@guzalopa_edu",
+    creator: site.twitter,
   },
   robots: {
     index: true,
@@ -98,7 +98,10 @@ export default function RootLayout({
       className={`${sora.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full min-h-[100dvh] flex flex-col bg-background text-foreground">
+      <body
+        className="min-h-full min-h-[100dvh] flex flex-col bg-background text-foreground"
+        suppressHydrationWarning
+      >
         <JsonLd />
         <ThemeProvider
           attribute="class"

@@ -5,6 +5,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { content } from "@/lib/content";
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -18,7 +19,7 @@ export default function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
-      aria-label="Mavzuni almashtirish"
+      aria-label={content.themeToggle.ariaLabel}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="relative size-9 rounded-full border-border/60 bg-background/40 backdrop-blur hover:bg-primary/10 hover:border-primary/40"
     >

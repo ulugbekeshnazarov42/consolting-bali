@@ -6,7 +6,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { site } from "@/lib/site";
+import { content } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 export default function Navbar() {
@@ -14,7 +14,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const scrollRaf = React.useRef(0);
 
-  /** Passive scroll + bitta RAF — Motion scrollY emas, har freymda React ishlashi kamayadi */
   React.useEffect(() => {
     const onScroll = () => {
       if (scrollRaf.current) return;
@@ -59,7 +58,7 @@ export default function Navbar() {
         <Logo />
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {site.nav.map((item) => (
+          {content.nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
@@ -78,14 +77,14 @@ export default function Navbar() {
             className="hidden h-auto min-h-0 rounded-full bg-primary py-2.5 pl-4 pr-3 text-sm font-semibold leading-none text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90 md:inline-flex md:items-center md:gap-1.5"
           >
             <a href="#contact" className="inline-flex items-center gap-1.5">
-              Konsultatsiya
+              {content.navbar.ctaLabel}
               <ArrowUpRight className="size-3.5 shrink-0 md:size-4" />
             </a>
           </Button>
           <Button
             variant="outline"
             size="icon"
-            aria-label="Menyu"
+            aria-label={content.navbar.menuLabel}
             className="size-11 min-h-11 min-w-11 rounded-full border-border/60 lg:hidden sm:size-10 sm:min-h-10 sm:min-w-10"
             onClick={() => setOpen((v) => !v)}
           >
@@ -115,7 +114,7 @@ export default function Navbar() {
             className="border-t border-border/60 bg-background/95 backdrop-blur-md lg:hidden"
           >
             <nav className="container mx-auto flex flex-col gap-1 px-4 py-4">
-              {site.nav.map((item, i) => (
+              {content.nav.map((item, i) => (
                 <motion.a
                   key={item.href}
                   href={item.href}
@@ -134,7 +133,7 @@ export default function Navbar() {
                 className="mt-2 w-full rounded-xl bg-primary text-primary-foreground"
                 onClick={() => setOpen(false)}
               >
-                <a href="#contact">Bepul konsultatsiya</a>
+                <a href="#contact">{content.navbar.mobileCtaLabel}</a>
               </Button>
             </nav>
           </motion.div>

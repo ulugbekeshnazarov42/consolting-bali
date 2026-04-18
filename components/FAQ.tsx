@@ -9,37 +9,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { content } from "@/lib/content";
 
-const faqs = [
-  {
-    q: "Birinchi konsultatsiya bepulmi?",
-    a: "Ha — tanishuv va dastlabki yo'nalish suhbati odatda bepul. Keyingi bosqichlarda (hujjat tayyorlash, kuzatuv) xizmat hajmi va vaqt bo'yicha oldindan kelishamiz.",
-  },
-  {
-    q: "Singapurda o'qish uchun nimadan boshlash kerak?",
-    a: "Avvalo maqsad va fan yo'nalishingizni aniqlaymiz, keyin mos dasturlar va kirish talablarini ko'rib chiqamiz. IELTS/TOEFL va akademik hujjatlar ro'yxati har bir universitet bo'yicha farq qiladi — bularni birga tartibga solamiz.",
-  },
-  {
-    q: "Talabalik vizasini kafolat qilasizmi?",
-    a: "Yo'q — hech kim vizani kafolatlay olmaydi. Biz hujjatlarni to'g'ri tartibda tayyorlash, talablarni tushuntirish va jarayonni rejalashtirishda yordam beramiz. Yakuniy qaror har doim viza organlari qo'lida.",
-  },
-  {
-    q: "Universitetga kirishni kafolat qilasizmi?",
-    a: "Yo'q. Qabul qilishni universitet va dastur hal qiladi. Biz arizani kuchaytirish, motivatsion xat va strategiyani yaxshilashda yordam beramiz.",
-  },
-  {
-    q: "Bali dasturi nima uchun kerak?",
-    a: "Bu qisqa muddatli tayyorgarlik va xorijiy muhitga moslashish uchun variant bo'lishi mumkin — til, intizom va keyingi bosqich (masalan, Singapur yoki boshqa mamlakat) uchun poydevor.",
-  },
-  {
-    q: "Qatar yoki Dubay haqida maslahat berasizmi?",
-    a: "Ha — o'qishdan keyingi yo'nalish va ish imkoniyatlari bo'yicha umumiy yo'l-yo'riq beramiz. Aniq vakansiya yoki ish taklifini kafolatlamaymiz, lekin realistik reja tuzishga yordam beramiz.",
-  },
-  {
-    q: "Hujjatlar va shaxsiy ma'lumotlar xavfsizligi qanday?",
-    a: "Ma'lumotlaringiz faqat konsultatsiya maqsadida ishlatiladi va uchinchi shaxslarga sotilmaydi. Kelajakda sayt kontenti CMS (masalan, Strapi) orqali boshqarilsa ham, shaxsiy ma'lumotlar server tomonda qoladi.",
-  },
-];
+const faq = content.faq;
 
 export default function FAQ() {
   return (
@@ -57,15 +29,14 @@ export default function FAQ() {
         >
           <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             <HelpCircle className="size-3.5" />
-            Savol-javoblar
+            {faq.badge}
           </Badge>
           <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl">
-            Ko'p so'raladigan{" "}
-            <span className="text-gradient-orange">savollar</span>
+            {faq.heading.before}{" "}
+            <span className="text-gradient-orange">{faq.heading.accent}</span>
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
-            Quyida eng ko'p uchraydigan savollarga javoblar. Javob topmasangiz —
-            biz bilan bog'laning.
+            {faq.paragraph}
           </p>
         </motion.div>
 
@@ -77,7 +48,7 @@ export default function FAQ() {
           className="mx-auto mt-12 max-w-3xl rounded-3xl border border-border/60 bg-card/60 p-2 backdrop-blur-sm md:p-4"
         >
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((f, i) => (
+            {faq.items.map((f, i) => (
               <AccordionItem
                 key={i}
                 value={`item-${i}`}

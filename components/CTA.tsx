@@ -3,9 +3,14 @@
 import { motion } from "motion/react";
 import { ArrowUpRight, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { site } from "@/lib/site";
+import { content, resolveHref, isExternalHref } from "@/lib/content";
+
+const cta = content.cta;
 
 export default function CTA() {
+  const secondaryHref = resolveHref(cta.secondaryCta.href);
+  const secondaryIsExternal = isExternalHref(cta.secondaryCta.href);
+
   return (
     <section className="relative overflow-hidden py-24 md:py-28">
       <div className="container mx-auto px-4 md:px-6">
@@ -35,17 +40,15 @@ export default function CTA() {
                 <span className="absolute inset-0 motion-reduce:animate-none animate-ping rounded-full bg-primary/60" />
                 <span className="relative size-1.5 rounded-full bg-primary" />
               </span>
-              Keyingi qadam
+              {cta.eyebrow}
             </span>
 
             <h2 className="mt-6 text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
-              Ta'lim yo'lingizni{" "}
-              <span className="text-gradient-orange">birga rejalashtiramiz</span>
+              {cta.heading.before}{" "}
+              <span className="text-gradient-orange">{cta.heading.accent}</span>
             </h2>
             <p className="mt-6 text-lg text-muted-foreground">
-              Qisqa suhbatda maqsadingizni tinglaymiz va keyingi qadamlarni
-              tushunarli qilib beramiz. Hech qanday majburiyat yo'q — faqat
-              ochiq maslahat.
+              {cta.paragraph}
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -54,8 +57,8 @@ export default function CTA() {
                 size="lg"
                 className="group h-12 gap-2 rounded-full bg-primary px-7 text-base font-semibold shadow-xl shadow-primary/30 hover:bg-primary/90"
               >
-                <a href="#contact">
-                  Bepul konsultatsiya
+                <a href={cta.primaryCta.href}>
+                  {cta.primaryCta.label}
                   <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               </Button>
@@ -65,9 +68,13 @@ export default function CTA() {
                 variant="outline"
                 className="h-12 gap-2 rounded-full border-border/60 bg-background/40 px-7 text-base font-medium backdrop-blur hover:bg-muted/60"
               >
-                <a href={site.social.telegram} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={secondaryHref}
+                  target={secondaryIsExternal ? "_blank" : undefined}
+                  rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
+                >
                   <Send className="size-4 text-primary" />
-                  Telegramda yozish
+                  {cta.secondaryCta.label}
                 </a>
               </Button>
             </div>

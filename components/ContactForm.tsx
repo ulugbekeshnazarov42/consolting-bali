@@ -34,39 +34,59 @@ import {
   serviceLabels,
   ageLabels,
 } from "@/lib/schemas";
-import { site } from "@/lib/site";
+import { content } from "@/lib/content";
+
+const form = content.contactForm;
 
 const contacts = [
   {
     icon: Phone,
-    label: "Telefon",
-    value: site.contact.phone,
-    href: `tel:${site.contact.phone.replace(/\s/g, "")}`,
+    label: content.contact.phoneLabel,
+    value: content.contact.phone,
+    href: `tel:${content.contact.phone.replace(/\s/g, "")}`,
   },
   {
     icon: Mail,
-    label: "Email",
-    value: site.contact.email,
-    href: `mailto:${site.contact.email}`,
+    label: content.contact.emailLabel,
+    value: content.contact.email,
+    href: `mailto:${content.contact.email}`,
   },
   {
     icon: MessageSquare,
-    label: "Telegram",
-    value: site.contact.telegram,
-    href: site.social.telegram,
+    label: content.contact.telegramLabel,
+    value: content.contact.telegram,
+    href: content.social.telegram,
   },
   {
     icon: MapPin,
-    label: "Manzil",
-    value: site.contact.address,
+    label: content.contact.addressLabel,
+    value: content.contact.address,
     href: "#",
   },
 ];
 
+function isCurrentlyOnline(): boolean {
+  const now = new Date();
+  const day = now.getDay();
+  const hour = now.getHours() + now.getMinutes() / 60;
+  const { weekdays, saturday, sundayClosed } = content.contact.hours;
+
+  if (day === 0 && sundayClosed) return false;
+  if (day === 6) return hour >= saturday.startHour && hour < saturday.endHour;
+  return hour >= weekdays.startHour && hour < weekdays.endHour;
+}
+
 export default function ContactForm() {
   const [submitted, setSubmitted] = React.useState(false);
+  const [online, setOnline] = React.useState<boolean | null>(null);
 
-  const form = useForm<ContactInput>({
+  React.useEffect(() => {
+    setOnline(isCurrentlyOnline());
+    const id = setInterval(() => setOnline(isCurrentlyOnline()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const hookForm = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       name: "",
@@ -86,7 +106,7 @@ export default function ContactForm() {
     setValue,
     watch,
     reset,
-  } = form;
+  } = hookForm;
 
   const service = watch("service");
   const age = watch("age");
@@ -101,22 +121,19 @@ export default function ContactForm() {
       const json = await res.json();
 
       if (!res.ok || !json.ok) {
-        throw new Error(json.error || "Xatolik yuz berdi");
+        throw new Error(json.error || form.toast.errorFallback);
       }
 
-      toast.success("So'rovingiz yuborildi!", {
-        description:
-          "Tez orada siz bilan bog'lanamiz — asosiy aloqa Telegram orqali.",
+      toast.success(form.toast.successTitle, {
+        description: form.toast.successDesc,
       });
       reset();
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      toast.error("Yuborib bo'lmadi", {
+      toast.error(form.toast.errorTitle, {
         description:
-          err instanceof Error
-            ? err.message
-            : "Tarmoq xatosi. Keyinroq urinib ko'ring.",
+          err instanceof Error ? err.message : form.toast.errorFallback,
       });
     }
   };
@@ -140,15 +157,14 @@ export default function ContactForm() {
           className="mx-auto max-w-2xl text-center"
         >
           <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            Bog'lanish
+            {form.badge}
           </Badge>
           <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl">
-            <span className="text-gradient-orange">Bepul</span> konsultatsiya
-            uchun yozing
+            <span className="text-gradient-orange">{form.heading.accent}</span>{" "}
+            {form.heading.after}
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
-            Formani to'ldiring yoki Telegramdan yozing — qisqa javob va keyingi
-            qadamlar bo'yicha yo'l-yo'riq olasiz.
+            {form.paragraph}
           </p>
         </motion.div>
 
@@ -162,11 +178,10 @@ export default function ContactForm() {
           >
             <div className="rounded-3xl border border-border/60 bg-card/60 p-6 backdrop-blur-sm md:p-8">
               <h3 className="text-lg font-bold tracking-tight">
-                To'g'ridan-to'g'ri bog'laning
+                {form.side.title}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Tezkor yordam kerakmi? Quyidagi kanallar orqali bevosita biz
-                bilan aloqa o'rnating.
+                {form.side.paragraph}
               </p>
               <div className="mt-6 flex flex-col gap-3">
                 {contacts.map(({ icon: Icon, label, value, href }) => (
@@ -193,20 +208,34 @@ export default function ContactForm() {
 
             <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/15 via-transparent to-orange-500/10 p-6 md:p-8">
               <h3 className="text-lg font-bold tracking-tight">
-                Ish vaqti
+                {form.side.hoursTitle}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Dushanba – Juma · 09:00 – 19:00
+                {content.contact.hours.weekdays.days} · {content.contact.hours.weekdays.time}
                 <br />
-                Shanba · 10:00 – 15:00
+                {content.contact.hours.saturday.days} · {content.contact.hours.saturday.time}
               </p>
-              <p className="mt-4 flex items-center gap-2 text-xs font-semibold text-primary">
-                <span className="relative flex size-2">
-                  <span className="absolute inset-0 motion-reduce:animate-none animate-ping rounded-full bg-primary/60" />
-                  <span className="relative size-2 rounded-full bg-primary" />
-                </span>
-                Hozir onlayn
-              </p>
+              {online !== null && (
+                <p
+                  className={`mt-4 flex items-center gap-2 text-xs font-semibold ${
+                    online ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <span className="relative flex size-2">
+                    {online && (
+                      <span className="absolute inset-0 motion-reduce:animate-none animate-ping rounded-full bg-primary/60" />
+                    )}
+                    <span
+                      className={`relative size-2 rounded-full ${
+                        online ? "bg-primary" : "bg-muted-foreground/70"
+                      }`}
+                    />
+                  </span>
+                  {online
+                    ? content.contact.hours.onlineBadge
+                    : content.contact.hours.offlineBadge}
+                </p>
+              )}
             </div>
           </motion.aside>
 
@@ -222,11 +251,11 @@ export default function ContactForm() {
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="name">
-                  Ism <span className="text-primary">*</span>
+                  {form.fields.name.label} <span className="text-primary">{form.required}</span>
                 </Label>
                 <Input
                   id="name"
-                  placeholder="To'liq ismingiz"
+                  placeholder={form.fields.name.placeholder}
                   aria-invalid={!!errors.name}
                   className="h-11 rounded-xl"
                   {...register("name")}
@@ -240,12 +269,12 @@ export default function ContactForm() {
 
               <div className="flex flex-col gap-2">
                 <Label htmlFor="phone">
-                  Telefon <span className="text-primary">*</span>
+                  {form.fields.phone.label} <span className="text-primary">{form.required}</span>
                 </Label>
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+998 90 123 45 67"
+                  placeholder={form.fields.phone.placeholder}
                   aria-invalid={!!errors.phone}
                   className="h-11 rounded-xl"
                   {...register("phone")}
@@ -259,11 +288,11 @@ export default function ContactForm() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email (ixtiyoriy)</Label>
+              <Label htmlFor="email">{form.fields.email.label}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="siz@kompaniya.uz"
+                placeholder={form.fields.email.placeholder}
                 aria-invalid={!!errors.email}
                 className="h-11 rounded-xl"
                 {...register("email")}
@@ -276,7 +305,7 @@ export default function ContactForm() {
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="flex flex-col gap-2">
                 <Label>
-                  Qiziqtirgan xizmat <span className="text-primary">*</span>
+                  {form.fields.service.label} <span className="text-primary">{form.required}</span>
                 </Label>
                 <Select
                   value={service}
@@ -290,7 +319,7 @@ export default function ContactForm() {
                     aria-invalid={!!errors.service}
                     className="h-11 w-full rounded-xl"
                   >
-                    <SelectValue placeholder="Tanlang..." />
+                    <SelectValue placeholder={form.fields.service.placeholder} />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(serviceLabels).map(([k, label]) => (
@@ -309,7 +338,7 @@ export default function ContactForm() {
 
               <div className="flex flex-col gap-2">
                 <Label>
-                  Yosh oralig'i <span className="text-primary">*</span>
+                  {form.fields.age.label} <span className="text-primary">{form.required}</span>
                 </Label>
                 <Select
                   value={age}
@@ -323,7 +352,7 @@ export default function ContactForm() {
                     aria-invalid={!!errors.age}
                     className="h-11 w-full rounded-xl"
                   >
-                    <SelectValue placeholder="Tanlang..." />
+                    <SelectValue placeholder={form.fields.age.placeholder} />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(ageLabels).map(([k, label]) => (
@@ -343,12 +372,12 @@ export default function ContactForm() {
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="message">
-                Maqsad / savolingiz <span className="text-primary">*</span>
+                {form.fields.message.label} <span className="text-primary">{form.required}</span>
               </Label>
               <Textarea
                 id="message"
                 rows={5}
-                placeholder="Masalan: qaysi mamlakat va dastur qiziq, qachon boshlashni rejalashtiryapsiz, til sertifikatingiz bormi..."
+                placeholder={form.fields.message.placeholder}
                 aria-invalid={!!errors.message}
                 className="min-h-32 rounded-xl"
                 {...register("message")}
@@ -369,28 +398,27 @@ export default function ContactForm() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
-                  Yuborilmoqda...
+                  {form.submit.loading}
                 </>
               ) : submitted ? (
                 <>
                   <CheckCircle2 className="size-4" />
-                  Yuborildi
+                  {form.submit.done}
                 </>
               ) : (
                 <>
                   <Send className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  So'rovni yuborish
+                  {form.submit.idle}
                 </>
               )}
             </Button>
 
             <p className="text-center text-xs text-muted-foreground">
-              Formani yuborish orqali siz{" "}
-              <a href="#" className="text-primary hover:underline">
-                maxfiylik siyosati
+              {form.consent.before}
+              <a href={form.consent.linkHref} className="text-primary hover:underline">
+                {form.consent.link}
               </a>
-              ga rozilik bildirasiz. Ma'lumotlaringiz uchinchi shaxslarga
-              oshkor qilinmaydi.
+              {form.consent.after}
             </p>
           </motion.form>
         </div>

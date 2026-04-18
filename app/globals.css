@@ -124,6 +124,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scroll-behavior: smooth;
+    scrollbar-width: 0px;
+    scrollbar-color: transparent transparent;
   }
   html {
     /* scroll-smooth butun sahifada scrollni og‘irlashtiradi; anchor uchun brauzer default */
@@ -132,7 +135,10 @@
   }
   body {
     @apply bg-background text-foreground overflow-x-hidden;
-    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1,
+      "ss01" 1;
     /* iPhone X–17 Pro Max, Android — tirqish / landscape */
     padding-left: max(0px, env(safe-area-inset-left, 0px));
     padding-right: max(0px, env(safe-area-inset-right, 0px));
@@ -158,8 +164,16 @@
 
   .bg-grid {
     background-image:
-      linear-gradient(to right, color-mix(in oklch, var(--border) 40%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklch, var(--border) 40%, transparent) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        color-mix(in oklch, var(--border) 40%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--border) 40%, transparent) 1px,
+        transparent 1px
+      );
     background-size: 48px 48px;
   }
 
@@ -173,7 +187,11 @@
 
   .mask-radial-fade {
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      black 40%,
+      transparent 80%
+    );
   }
 
   .glow-orange {
@@ -184,23 +202,43 @@
 }
 
 @keyframes aurora {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  50% { transform: translate3d(-20px, 20px, 0) rotate(5deg); }
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-20px, 20px, 0) rotate(5deg);
+  }
 }
 
 @keyframes shine {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
 }
 
-.animate-aurora { animation: aurora 14s ease-in-out infinite; }
-.animate-shine { animation: shine 3s linear infinite; }
-.animate-float { animation: float-slow 6s ease-in-out infinite; }
+.animate-aurora {
+  animation: aurora 14s ease-in-out infinite;
+}
+.animate-shine {
+  animation: shine 3s linear infinite;
+}
+.animate-float {
+  animation: float-slow 6s ease-in-out infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-aurora,

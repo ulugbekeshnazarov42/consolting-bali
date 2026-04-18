@@ -2,6 +2,7 @@ import "server-only";
 
 import type { ContactInput } from "@/lib/schemas";
 import { ageLabels, serviceLabels } from "@/lib/schemas";
+import { content } from "@/lib/content";
 
 const TELEGRAM_API = "https://api.telegram.org";
 
@@ -19,16 +20,17 @@ export async function sendTelegramLead(data: ContactInput) {
     );
   }
 
+  const l = content.telegram.labels;
   const text = [
-    "*🎓 Yangi so'rov — Guzal Opa Education*",
+    `*${escapeMarkdown(content.telegram.leadTitle)}*`,
     "",
-    `*Ism:* ${escapeMarkdown(data.name)}`,
-    `*Telefon:* ${escapeMarkdown(data.phone)}`,
-    data.email ? `*Email:* ${escapeMarkdown(data.email)}` : null,
-    `*Yo'nalish:* ${escapeMarkdown(serviceLabels[data.service])}`,
-    `*Yosh:* ${escapeMarkdown(ageLabels[data.age])}`,
+    `*${l.name}:* ${escapeMarkdown(data.name)}`,
+    `*${l.phone}:* ${escapeMarkdown(data.phone)}`,
+    data.email ? `*${l.email}:* ${escapeMarkdown(data.email)}` : null,
+    `*${l.service}:* ${escapeMarkdown(serviceLabels[data.service])}`,
+    `*${l.age}:* ${escapeMarkdown(ageLabels[data.age])}`,
     "",
-    "*Xabar:*",
+    `*${l.message}:*`,
     escapeMarkdown(data.message),
     "",
     `_${escapeMarkdown(new Date().toLocaleString("uz-UZ"))}_`,
