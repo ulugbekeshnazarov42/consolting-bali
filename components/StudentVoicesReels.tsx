@@ -1,9 +1,5 @@
 "use client";
 
-import * as React from "react";
-import Marquee from "react-fast-marquee";
-import { motion, useReducedMotion } from "motion/react";
-import { MessagesSquare, Play, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +20,11 @@ import {
 } from "@/components/ui/drawer";
 import { content } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import gsap from "gsap";
+import { MessagesSquare, Play, Sparkles, X } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import * as React from "react";
+import Marquee from "react-fast-marquee";
 
 const reelsContent = content.reels;
 
@@ -40,6 +41,7 @@ const REEL_FALLBACK_SOURCES = [
 
 type Reel = (typeof reelsContent.items)[number];
 
+// --- YANGA: PREMIUM VIDEO MODAL BODY ---
 function ReelVideoBody({
   item,
   videoRef,
@@ -50,11 +52,14 @@ function ReelVideoBody({
   const sources = REEL_FALLBACK_SOURCES;
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-border/50 bg-card shadow-[0_12px_40px_-20px_color-mix(in_oklch,var(--foreground)_14%,transparent)]">
-      <div className="relative bg-black">
-        <div className="relative mx-auto aspect-9/16 max-h-[min(72vh,620px)] w-full max-w-sm md:max-w-md">
+    <div className="relative w-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/60 backdrop-blur-2xl shadow-[0_0_80px_-20px_var(--primary)] group">
+      {/* Background ambient glow inside modal */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-orange-500/10 opacity-50 z-0" />
+
+      <div className="relative z-10 bg-black">
+        <div className="relative mx-auto aspect-9/16 max-h-[min(75vh,680px)] w-full max-w-sm md:max-w-md">
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-linear-to-t from-black/55 to-transparent"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-black via-black/60 to-transparent"
             aria-hidden
           />
           <video
@@ -63,7 +68,7 @@ function ReelVideoBody({
             controls
             playsInline
             preload="metadata"
-            className="absolute inset-0 size-full object-cover"
+            className="absolute inset-0 size-full object-cover rounded-t-[2rem]"
           >
             {sources.map((s) => (
               <source key={s.src} src={s.src} type={s.type} />
@@ -73,30 +78,26 @@ function ReelVideoBody({
         </div>
       </div>
 
-      <div className="relative overflow-hidden border-t border-primary/20 bg-card text-left">
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_0%_0%,color-mix(in_oklch,var(--primary)_14%,transparent),transparent_52%),radial-gradient(90%_60%_at_100%_100%,color-mix(in_oklch,var(--foreground)_6%,transparent),transparent_55%)]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.4] mix-blend-soft-light [background-image:repeating-linear-gradient(-18deg,transparent,transparent_4px,color-mix(in_oklch,var(--foreground)_4%,transparent)_4px,color-mix(in_oklch,var(--foreground)_4%,transparent)_5px)]"
-          aria-hidden
-        />
-
-        <div className="relative px-5 pb-6 pt-5 md:px-7 md:pb-8 md:pt-6">
+      <div className="relative z-20 overflow-hidden border-t border-white/10 bg-black/40 text-left backdrop-blur-xl">
+        <div className="relative px-6 pb-8 pt-6 md:px-8 md:pb-10 md:pt-8">
           <span
-            className="pointer-events-none absolute right-4 top-2 font-heading text-[4.5rem] font-extrabold leading-none text-primary/7 select-none dark:text-primary/11 md:right-6 md:text-[5.25rem]"
+            className="pointer-events-none absolute right-4 top-2 font-heading text-[5rem] font-extrabold leading-none text-primary/10 select-none md:right-6 md:text-[6rem]"
             aria-hidden
           >
             &ldquo;
           </span>
 
-          <p className="relative z-10 font-heading text-lg font-extrabold tracking-tight text-foreground md:text-xl">
-            {item.name}
-          </p>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="flex size-6 items-center justify-center rounded-full bg-primary/20 border border-primary/30">
+              <Sparkles className="size-3 text-primary" />
+            </span>
+            <p className="relative z-10 font-heading text-xl font-extrabold tracking-tight text-white md:text-2xl drop-shadow-md">
+              {item.name}
+            </p>
+          </div>
 
-          <blockquote className="relative z-10 mt-3 border-l-[3px] border-primary/55 pl-4 md:mt-4 md:pl-5">
-            <p className="text-pretty font-heading text-[0.95rem] font-medium leading-[1.55] text-foreground/92 md:text-base md:leading-relaxed">
+          <blockquote className="relative z-10 mt-3 border-l-[3px] border-primary pl-4 md:mt-4 md:pl-5">
+            <p className="text-pretty font-heading text-base font-medium leading-relaxed text-white/80 md:text-lg">
               {item.quote}
             </p>
           </blockquote>
@@ -106,6 +107,7 @@ function ReelVideoBody({
   );
 }
 
+// --- YANGA: PREMIUM REEL CARD (Glass & 3D Hover) ---
 function ReelCard({
   item,
   className,
@@ -120,46 +122,58 @@ function ReelCard({
       type="button"
       onClick={() => onOpen(item)}
       className={cn(
-        "relative mx-2.5 block aspect-9/16 w-[min(11.5rem,calc(100vw-4rem))] shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-border/55 bg-card text-left shadow-[0_20px_50px_-24px_color-mix(in_oklch,var(--foreground)_22%,transparent)] transition-[transform,box-shadow] hover:z-1 hover:scale-[1.02] hover:shadow-[0_24px_56px_-20px_color-mix(in_oklch,var(--foreground)_28%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.99] sm:mx-3 sm:w-48 md:w-52 md:rounded-3xl motion-reduce:transition-none motion-reduce:hover:scale-100",
-        className
+        "relative mx-3 block aspect-9/16 w-[min(13rem,calc(100vw-4rem))] shrink-0 cursor-pointer overflow-visible rounded-[2rem] text-left transition-all duration-500 focus-visible:outline-none sm:mx-4 sm:w-56 md:w-64 group",
+        className,
       )}
     >
       <span className="sr-only">
         {item.name} — {reelsContent.openAriaSuffix}
       </span>
-      <img
-        src={item.image}
-        alt=""
-        className="pointer-events-none absolute inset-0 size-full object-cover"
-        loading="lazy"
-        decoding="async"
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-linear-to-t from-background via-background/55 to-transparent"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-linear-to-b from-foreground/35 via-transparent to-transparent opacity-90"
-        aria-hidden
-      />
 
-      <div className="pointer-events-none absolute inset-x-2.5 top-2.5 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
-        <span className="rounded-full bg-black/45 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/95 ring-1 ring-white/25 backdrop-blur-sm sm:text-[10px]">
-          <span className="mr-1 inline-block size-1.5 animate-pulse rounded-full bg-red-500 motion-reduce:animate-none" />
-          {reelsContent.liveLabel}
-        </span>
-        <span className="grid size-9 place-items-center rounded-full bg-white/20 text-white ring-1 ring-white/35 backdrop-blur-md sm:size-10">
-          <Play className="size-4 translate-x-0.5 fill-current sm:size-[1.05rem]" aria-hidden />
-        </span>
-      </div>
+      {/* Outer Glow Effect on Hover */}
+      <div className="absolute -inset-0.5 rounded-[2rem] bg-gradient-to-b from-primary/50 to-orange-500/50 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-60" />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3.5 sm:p-4">
-        <p className="text-pretty font-heading text-sm font-bold leading-snug text-foreground sm:text-[0.95rem]">
-          &ldquo;{item.quote}&rdquo;
-        </p>
-        <p className="mt-2 text-xs font-medium text-muted-foreground sm:text-[13px]">
-          <span className="text-foreground/90">{item.name}</span>
-        </p>
+      {/* Main Glass Container */}
+      <div className="relative size-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.03]">
+        <img
+          src={item.image}
+          alt=""
+          className="pointer-events-none absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-70"
+          aria-hidden
+        />
+
+        {/* Top Badges */}
+        <div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-2 sm:inset-x-4 sm:top-4 z-10">
+          <span className="flex items-center gap-1.5 rounded-full border border-red-500/30 bg-black/50 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-white shadow-lg backdrop-blur-md">
+            <span className="inline-block size-2 animate-pulse rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+            {reelsContent.liveLabel}
+          </span>
+        </div>
+
+        {/* Play Button - Centered on hover */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center z-20">
+          <span className="grid size-12 place-items-center rounded-full bg-white/10 text-white border border-white/20 backdrop-blur-md transition-all duration-500 group-hover:bg-primary/80 group-hover:border-primary group-hover:scale-125 group-hover:shadow-[0_0_30px_var(--primary)] sm:size-14">
+            <Play className="size-5 translate-x-0.5 fill-current" aria-hidden />
+          </span>
+        </div>
+
+        {/* Bottom Content */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 sm:p-5 z-10 transform transition-transform duration-500 group-hover:translate-y-[-4px]">
+          <p className="text-pretty font-heading text-sm font-bold leading-snug text-white sm:text-base drop-shadow-lg">
+            &ldquo;{item.quote}&rdquo;
+          </p>
+          <div className="mt-3 flex items-center gap-2">
+            <div className="h-px flex-1 bg-gradient-to-r from-primary to-transparent opacity-50" />
+            <p className="text-xs font-bold text-white/70 uppercase tracking-wider sm:text-[11px]">
+              {item.name}
+            </p>
+          </div>
+        </div>
       </div>
     </button>
   );
@@ -174,6 +188,40 @@ export default function StudentVoicesReels() {
   const [selected, setSelected] = React.useState<Reel | null>(null);
   const [useDialogShell, setUseDialogShell] = React.useState(false);
   const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  // --- GSAP Refs ---
+  const sectionRef = React.useRef<HTMLElement>(null);
+  const orb1Ref = React.useRef<HTMLDivElement>(null);
+  const orb2Ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (reduceMotion) return;
+
+    // Background Orbs Floating Animation (GSAP)
+    const ctx = gsap.context(() => {
+      gsap.to(orb1Ref.current, {
+        y: "random(-40, 40)",
+        x: "random(-40, 40)",
+        rotation: "random(-15, 15)",
+        duration: "random(4, 7)",
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      gsap.to(orb2Ref.current, {
+        y: "random(-50, 50)",
+        x: "random(-50, 50)",
+        scale: "random(0.9, 1.1)",
+        duration: "random(5, 8)",
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [reduceMotion]);
 
   const openReel = React.useCallback((item: Reel) => {
     setSelected(item);
@@ -192,85 +240,115 @@ export default function StudentVoicesReels() {
 
   return (
     <section
+      ref={sectionRef}
       id="fikrlar"
-      className="relative overflow-hidden border-b border-border/60 bg-muted/25 py-24 md:py-32 dark:bg-muted/10"
+      className="relative overflow-hidden border-b border-border/20 bg-background py-24 md:py-32"
       aria-labelledby="fikrlar-heading"
       aria-label={reelsContent.sectionAriaLabel}
     >
+      {/* Grid Overlay */}
       <div
-        className="pointer-events-none absolute inset-0 bg-dot mask-radial-fade opacity-20"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -left-32 top-1/3 h-72 w-72 rounded-full bg-primary/15 blur-[100px]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-orange-500/10 blur-[110px]"
+        className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-30"
         aria-hidden
       />
 
-      <div className="container relative mx-auto px-4 md:px-6">
+      {/* GSAP Animated Glowing Orbs */}
+      <div
+        ref={orb1Ref}
+        className="pointer-events-none absolute -left-40 top-1/4 size-[500px] rounded-full bg-primary/20 blur-[120px] opacity-60"
+        aria-hidden
+      />
+      <div
+        ref={orb2Ref}
+        className="pointer-events-none absolute -right-40 bottom-10 size-[550px] rounded-full bg-orange-500/15 blur-[130px] opacity-60"
+        aria-hidden
+      />
+
+      <div className="container relative mx-auto px-4 md:px-6 z-10">
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto max-w-2xl text-center md:max-w-3xl"
         >
-          <Badge className="mb-5 gap-1.5 rounded-full border border-primary/35 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            <MessagesSquare className="size-3.5" />
+          <Badge className="mb-6 gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-md">
+            <MessagesSquare className="size-4" />
             {reelsContent.badge}
           </Badge>
           <h2
             id="fikrlar-heading"
-            className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-[2.75rem] lg:leading-tight"
+            className="text-balance text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
           >
             {reelsContent.heading.before}{" "}
-            <span className="text-gradient-orange">{reelsContent.heading.accent}</span>
+            <span className="relative inline-block">
+              <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-xl bg-gradient-to-r from-primary/20 to-orange-500/20 blur-xl opacity-70" />
+              <span className="text-gradient-orange">
+                {reelsContent.heading.accent}
+              </span>
+            </span>
           </h2>
-          <p className="mt-5 text-base text-muted-foreground md:text-lg">
+          <p className="mt-6 text-lg text-white/70 md:text-xl max-w-xl mx-auto">
             {reelsContent.paragraph}
           </p>
         </motion.div>
 
-        <div className="relative mt-14 md:mt-16">
+        {/* Marquee Section */}
+        <div className="relative mt-16 md:mt-20">
+          {/* Side Fades for Marquee */}
           <div
-            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-linear-to-r from-background via-background/80 to-transparent md:w-20 lg:w-28 dark:from-background"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-background via-background/90 to-transparent md:w-32"
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-background via-background/80 to-transparent md:w-20 lg:w-28 dark:from-background"
+            className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-background via-background/90 to-transparent md:w-32"
             aria-hidden
           />
 
           {reduceMotion ? (
             <div
-              className="flex flex-wrap justify-center gap-y-8 pb-2 pt-2"
+              className="flex flex-wrap justify-center gap-y-10 pb-4 pt-4"
               role="list"
             >
               {reels.slice(0, 6).map((item) => (
-                <div key={item.id} role="listitem" className="flex justify-center">
+                <div
+                  key={item.id}
+                  role="listitem"
+                  className="flex justify-center"
+                >
                   <ReelCard item={item} onOpen={openReel} />
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col gap-8 md:gap-10">
-              <Marquee speed={34} pauseOnHover gradient={false} className="py-1">
+            <div className="flex flex-col gap-10 md:gap-14">
+              <Marquee
+                speed={40}
+                pauseOnHover
+                gradient={false}
+                className="py-4 overflow-visible"
+              >
                 {reels.map((item) => (
-                  <ReelCard key={`a-${item.id}`} item={item} onOpen={openReel} />
+                  <ReelCard
+                    key={`a-${item.id}`}
+                    item={item}
+                    onOpen={openReel}
+                  />
                 ))}
               </Marquee>
               <Marquee
-                speed={28}
+                speed={30}
                 direction="right"
                 pauseOnHover
                 gradient={false}
-                className="py-1"
+                className="py-4 overflow-visible"
               >
                 {rowB.map((item) => (
-                  <ReelCard key={`b-${item.id}`} item={item} onOpen={openReel} />
+                  <ReelCard
+                    key={`b-${item.id}`}
+                    item={item}
+                    onOpen={openReel}
+                  />
                 ))}
               </Marquee>
             </div>
@@ -278,27 +356,26 @@ export default function StudentVoicesReels() {
         </div>
       </div>
 
+      {/* Video Modal / Drawer Logic */}
       {selected && open && useDialogShell ? (
         <Dialog open onOpenChange={handleOpenChange}>
           <DialogContent
             showCloseButton={false}
-            className="max-w-[min(calc(100vw-1rem),24rem)] gap-0 overflow-hidden rounded-2xl border-border/60 p-0 sm:max-w-[min(calc(100vw-2rem),28rem)]"
+            className="max-w-[min(calc(100vw-1rem),28rem)] gap-0 overflow-visible rounded-[2rem] border-0 bg-transparent p-0"
           >
             <DialogHeader className="sr-only">
               <DialogTitle>{selected.name}</DialogTitle>
-              <DialogDescription>
-                {selected.program}
-              </DialogDescription>
+              <DialogDescription>{selected.program}</DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="absolute top-2 right-2 z-20 size-10 rounded-full border border-border/50 bg-background/80 text-foreground shadow-sm backdrop-blur-md hover:bg-background"
+                className="absolute -right-4 -top-4 z-50 size-12 rounded-full border border-white/20 bg-black/80 text-white shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 hover:bg-red-500 hover:border-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]"
                 aria-label={reelsContent.closeLabel}
               >
-                <X className="size-4" />
+                <X className="size-5" />
               </Button>
             </DialogClose>
             <ReelVideoBody
@@ -312,27 +389,25 @@ export default function StudentVoicesReels() {
         <Drawer open onOpenChange={handleOpenChange} repositionInputs={false}>
           <DrawerContent
             className={cn(
-              "max-h-[92vh] overflow-hidden rounded-t-[1.35rem] border border-border/50 bg-card p-0 shadow-[0_-20px_60px_-24px_color-mix(in_oklch,var(--foreground)_18%,transparent)]",
-              "ring-1 ring-inset ring-white/10 dark:ring-white/5",
-              "[&>div:first-child]:mt-3"
+              "max-h-[95vh] overflow-hidden rounded-t-[2rem] border border-white/10 bg-black/90 p-0 shadow-[0_-20px_80px_-20px_var(--primary)] backdrop-blur-2xl",
+              "ring-1 ring-inset ring-white/5",
+              "[&>div:first-child]:mt-4[&>div:first-child]:bg-white/20",
             )}
           >
             <DrawerHeader className="sr-only">
               <DrawerTitle>{selected.name}</DrawerTitle>
-              <DrawerDescription>
-                {selected.program}
-              </DrawerDescription>
+              <DrawerDescription>{selected.program}</DrawerDescription>
             </DrawerHeader>
-            <div className="relative max-h-[calc(92vh-1rem)] overflow-y-auto overscroll-contain">
+            <div className="relative max-h-[calc(95vh-1rem)] overflow-y-auto overscroll-contain bg-black/40">
               <DrawerClose asChild>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute top-3 right-4 z-20 size-11 rounded-full border border-border/55 bg-background/90 text-foreground shadow-md shadow-black/10 backdrop-blur-md hover:border-primary/35 hover:bg-background"
+                  className="absolute top-4 right-4 z-50 size-10 rounded-full border border-white/10 bg-black/60 text-white backdrop-blur-md transition-all active:scale-95 hover:bg-red-500/80"
                   aria-label={reelsContent.closeLabel}
                 >
-                  <X className="size-4" strokeWidth={2.25} />
+                  <X className="size-4" strokeWidth={2.5} />
                 </Button>
               </DrawerClose>
               <ReelVideoBody
