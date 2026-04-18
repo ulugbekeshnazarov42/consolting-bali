@@ -73,12 +73,21 @@ export default function Navbar() {
           <ThemeToggle />
           <Button
             asChild
-            size="sm"
-            className="hidden h-auto min-h-0 rounded-full bg-primary py-2.5 pl-4 pr-3 text-sm font-semibold leading-none text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90 md:inline-flex md:items-center md:gap-1.5"
+            size="icon"
+            variant="default"
+            className={cn(
+              "shrink-0 rounded-full bg-primary font-semibold leading-none text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90",
+              "size-11 min-h-11 min-w-11 max-sm:max-h-11 max-sm:max-w-11 p-0",
+              "sm:h-auto sm:min-h-0 sm:w-auto sm:max-w-none sm:gap-1.5 sm:px-4 sm:py-2.5 sm:text-sm"
+            )}
           >
-            <a href="#contact" className="inline-flex items-center gap-1.5">
-              {content.navbar.ctaLabel}
-              <ArrowUpRight className="size-3.5 shrink-0 md:size-4" />
+            <a
+              href="#contact"
+              aria-label={content.navbar.ctaLabel}
+              className="inline-flex max-sm:size-11 max-sm:items-center max-sm:justify-center items-center justify-center gap-0 sm:gap-1.5"
+            >
+              <span className="hidden sm:inline">{content.navbar.ctaLabel}</span>
+              <ArrowUpRight className="size-4 shrink-0 sm:size-3.5" aria-hidden />
             </a>
           </Button>
           <Button
