@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ArrowUp, MessageCircle, X } from "lucide-react";
 import { FaInstagram, FaTelegramPlane, FaYoutube } from "react-icons/fa";
+import { IoArrowUp, IoChatbubbleEllipsesOutline, IoClose } from "react-icons/io5";
 import { content } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
@@ -119,9 +119,9 @@ export default function FloatingDock() {
           )}
         >
           {expanded ? (
-            <X className="size-[18px]" strokeWidth={2.5} />
+            <IoClose className="size-[18px]" aria-hidden />
           ) : (
-            <MessageCircle className="size-[18px]" strokeWidth={2.2} />
+            <IoChatbubbleEllipsesOutline className="size-[18px]" aria-hidden />
           )}
         </button>
       </div>
@@ -145,7 +145,7 @@ export default function FloatingDock() {
             aria-label={content.floatingDock.scrollTopLabel}
             className="pointer-events-auto grid size-11 place-items-center rounded-full border border-border/60 bg-card/95 text-foreground shadow-lg shadow-black/15 backdrop-blur-sm transition-colors hover:border-primary/40 md:size-12 md:border-primary/30 md:bg-primary md:text-primary-foreground md:shadow-primary/35"
           >
-            <ArrowUp className="size-[18px] md:size-5" strokeWidth={2.5} />
+            <IoArrowUp className="size-[18px] md:size-5" aria-hidden />
           </motion.button>
         )}
       </AnimatePresence>

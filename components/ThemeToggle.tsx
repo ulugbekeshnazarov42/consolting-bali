@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { content } from "@/lib/content";
+import { cn } from "@/lib/utils";
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -21,7 +22,10 @@ export default function ThemeToggle() {
       size="icon"
       aria-label={content.themeToggle.ariaLabel}
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative size-9 rounded-full border-border/60 bg-background/40 backdrop-blur hover:bg-primary/10 hover:border-primary/40"
+      className={cn(
+        "relative size-11 min-h-11 min-w-11 shrink-0 rounded-full border-border/60 bg-background/40 p-0 backdrop-blur",
+        "hover:border-primary/40 hover:bg-primary/10"
+      )}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

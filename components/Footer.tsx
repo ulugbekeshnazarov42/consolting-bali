@@ -14,13 +14,13 @@ export default function Footer() {
     content.footer.columns;
 
   return (
-    <footer className="relative border-t border-border/60 bg-background max-lg:pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
+    <footer className="relative w-full min-w-0 border-t border-border/60 bg-background max-lg:pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"
         aria-hidden
       />
 
-      <div className="container mx-auto px-4 py-16 md:px-6 md:py-20">
+      <div className="container mx-auto w-full min-w-0 px-4 py-16 md:px-6 md:py-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="space-y-6 md:col-span-4">
             <Logo />

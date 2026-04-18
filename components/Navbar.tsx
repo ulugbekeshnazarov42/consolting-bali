@@ -74,18 +74,13 @@ export default function Navbar() {
           <Button
             asChild
             size="icon"
-            variant="default"
             className={cn(
-              "shrink-0 rounded-full bg-primary font-semibold leading-none text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90",
-              "size-11 min-h-11 min-w-11 max-sm:max-h-11 max-sm:max-w-11 p-0",
-              "sm:h-auto sm:min-h-0 sm:w-auto sm:max-w-none sm:gap-1.5 sm:px-4 sm:py-2.5 sm:text-sm"
+              "shrink-0 rounded-full bg-primary p-0 font-semibold leading-none text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90",
+              "max-sm:size-11 max-sm:max-h-11 max-sm:max-w-11 max-sm:min-h-11 max-sm:min-w-11",
+              "sm:inline-flex sm:h-11 sm:min-h-11 sm:min-w-0 sm:w-auto sm:gap-1.5 sm:px-4 sm:py-0 sm:text-sm"
             )}
           >
-            <a
-              href="#contact"
-              aria-label={content.navbar.ctaLabel}
-              className="inline-flex max-sm:size-11 max-sm:items-center max-sm:justify-center items-center justify-center gap-0 sm:gap-1.5"
-            >
+            <a href="#contact" aria-label={content.navbar.ctaLabel}>
               <span className="hidden sm:inline">{content.navbar.ctaLabel}</span>
               <ArrowUpRight className="size-4 shrink-0 sm:size-3.5" aria-hidden />
             </a>
@@ -94,7 +89,7 @@ export default function Navbar() {
             variant="outline"
             size="icon"
             aria-label={content.navbar.menuLabel}
-            className="size-11 min-h-11 min-w-11 rounded-full border-border/60 lg:hidden sm:size-10 sm:min-h-10 sm:min-w-10"
+            className="size-11 min-h-11 min-w-11 shrink-0 rounded-full border-border/60 p-0 lg:hidden"
             onClick={() => setOpen((v) => !v)}
           >
             <AnimatePresence mode="wait" initial={false}>
