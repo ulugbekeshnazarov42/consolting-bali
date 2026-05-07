@@ -377,7 +377,7 @@ export default function Hero() {
   );
 }
 
-function HeroCard({ card }: { card: any }) {
+function HeroCard({ card }: { card: typeof content.hero.card }) {
   return (
     <div className="relative w-full group">
       {/* Outer Glow Effect */}
@@ -419,7 +419,7 @@ function HeroCard({ card }: { card: any }) {
           <div className="absolute left-[39px] top-10 bottom-10 w-[2px] bg-gradient-to-b from-primary via-primary/40 to-transparent sm:left-[47px]" />
 
           <ul className="relative flex flex-col gap-0">
-            {card.destinations.map((d: any, i: number) => (
+            {card.destinations.map((d, i: number) => (
               <li
                 key={d.city}
                 className={cn(

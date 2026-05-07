@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { MessagesSquare, Play, Sparkles, X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import * as React from "react";
 import Marquee from "react-fast-marquee";
 
@@ -139,12 +140,12 @@ function ReelCard({
 
       {/* Main Glass Container */}
       <div className="relative size-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.03]">
-        <img
+        <Image
           src={item.image}
-          alt=""
-          className="pointer-events-none absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
-          loading="lazy"
-          decoding="async"
+          alt={item.name}
+          fill
+          className="pointer-events-none absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+          sizes="(max-width: 640px) 13rem, 16rem"
         />
         <div
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-70"

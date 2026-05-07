@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { motion, useMotionValue, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -422,22 +423,21 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
                 )}
 
                 <div className="relative w-full flex-1 overflow-hidden">
-                  <img
+                  <Image
                     alt={`${item.name}'s card`}
                     className={cn(
-                      "absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out",
+                      "object-cover transition-transform duration-500 ease-out",
                       isActive && isHovered && "scale-[1.03]"
                     )}
-                    decoding="async"
                     draggable={false}
-                    height={cardHeight}
                     src={item.image}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 900px"
                     style={{
                       zIndex: 1,
                       pointerEvents: "none",
                       userSelect: "none",
                     }}
-                    width={960}
                   />
                   <div
                     className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/55 via-black/10 to-transparent dark:from-black/65"
@@ -459,11 +459,10 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
                   target={item.href.startsWith("http") ? "_blank" : undefined}
                 >
                   <span className="relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-full bg-background/15 ring-2 ring-background/25">
-                    <img
+                    <Image
                       alt=""
                       aria-hidden
-                      className="size-full object-cover"
-                      decoding="async"
+                      className="object-cover"
                       height={36}
                       src={item.avatar}
                       width={36}

@@ -1,8 +1,6 @@
 "use client";
 
-import * as React from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,10 +8,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { content, interpolate } from "@/lib/content";
 import { getIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import * as React from "react";
 
 const onboarding = content.onboarding;
 const STORAGE_KEY = onboarding.storageKey;
@@ -34,6 +34,24 @@ function markSeen() {
 
 type Step = (typeof onboarding.steps)[number];
 
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 15, filter: "blur(5px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { type: "spring" as const, stiffness: 100, damping: 20 },
+  },
+};
+
 function StepBody({
   current,
   reduceMotion,
@@ -45,61 +63,63 @@ function StepBody({
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={current.id}
-        initial={
-          reduceMotion ? false : { opacity: 0, x: 14, filter: "blur(4px)" }
-        }
-        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+        initial={reduceMotion ? false : "hidden"}
+        animate="show"
         exit={
-          reduceMotion ? undefined : { opacity: 0, x: -10, filter: "blur(4px)" }
+          reduceMotion
+            ? undefined
+            : { opacity: 0, scale: 0.95, filter: "blur(4px)", transition: { duration: 0.2 } }
         }
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        variants={staggerContainer}
       >
         {current.body && (
-          <p
+          <motion.p
+            variants={reduceMotion ? undefined : staggerItem}
             className={cn(
-              "mb-3 text-center text-muted-foreground text-pretty last:mb-0",
-              "text-[15px] leading-relaxed sm:mb-4 sm:text-base",
-              "lg:mb-3 lg:text-[15px] lg:leading-relaxed xl:text-base"
+              "mb-4 text-center text-muted-foreground text-pretty last:mb-0",
+              "text-[15px] leading-relaxed sm:mb-5 sm:text-base",
+              "lg:mb-4 lg:text-[15px] lg:leading-relaxed xl:text-base"
             )}
           >
             {current.body}
-          </p>
+          </motion.p>
         )}
         {current.bullets && current.bullets.length > 0 && (
-          <ul className="flex flex-col gap-2.5 sm:gap-3 lg:gap-2.5">
+          <motion.ul variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {current.bullets.map((b) => {
               const BIcon = getIcon(b.icon);
               return (
-                <li
+                <motion.li
                   key={b.text}
+                  variants={reduceMotion ? undefined : staggerItem}
                   className={cn(
-                    "group flex items-start gap-3 rounded-2xl border border-border/50",
-                    "bg-background/35 px-3.5 py-3 text-left shadow-sm backdrop-blur-md",
-                    "transition-[border-color,box-shadow,background-color] duration-200",
-                    "hover:border-primary/35 hover:bg-background/50 hover:shadow-md",
-                    "sm:px-4 sm:py-3.5",
-                    "lg:rounded-xl lg:py-3"
+                    "group flex h-full items-start gap-3.5 rounded-2xl border border-border/40",
+                    "bg-gradient-to-br from-background/50 to-background/20 px-4 py-3.5 text-left shadow-sm backdrop-blur-md",
+                    "transition-all duration-300 ease-out hover:-translate-y-0.5",
+                    "hover:border-primary/40 hover:bg-background/60 hover:shadow-[0_8px_20px_-8px_color-mix(in_oklch,var(--primary)_20%,transparent)]",
+                    "sm:px-5 sm:py-4",
+                    "lg:rounded-[1.15rem] lg:py-3.5"
                   )}
                 >
                   <span
                     className={cn(
-                      "mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl",
-                      "bg-gradient-to-br from-primary/25 via-primary/12 to-primary/5",
-                      "text-primary shadow-inner shadow-primary/10",
-                      "ring-1 ring-inset ring-white/10 dark:ring-white/5",
-                      "transition-transform duration-200 group-hover:scale-[1.02]",
-                      "sm:size-10 lg:size-9"
+                      "mt-0.5 grid size-10 shrink-0 place-items-center rounded-xl",
+                      "bg-gradient-to-br from-primary/20 via-primary/10 to-transparent",
+                      "text-primary shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
+                      "ring-1 ring-inset ring-primary/20",
+                      "transition-all duration-300 group-hover:scale-110 group-hover:from-primary/30 group-hover:shadow-[0_0_15px_-3px_var(--primary)]",
+                      "sm:size-[2.65rem] lg:size-10"
                     )}
                   >
-                    <BIcon className="size-4 sm:size-[18px]" strokeWidth={1.85} />
+                    <BIcon className="size-[1.15rem] sm:size-5 lg:size-[1.15rem]" strokeWidth={2} />
                   </span>
-                  <span className="min-w-0 flex-1 pt-0.5 text-[13px] leading-relaxed text-foreground/92 sm:text-sm">
+                  <span className="min-w-0 flex-1 pt-1 text-[13.5px] leading-relaxed text-foreground/90 sm:text-[15px] lg:text-[14px]">
                     {interpolate(b.text, interpolateValues)}
                   </span>
-                </li>
+                </motion.li>
               );
             })}
-          </ul>
+          </motion.ul>
         )}
       </motion.div>
     </AnimatePresence>
@@ -163,80 +183,107 @@ export default function WelcomeOnboarding() {
       <DialogContent
         showCloseButton
         className={cn(
-          "flex max-h-[min(94dvh,720px)] flex-col gap-0 overflow-hidden rounded-2xl border-border/40 bg-card p-0",
-          "shadow-[0_0_0_1px_color-mix(in_oklch,var(--border)_50%,transparent),0_25px_80px_-20px_color-mix(in_oklch,var(--primary)_22%,transparent)]",
-          "w-[calc(100vw-1.25rem)] max-w-[calc(100vw-1.25rem)] sm:max-w-lg sm:rounded-[1.35rem]",
-          "md:max-w-xl md:rounded-[1.85rem]",
-          "lg:max-h-[min(640px,88vh)] lg:max-w-2xl lg:rounded-[2rem]",
-          "xl:max-w-2xl"
+          "flex !h-screen !w-screen !max-w-none flex-col gap-0 overflow-hidden !rounded-none !border-none bg-background/95 p-0 backdrop-blur-3xl dark:bg-black/90",
+          "shadow-none"
         )}
         onEscapeKeyDown={() => closeAndRemember()}
       >
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-          <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
-            aria-hidden
-          />
-          <div
-            className={cn(
-              "pointer-events-none absolute inset-0 bg-gradient-to-br opacity-90",
-              current.accent
-            )}
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute inset-0 bg-dot opacity-[0.07] mask-radial-fade"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/35"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -right-16 -top-12 size-48 rounded-full bg-primary/18 blur-3xl lg:size-56"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -bottom-12 -left-12 size-40 rounded-full bg-orange-500/15 blur-3xl lg:size-48"
-            aria-hidden
-          />
+          {/* Animated Background Orbs */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]" aria-hidden>
+            <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/95 to-background/80 z-[-1]" />
+            <motion.div
+              animate={{
+                x: [0, 30, -20, 0],
+                y: [0, -40, 20, 0],
+                scale: [1, 1.1, 0.9, 1]
+              }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              className="absolute -right-20 -top-20 size-[30rem] rounded-full bg-primary/20 blur-[100px] lg:size-[40rem] z-[-1]"
+            />
+            <motion.div
+              animate={{
+                x: [0, -40, 30, 0],
+                y: [0, 30, -30, 0],
+                scale: [1, 1.2, 0.8, 1]
+              }}
+              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+              className="absolute -bottom-32 -left-32 size-[30rem] rounded-full bg-orange-500/15 blur-[120px] lg:size-[50rem] z-[-1]"
+            />
+            <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.85] transition-colors duration-1000 z-[-1]", current.accent)} />
+            <div className="absolute inset-0 bg-grid mask-radial-fade opacity-[0.08] dark:opacity-[0.15] z-[-1]" />
+          </div>
 
+          {/* Top Edge Glow */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-70" aria-hidden />
+
+          {/* Header Content */}
           <div
             className={cn(
-              "relative shrink-0 px-5 pt-11 pb-1 sm:px-8 sm:pt-12",
-              "md:px-9 lg:px-10 lg:pt-11 lg:pb-2"
+              "relative shrink-0 px-5 pt-12 pb-2 sm:px-10 sm:pt-16",
+              "md:px-16 lg:px-24 lg:pt-20 lg:pb-6 max-w-5xl mx-auto w-full"
             )}
           >
-            <div className="mb-3 flex justify-center sm:mb-4">
-              <span className="inline-flex max-w-[92%] items-center justify-center rounded-full border border-primary/35 bg-primary/12 px-3.5 py-1.5 text-center font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-primary shadow-sm shadow-primary/10 sm:max-w-none sm:px-5 sm:text-[11px] sm:tracking-[0.24em]">
-                {onboarding.stepLabels[step]}
-              </span>
-            </div>
-
-            <div className="mb-4 flex justify-center sm:mb-5 lg:mb-4">
-              <span
-                className={cn(
-                  "relative grid place-items-center rounded-[1.15rem] bg-gradient-to-br from-primary via-primary to-orange-600 text-primary-foreground",
-                  "shadow-[0_12px_40px_-12px_color-mix(in_oklch,var(--primary)_55%,transparent),0_2px_0_0_color-mix(in_oklch,var(--primary)_40%,transparent)_inset]",
-                  "size-[3.65rem] ring-2 ring-white/15 ring-offset-2 ring-offset-transparent sm:size-16 lg:size-[4.35rem]"
-                )}
-              >
-                <span className="absolute inset-0 rounded-[1.15rem] bg-gradient-to-b from-white/30 to-transparent" />
-                <Icon className="relative size-[1.65rem] drop-shadow-sm sm:size-8 lg:size-9" strokeWidth={1.65} />
-              </span>
-            </div>
-
-            <DialogTitle
-              className={cn(
-                "text-center font-heading font-extrabold capitalize tracking-tight text-balance text-foreground",
-                "text-[1.35rem] leading-[1.2] sm:text-[1.65rem] lg:text-[1.7rem] xl:text-[1.8rem]"
-              )}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 flex justify-center sm:mb-6"
             >
-              {current.title}
-            </DialogTitle>
-            <p className="mt-2 text-center text-sm font-semibold tracking-wide text-primary/95 lg:text-[0.98rem]">
-              {current.subtitle}
-            </p>
+              <div className="relative group">
+                <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-primary/50 to-orange-500/50 blur-sm opacity-50 group-hover:opacity-100 transition duration-500" />
+                <span className="relative inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background/80 px-4 py-1.5 font-heading text-xs font-bold uppercase tracking-[0.22em] text-primary shadow-sm backdrop-blur-md sm:px-6 sm:text-sm sm:tracking-[0.24em]">
+                  <Sparkles className="size-4 text-orange-500" />
+                  {onboarding.stepLabels[step]}
+                </span>
+              </div>
+            </motion.div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.icon}
+                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                className="mb-6 flex justify-center sm:mb-8 lg:mb-8"
+              >
+                <div className="relative">
+                  <span className="absolute -inset-2 animate-pulse rounded-full bg-primary/20 blur-2xl" />
+                  <span
+                    className={cn(
+                      "relative grid place-items-center rounded-3xl bg-gradient-to-br from-primary via-primary to-orange-600 text-white",
+                      "shadow-[0_12px_40px_-12px_color-mix(in_oklch,var(--primary)_60%,transparent),inset_0_2px_0_0_rgba(255,255,255,0.2)]",
+                      "size-20 ring-1 ring-white/20 sm:size-24 lg:size-28"
+                    )}
+                  >
+                    <Icon className="size-10 drop-shadow-md sm:size-12 lg:size-14" strokeWidth={1.5} />
+                  </span>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.title}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <DialogTitle
+                  className={cn(
+                    "text-center font-heading font-extrabold capitalize tracking-tight text-balance text-foreground",
+                    "text-3xl leading-[1.2] sm:text-4xl lg:text-5xl"
+                  )}
+                >
+                  {current.title}
+                </DialogTitle>
+                <p className="mt-4 text-center text-base font-semibold tracking-wide text-primary/90 sm:text-lg lg:text-xl">
+                  {current.subtitle}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+
             <DialogDescription className="sr-only">
               {interpolate(onboarding.progressSrTemplate, {
                 step: step + 1,
@@ -246,34 +293,28 @@ export default function WelcomeOnboarding() {
             </DialogDescription>
           </div>
 
-          <div className="relative min-h-0 flex-1 border-t border-border/25 px-5 pt-1 sm:px-8 md:px-9 lg:flex lg:min-h-[305px] lg:flex-col lg:px-10 lg:pt-2">
-            <ScrollArea
-              className={cn(
-                "w-full lg:hidden",
-                "h-[min(42vh,304px)] sm:h-[min(40vh,328px)]"
-              )}
-            >
-              <div className="pr-3 pb-3 pt-2">
+          {/* Scrollable Content */}
+          <div className="relative min-h-0 flex-1 px-5 pt-2 sm:px-10 md:px-16 lg:px-24 w-full max-w-5xl mx-auto">
+            {/* Subtle Divider */}
+            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-border/40 to-transparent" />
+
+            <ScrollArea className="h-full w-full">
+              <div className="pr-4 pb-12 pt-4">
                 <StepBody current={current} reduceMotion={reduceMotion} />
               </div>
             </ScrollArea>
-
-            <div className="hidden min-h-0 flex-1 flex-col lg:flex lg:overflow-visible">
-              <div className="pb-3 pt-2">
-                <StepBody current={current} reduceMotion={reduceMotion} />
-              </div>
-            </div>
           </div>
 
+          {/* Footer Area */}
           <div
             className={cn(
-              "relative shrink-0 border-t border-border/35 bg-gradient-to-t from-card/95 via-card/88 to-card/75",
-              "px-5 py-4 backdrop-blur-xl sm:px-8",
-              "md:px-9 lg:px-10 lg:py-5"
+              "relative shrink-0 border-t border-border/20 bg-background/50",
+              "px-5 py-5 backdrop-blur-2xl sm:px-10",
+              "md:px-12 lg:px-14 lg:py-6"
             )}
           >
             <div
-              className="mb-4 flex max-w-full justify-center gap-1.5 px-1 sm:gap-2"
+              className="mb-5 flex max-w-full justify-center gap-2 px-1"
               role="tablist"
               aria-label={onboarding.stepsAriaLabel}
             >
@@ -286,55 +327,52 @@ export default function WelcomeOnboarding() {
                   aria-label={interpolate(onboarding.stepAriaTemplate, { n: i + 1 })}
                   onClick={() => setStep(i)}
                   className={cn(
-                    "h-2 shrink-0 rounded-full transition-all duration-300 ease-out",
+                    "h-2 shrink-0 rounded-full transition-all duration-500 ease-out",
                     i === step
-                      ? "w-8 bg-primary shadow-[0_0_14px_-2px_color-mix(in_oklch,var(--primary)_65%,transparent)] sm:w-9"
-                      : "w-1.5 bg-muted-foreground/28 hover:bg-muted-foreground/48"
+                      ? "w-10 bg-gradient-to-r from-primary to-orange-500 shadow-[0_0_15px_color-mix(in_oklch,var(--primary)_60%,transparent)]"
+                      : "w-2 bg-muted-foreground/20 hover:bg-muted-foreground/40"
                   )}
                 />
               ))}
             </div>
 
-            <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="order-2 h-9 text-muted-foreground underline-offset-4 hover:bg-transparent hover:text-foreground hover:underline sm:order-1"
+                className="order-2 h-11 text-muted-foreground underline-offset-4 hover:bg-transparent hover:text-foreground hover:underline sm:order-1 font-semibold"
                 onClick={closeAndRemember}
               >
                 {onboarding.skipLabel}
               </Button>
-              <div className="order-1 flex w-full gap-2.5 sm:order-2 sm:w-auto sm:justify-end">
+              <div className="order-1 flex w-full gap-3 sm:order-2 sm:w-auto sm:justify-end">
                 {step > 0 && (
                   <Button
                     type="button"
                     variant="outline"
-                    size="default"
-                    className="h-10 flex-1 rounded-full border-border/60 bg-background/40 shadow-sm sm:h-10 sm:flex-initial sm:min-w-[7.25rem]"
+                    className="h-12 flex-1 rounded-full border-border/40 bg-background/50 shadow-sm hover:bg-background/80 hover:text-primary transition-all sm:flex-initial sm:min-w-[8rem] font-semibold"
                     onClick={goBack}
                   >
                     {onboarding.backLabel}
                   </Button>
                 )}
-                {step < onboarding.steps.length - 1 ? (
-                  <Button
-                    type="button"
-                    className="h-10 flex-1 rounded-full font-semibold shadow-lg shadow-primary/25 sm:flex-initial sm:min-w-[9.5rem]"
-                    onClick={goNext}
-                  >
-                    {onboarding.nextLabel}
-                    <ArrowRight className="size-4" />
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    className="h-10 flex-1 rounded-full font-semibold shadow-lg shadow-primary/25 sm:flex-initial sm:min-w-[9.5rem]"
-                    onClick={closeAndRemember}
-                  >
-                    {onboarding.finishLabel}
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  className={cn(
+                    "group relative h-12 flex-1 overflow-hidden rounded-full font-semibold transition-all sm:flex-initial sm:min-w-[11rem]",
+                    "bg-gradient-to-r from-primary to-orange-500 text-white shadow-[0_8px_25px_-5px_color-mix(in_oklch,var(--primary)_50%,transparent)] hover:shadow-[0_10px_30px_-5px_color-mix(in_oklch,var(--primary)_60%,transparent)]"
+                  )}
+                  onClick={step < onboarding.steps.length - 1 ? goNext : closeAndRemember}
+                >
+                  <span className="absolute inset-0 bg-white/20 translate-y-full transition-transform duration-300 group-hover:translate-y-0" />
+                  <span className="relative flex items-center justify-center gap-2">
+                    {step < onboarding.steps.length - 1 ? onboarding.nextLabel : onboarding.finishLabel}
+                    {step < onboarding.steps.length - 1 && (
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                    )}
+                  </span>
+                </Button>
               </div>
             </div>
           </div>
