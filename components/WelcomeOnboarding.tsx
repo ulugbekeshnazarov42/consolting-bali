@@ -205,7 +205,7 @@ function ImagePanel({
       {/* Brand top-left */}
       <div className="absolute left-8 top-8">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/40">
-          Guzal Opa Education
+          VisaWithJanet
         </p>
       </div>
 

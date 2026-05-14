@@ -1,11 +1,11 @@
 {
   "brand": {
-    "name": "Guzal Opa Education",
-    "shortName": "Guzal Opa",
+    "name": "VisaWithJanet",
+    "shortName": "VisaWithJanet",
     "url": "https://guzalopa.uz",
     "tagline": "Xalqaro ta'lim bo'yicha ishonchli ekspert va hamrohingiz",
-    "description": "Guzal Opa Education — yoshlarga Singapur va Balidagi ta'lim imkoniyatlarini kashf etishda yordam beruvchi shaxsiy maslahatchi. Universitetga qabul, hujjatlar tayyorlash va viza jarayonlarida to'liq va shaffof hamrohlik.",
-    "author": "Guzal Opa Education",
+    "description": "VisaWithJanet — yoshlarga Singapur va Balidagi ta'lim imkoniyatlarini kashf etishda yordam beruvchi shaxsiy maslahatchi. Universitetga qabul, hujjatlar tayyorlash va viza jarayonlarida to'liq va shaffof hamrohlik.",
+    "author": "VisaWithJanet",
     "locale": "uz_UZ",
     "twitter": "@guzalopa_edu",
     "keywords": [
@@ -16,8 +16,8 @@
       "universitetga kirish",
       "hujjatlarni tayyorlash",
       "motivatsion xat",
-      "Guzal Opa",
-      "Guzal Opa Education",
+      "VisaWithJanet",
+      "VisaWithJanet",
       "study abroad Uzbekistan",
       "Singapore study consulting",
       "Bali study program"
@@ -253,7 +253,7 @@
   "reels": {
     "badge": "Real Natijalar",
     "heading": { "before": "Talabalarimizning", "accent": "jonli hikoyalari" },
-    "paragraph": "Guzal Opa Education orqali orzusidagi universitetlarga qabul qilingan yoshlarning haqiqiy taassurotlari bilan tanishing.",
+    "paragraph": "VisaWithJanet orqali orzusidagi universitetlarga qabul qilingan yoshlarning haqiqiy taassurotlari bilan tanishing.",
     "sectionAriaLabel": "Talabalar sharhlari",
     "liveLabel": "Sharh",
     "openAriaSuffix": "videoni ko'rish",
@@ -264,7 +264,7 @@
         "id": "a",
         "name": "Madina K.",
         "program": "Singapur Milliy Universiteti",
-        "quote": "SOP yozish shunchalik qiyinligini bilmagandim. Guzal opa bilan uni mukammal darajaga yetkazdik!",
+        "quote": "SOP yozish shunchalik qiyinligini bilmagandim. VisaWithJanet bilan uni mukammal darajaga yetkazdik!",
         "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=480&h=854&q=80"
       },
       {
@@ -292,7 +292,7 @@
         "id": "e",
         "name": "Shahnoza R.",
         "program": "SMU · Bakalavr",
-        "quote": "O'zbekistondagi boshqa agentliklar rad etgan qiyin holatimda Guzal Opa Education to'g'ri strategiya chizib berdi.",
+        "quote": "O'zbekistondagi boshqa agentliklar rad etgan qiyin holatimda VisaWithJanet to'g'ri strategiya chizib berdi.",
         "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=480&h=854&q=80"
       },
       {
@@ -575,13 +575,13 @@
     "paragraph": "Bizning talabalarimizning o'z so'zlari bilan aytilgan haqiqiy tajribalari.",
     "items": [
       {
-        "text": "Guzal opa bilan ishlash hayotimning eng to'g'ri qadami bo'ldi. Hujjatlarimni yig'ishdan to vizagacha har bir bosqichda yonimda bo'lishdi. NUS — endi mening universitetim!",
+        "text": "VisaWithJanet bilan ishlash hayotimning eng to'g'ri qadami bo'ldi. Hujjatlarimni yig'ishdan to vizagacha har bir bosqichda yonimda bo'lishdi. NUS — endi mening universitetim!",
         "name": "Madina Karimova",
         "program": "NUS · Kompyuter Fanlari",
         "initial": "M"
       },
       {
-        "text": "Singapur Polytechnicga kirish uchun 6 oy harakat qildim, lekin hujjatlardan qo'rqqandim. Guzal Opa Education bilan 3 oyda hamma narsa tayyor bo'ldi. Juda professional va samimiy jamoa.",
+        "text": "Singapur Polytechnicga kirish uchun 6 oy harakat qildim, lekin hujjatlardan qo'rqqandim. VisaWithJanet bilan 3 oyda hamma narsa tayyor bo'ldi. Juda professional va samimiy jamoa.",
         "name": "Jasur Toshmatov",
         "program": "SP · Biznes Menejment",
         "initial": "J"
@@ -593,13 +593,13 @@
         "initial": "N"
       },
       {
-        "text": "Viza intervyusidan oldin juda xavotirlandim. Lekin Guzal opa menga barcha savol-javoblarni mashq qilishga yordam berdi. Natijada birinchi urinishda viza chiqqan!",
+        "text": "Viza intervyusidan oldin juda xavotirlandim. Lekin VisaWithJanet menga barcha savol-javoblarni mashq qilishga yordam berdi. Natijada birinchi urinishda viza chiqqan!",
         "name": "Behzod Mirzayev",
         "program": "SMU · Iqtisodiyot",
         "initial": "B"
       },
       {
-        "text": "Motivatsion xatimni yozishda uzoq qiynaldim. Guzal opa bilan birga yozdik — komissiya «Bu xat juda ta'sirchan» dedi. Qabul qildim! Har qanday narxga arziydi.",
+        "text": "Motivatsion xatimni yozishda uzoq qiynaldim. VisaWithJanet bilan birga yozdik — komissiya «Bu xat juda ta'sirchan» dedi. Qabul qildim! Har qanday narxga arziydi.",
         "name": "Shahnoza Razzaqova",
         "program": "NTU · Dizayn",
         "initial": "S"
@@ -633,12 +633,12 @@
     "ariaLabel": "Dizayn rangini o'zgartirish"
   },
   "logo": {
-    "ariaLabel": "Guzal Opa Education - Asosiy Sahifa",
-    "primary": "Guzal Opa",
-    "secondary": "Education"
+    "ariaLabel": "VisaWithJanet - Asosiy Sahifa",
+    "primary": "VisaWithJanet",
+    "secondary": ""
   },
   "onboarding": {
-    "storageKey": "guzalopa_welcome_onboarding_v1",
+    "storageKey": "visawithjanet_welcome_onboarding_v1",
     "skipLabel": "O'tkazib yuborish",
     "nextLabel": "Keyingi qadam",
     "backLabel": "Orqaga",
@@ -658,7 +658,7 @@
     "steps": [
       {
         "id": "welcome",
-        "title": "Guzal Opa Education",
+        "title": "VisaWithJanet",
         "subtitle": "Xalqaro Ta'lim Olami",
         "body": "Xorijda o'qish yo'lini tanlab eng to'g'ri ishni qildingiz. Biz sizga Osiyoning yulduzlari — Singapur va Bali ta'lim tizimiga kafolatlangan va shaffof yo'lni ko'rsatamiz.",
         "icon": "Heart",
@@ -791,7 +791,7 @@
     ]
   },
   "telegram": {
-    "leadTitle": "🌟 Yangi Mijoz Arizasi — Guzal Opa Education",
+    "leadTitle": "🌟 Yangi Mijoz Arizasi — VisaWithJanet",
     "labels": {
       "name": "👤 Ism-Familiya:",
       "phone": "📞 Telefon:",
