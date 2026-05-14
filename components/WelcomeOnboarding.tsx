@@ -1,8 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import * as React from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { X, ArrowLeft, ArrowRight } from "lucide-react";
+
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -11,14 +16,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { content, interpolate } from "@/lib/content";
 import { getIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import * as React from "react";
 
-const onboarding = content.onboarding;
-const STORAGE_KEY = onboarding.storageKey;
+const ob = content.onboarding;
+const STORAGE_KEY = ob.storageKey;
 
-const interpolateValues = {
+const ivals = {
   telegram: content.contact.telegram,
   phone: content.contact.phone,
   address: content.contact.address,
@@ -27,129 +29,240 @@ const interpolateValues = {
 function markSeen() {
   try {
     localStorage.setItem(STORAGE_KEY, "1");
-  } catch {
-    /* private mode */
-  }
+  } catch {}
 }
 
-type Step = (typeof onboarding.steps)[number];
+type Step = (typeof ob.steps)[number];
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08 },
-  },
-};
+/* ── Bullet item ─────────────────────────────────────── */
+function Bullet({
+  b,
+  index,
+  reduceMotion,
+}: {
+  b: Step["bullets"][number];
+  index: number;
+  reduceMotion: boolean | null;
+}) {
+  const BIcon = getIcon(b.icon);
+  return (
+    <motion.li
+      initial={reduceMotion ? false : { opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{
+        delay: index * 0.07 + 0.15,
+        duration: 0.45,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      className="group flex items-start gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.025] px-5 py-4 transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.04]"
+    >
+      <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-orange-500/10 text-primary ring-1 ring-inset ring-primary/25 transition-all duration-300 group-hover:ring-primary/50">
+        <BIcon className="size-4" strokeWidth={2} />
+      </span>
+      <span className="min-w-0 flex-1 pt-0.5 text-[14px] leading-relaxed text-zinc-300 sm:text-[15px]">
+        {interpolate(b.text, ivals)}
+      </span>
+    </motion.li>
+  );
+}
 
-const staggerItem = {
-  hidden: { opacity: 0, y: 15, filter: "blur(5px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { type: "spring" as const, stiffness: 100, damping: 20 },
-  },
-};
-
-function StepBody({
+/* ── Step content area ───────────────────────────────── */
+function StepContent({
   current,
+  direction,
   reduceMotion,
 }: {
   current: Step;
+  direction: number;
   reduceMotion: boolean | null;
 }) {
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="wait" custom={direction}>
       <motion.div
         key={current.id}
-        initial={reduceMotion ? false : "hidden"}
-        animate="show"
+        custom={direction}
+        initial={
+          reduceMotion ? false : { opacity: 0, x: direction * 56, filter: "blur(4px)" }
+        }
+        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
         exit={
           reduceMotion
             ? undefined
-            : { opacity: 0, scale: 0.95, filter: "blur(4px)", transition: { duration: 0.2 } }
+            : {
+                opacity: 0,
+                x: direction * -40,
+                filter: "blur(4px)",
+                transition: { duration: 0.22 },
+              }
         }
-        variants={staggerContainer}
+        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+        className="flex flex-col gap-6 pb-10"
       >
-        {current.body && (
-          <motion.p
-            variants={reduceMotion ? undefined : staggerItem}
-            className={cn(
-              "mb-4 text-center text-muted-foreground text-pretty last:mb-0",
-              "text-[15px] leading-relaxed sm:mb-5 sm:text-base",
-              "lg:mb-4 lg:text-[15px] lg:leading-relaxed xl:text-base"
-            )}
+        {/* Title block */}
+        <div className="space-y-2">
+          <DialogTitle
+            className="font-extrabold leading-[1.08] tracking-[-0.028em] text-white"
+            style={{ fontSize: "clamp(1.65rem, 3.5vw, 2.5rem)" }}
           >
+            {current.title}
+          </DialogTitle>
+          <p className="text-sm font-semibold tracking-wide text-primary/80 sm:text-[15px]">
+            {current.subtitle}
+          </p>
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3">
+          <span className="h-px w-10 bg-gradient-to-r from-primary to-transparent" />
+          <span className="h-px flex-1 bg-white/[0.05]" />
+        </div>
+
+        {/* Body text */}
+        {current.body && (
+          <p className="text-[15px] leading-[1.72] text-zinc-400">
             {current.body}
-          </motion.p>
+          </p>
         )}
-        {current.bullets && current.bullets.length > 0 && (
-          <motion.ul variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            {current.bullets.map((b) => {
-              const BIcon = getIcon(b.icon);
-              return (
-                <motion.li
-                  key={b.text}
-                  variants={reduceMotion ? undefined : staggerItem}
-                  className={cn(
-                    "group flex h-full items-start gap-3.5 rounded-2xl border border-border/40",
-                    "bg-gradient-to-br from-background/50 to-background/20 px-4 py-3.5 text-left shadow-sm backdrop-blur-md",
-                    "transition-all duration-300 ease-out hover:-translate-y-0.5",
-                    "hover:border-primary/40 hover:bg-background/60 hover:shadow-[0_8px_20px_-8px_color-mix(in_oklch,var(--primary)_20%,transparent)]",
-                    "sm:px-5 sm:py-4",
-                    "lg:rounded-[1.15rem] lg:py-3.5"
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "mt-0.5 grid size-10 shrink-0 place-items-center rounded-xl",
-                      "bg-gradient-to-br from-primary/20 via-primary/10 to-transparent",
-                      "text-primary shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
-                      "ring-1 ring-inset ring-primary/20",
-                      "transition-all duration-300 group-hover:scale-110 group-hover:from-primary/30 group-hover:shadow-[0_0_15px_-3px_var(--primary)]",
-                      "sm:size-[2.65rem] lg:size-10"
-                    )}
-                  >
-                    <BIcon className="size-[1.15rem] sm:size-5 lg:size-[1.15rem]" strokeWidth={2} />
-                  </span>
-                  <span className="min-w-0 flex-1 pt-1 text-[13.5px] leading-relaxed text-foreground/90 sm:text-[15px] lg:text-[14px]">
-                    {interpolate(b.text, interpolateValues)}
-                  </span>
-                </motion.li>
-              );
-            })}
-          </motion.ul>
+
+        {/* Bullets */}
+        {current.bullets.length > 0 && (
+          <ul className="flex flex-col gap-2.5">
+            {current.bullets.map((b, i) => (
+              <Bullet
+                key={b.text}
+                b={b}
+                index={i}
+                reduceMotion={reduceMotion}
+              />
+            ))}
+          </ul>
         )}
       </motion.div>
     </AnimatePresence>
   );
 }
 
+/* ── Left image panel (desktop) ─────────────────────── */
+function ImagePanel({
+  current,
+  step,
+  total,
+  progress,
+  reduceMotion,
+}: {
+  current: Step;
+  step: number;
+  total: number;
+  progress: number;
+  reduceMotion: boolean | null;
+}) {
+  const Icon = getIcon(current.icon);
+  return (
+    <div className="relative hidden overflow-hidden md:flex md:w-[40%] lg:w-[42%] xl:w-[44%] 2xl:w-[46%]">
+      {/* Crossfading image */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current.id + "-img"}
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={current.image}
+            alt={current.title}
+            fill
+            priority
+            sizes="46vw"
+            className="object-cover"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-zinc-950/95" />
+      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-transparent to-black/20" />
+
+      {/* Vertical progress bar — left edge */}
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-white/[0.06]">
+        <motion.div
+          className="w-full origin-top rounded-b-full bg-gradient-to-b from-primary to-orange-400"
+          animate={{ scaleY: progress / 100 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        />
+      </div>
+
+      {/* Large faded step number */}
+      <div
+        className="pointer-events-none absolute right-3 top-6 select-none font-black leading-none text-white/[0.06]"
+        style={{ fontSize: "clamp(8rem, 20vw, 16rem)" }}
+        aria-hidden
+      >
+        {String(step + 1).padStart(2, "0")}
+      </div>
+
+      {/* Brand top-left */}
+      <div className="absolute left-8 top-8">
+        <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/40">
+          Guzal Opa Education
+        </p>
+      </div>
+
+      {/* Bottom info */}
+      <div className="relative mt-auto p-8 xl:p-10">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.id + "-panel-info"}
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="flex flex-col gap-4"
+          >
+            {/* Step counter */}
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.32em] text-primary/70">
+              {step + 1} / {total} · {ob.stepLabels[step]}
+            </p>
+
+            {/* Icon badge */}
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-orange-600 shadow-[0_12px_32px_-6px_oklch(0.769_0.188_70.08_/_0.7)] ring-1 ring-white/15">
+              <Icon className="size-7 text-white" strokeWidth={1.5} />
+            </div>
+
+            {/* Title preview */}
+            <p className="text-xl font-bold leading-snug tracking-tight text-white xl:text-2xl">
+              {current.title}
+            </p>
+            <p className="text-[13px] font-semibold text-primary/70">
+              {current.subtitle}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+/* ── Main component ──────────────────────────────────── */
 export default function WelcomeOnboarding() {
   const [open, setOpen] = React.useState(false);
   const [step, setStep] = React.useState(0);
+  const [direction, setDirection] = React.useState(1);
   const [hydrated, setHydrated] = React.useState(false);
   const reduceMotion = useReducedMotion();
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const forceDemo =
-      params.get("onboarding") === "1" || params.get("demo") === "1";
-    if (forceDemo) {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        /* ignore */
-      }
+    const demo = params.get("onboarding") === "1" || params.get("demo") === "1";
+    if (demo) {
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setOpen(true);
       setHydrated(true);
       return;
     }
-
     try {
-      const seen = localStorage.getItem(STORAGE_KEY);
-      if (!seen) setOpen(true);
+      if (!localStorage.getItem(STORAGE_KEY)) setOpen(true);
     } catch {
       setOpen(true);
     }
@@ -161,218 +274,221 @@ export default function WelcomeOnboarding() {
     setOpen(false);
   }, []);
 
-  const handleOpenChange = (next: boolean) => {
-    if (!next) closeAndRemember();
-    else setOpen(next);
+  const navigate = (dir: number) => {
+    setDirection(dir);
+    setStep((s) => Math.max(0, Math.min(ob.steps.length - 1, s + dir)));
   };
 
   const goNext = () => {
-    if (step < onboarding.steps.length - 1) setStep((s) => s + 1);
+    if (step < ob.steps.length - 1) navigate(1);
     else closeAndRemember();
   };
 
-  const goBack = () => setStep((s) => Math.max(0, s - 1));
+  const goBack = () => navigate(-1);
 
-  const current = onboarding.steps[step];
+  const current = ob.steps[step];
   const Icon = getIcon(current.icon);
+  const total = ob.steps.length;
+  const progress = ((step + 1) / total) * 100;
 
   if (!hydrated) return null;
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { if (!v) closeAndRemember(); }}>
       <DialogContent
-        showCloseButton
+        showCloseButton={false}
         className={cn(
-          "flex !h-screen !w-screen !max-w-none flex-col gap-0 overflow-hidden !rounded-none !border-none bg-background/95 p-0 backdrop-blur-3xl dark:bg-black/90",
-          "shadow-none"
+          "!h-[100dvh] !w-screen !max-w-none !rounded-none !border-none bg-zinc-950 p-0 shadow-none",
+          "flex overflow-hidden",
         )}
-        onEscapeKeyDown={() => closeAndRemember()}
+        onEscapeKeyDown={closeAndRemember}
       >
-        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-          {/* Animated Background Orbs */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]" aria-hidden>
-            <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/95 to-background/80 z-[-1]" />
-            <motion.div
-              animate={{
-                x: [0, 30, -20, 0],
-                y: [0, -40, 20, 0],
-                scale: [1, 1.1, 0.9, 1]
-              }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute -right-20 -top-20 size-[30rem] rounded-full bg-primary/20 blur-[100px] lg:size-[40rem] z-[-1]"
-            />
-            <motion.div
-              animate={{
-                x: [0, -40, 30, 0],
-                y: [0, 30, -30, 0],
-                scale: [1, 1.2, 0.8, 1]
-              }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-32 -left-32 size-[30rem] rounded-full bg-orange-500/15 blur-[120px] lg:size-[50rem] z-[-1]"
-            />
-            <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.85] transition-colors duration-1000 z-[-1]", current.accent)} />
-            <div className="absolute inset-0 bg-grid mask-radial-fade opacity-[0.08] dark:opacity-[0.15] z-[-1]" />
-          </div>
+        <DialogDescription className="sr-only">
+          {interpolate(ob.progressSrTemplate, {
+            step: step + 1,
+            total,
+            title: current.title,
+          })}
+        </DialogDescription>
 
-          {/* Top Edge Glow */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-70" aria-hidden />
+        {/* ── Desktop left: image panel ── */}
+        <ImagePanel
+          current={current}
+          step={step}
+          total={total}
+          progress={progress}
+          reduceMotion={reduceMotion}
+        />
 
-          {/* Header Content */}
-          <div
-            className={cn(
-              "relative shrink-0 px-5 pt-12 pb-2 sm:px-10 sm:pt-16",
-              "md:px-16 lg:px-24 lg:pt-20 lg:pb-6 max-w-5xl mx-auto w-full"
-            )}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-4 flex justify-center sm:mb-6"
-            >
-              <div className="relative group">
-                <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-primary/50 to-orange-500/50 blur-sm opacity-50 group-hover:opacity-100 transition duration-500" />
-                <span className="relative inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background/80 px-4 py-1.5 font-heading text-xs font-bold uppercase tracking-[0.22em] text-primary shadow-sm backdrop-blur-md sm:px-6 sm:text-sm sm:tracking-[0.24em]">
-                  <Sparkles className="size-4 text-orange-500" />
-                  {onboarding.stepLabels[step]}
-                </span>
-              </div>
-            </motion.div>
+        {/* ── Right / mobile: content panel ── */}
+        <div className="flex min-h-0 flex-1 flex-col bg-zinc-950">
 
+          {/* Mobile: image strip */}
+          <div className="relative shrink-0 md:hidden" style={{ height: "38vh" }}>
             <AnimatePresence mode="wait">
               <motion.div
-                key={current.icon}
-                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                className="mb-6 flex justify-center sm:mb-8 lg:mb-8"
+                key={current.id + "-mob"}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0"
               >
-                <div className="relative">
-                  <span className="absolute -inset-2 animate-pulse rounded-full bg-primary/20 blur-2xl" />
-                  <span
-                    className={cn(
-                      "relative grid place-items-center rounded-3xl bg-gradient-to-br from-primary via-primary to-orange-600 text-white",
-                      "shadow-[0_12px_40px_-12px_color-mix(in_oklch,var(--primary)_60%,transparent),inset_0_2px_0_0_rgba(255,255,255,0.2)]",
-                      "size-20 ring-1 ring-white/20 sm:size-24 lg:size-28"
-                    )}
-                  >
-                    <Icon className="size-10 drop-shadow-md sm:size-12 lg:size-14" strokeWidth={1.5} />
+                <Image
+                  src={current.image}
+                  alt={current.title}
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              </motion.div>
+            </AnimatePresence>
+            {/* Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-zinc-950/20 to-zinc-950" />
+            <div className="absolute inset-x-0 bottom-0 px-5 pb-4">
+              {/* Mobile step badge */}
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="grid size-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-orange-600 shadow-[0_4px_16px_-4px_oklch(0.769_0.188_70.08_/_0.65)]">
+                    <Icon className="size-4 text-white" strokeWidth={2} />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-primary/80">
+                    {ob.stepLabels[step]}
                   </span>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <DialogTitle
-                  className={cn(
-                    "text-center font-heading font-extrabold capitalize tracking-tight text-balance text-foreground",
-                    "text-3xl leading-[1.2] sm:text-4xl lg:text-5xl"
-                  )}
-                >
-                  {current.title}
-                </DialogTitle>
-                <p className="mt-4 text-center text-base font-semibold tracking-wide text-primary/90 sm:text-lg lg:text-xl">
-                  {current.subtitle}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            <DialogDescription className="sr-only">
-              {interpolate(onboarding.progressSrTemplate, {
-                step: step + 1,
-                total: onboarding.steps.length,
-                title: current.title,
-              })}
-            </DialogDescription>
-          </div>
-
-          {/* Scrollable Content */}
-          <div className="relative min-h-0 flex-1 px-5 pt-2 sm:px-10 md:px-16 lg:px-24 w-full max-w-5xl mx-auto">
-            {/* Subtle Divider */}
-            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-border/40 to-transparent" />
-
-            <ScrollArea className="h-full w-full">
-              <div className="pr-4 pb-12 pt-4">
-                <StepBody current={current} reduceMotion={reduceMotion} />
+                <span className="text-[11px] font-bold tabular-nums text-zinc-400">
+                  {step + 1}/{total}
+                </span>
               </div>
-            </ScrollArea>
+              {/* Mobile progress bar */}
+              <div className="h-[2px] w-full overflow-hidden rounded-full bg-white/[0.08]">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-primary to-orange-400"
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Footer Area */}
-          <div
-            className={cn(
-              "relative shrink-0 border-t border-border/20 bg-background/50",
-              "px-5 py-5 backdrop-blur-2xl sm:px-10",
-              "md:px-12 lg:px-14 lg:py-6"
-            )}
-          >
+          {/* Top bar — desktop only */}
+          <div className="hidden shrink-0 items-center justify-between border-b border-white/[0.06] px-8 py-4 md:flex lg:px-10">
+            {/* Step dots */}
             <div
-              className="mb-5 flex max-w-full justify-center gap-2 px-1"
+              className="flex items-center gap-2"
               role="tablist"
-              aria-label={onboarding.stepsAriaLabel}
+              aria-label={ob.stepsAriaLabel}
             >
-              {onboarding.steps.map((s, i) => (
+              {ob.steps.map((s, i) => (
                 <button
                   key={s.id}
                   type="button"
                   role="tab"
                   aria-selected={i === step}
-                  aria-label={interpolate(onboarding.stepAriaTemplate, { n: i + 1 })}
-                  onClick={() => setStep(i)}
+                  aria-label={interpolate(ob.stepAriaTemplate, { n: i + 1 })}
+                  onClick={() => {
+                    setDirection(i > step ? 1 : -1);
+                    setStep(i);
+                  }}
                   className={cn(
-                    "h-2 shrink-0 rounded-full transition-all duration-500 ease-out",
+                    "h-[5px] rounded-full transition-all duration-400",
                     i === step
-                      ? "w-10 bg-gradient-to-r from-primary to-orange-500 shadow-[0_0_15px_color-mix(in_oklch,var(--primary)_60%,transparent)]"
-                      : "w-2 bg-muted-foreground/20 hover:bg-muted-foreground/40"
+                      ? "w-8 bg-gradient-to-r from-primary to-orange-400 shadow-[0_0_10px_oklch(0.769_0.188_70.08_/_0.55)]"
+                      : "w-[5px] bg-zinc-700 hover:bg-zinc-500",
                   )}
                 />
               ))}
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="order-2 h-11 text-muted-foreground underline-offset-4 hover:bg-transparent hover:text-foreground hover:underline sm:order-1 font-semibold"
-                onClick={closeAndRemember}
+            {/* Close X */}
+            <DialogClose asChild>
+              <button
+                onClick={markSeen}
+                className="flex size-9 items-center justify-center rounded-full border border-white/[0.08] text-zinc-500 transition-all hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
+                aria-label="Yopish"
               >
-                {onboarding.skipLabel}
-              </Button>
-              <div className="order-1 flex w-full gap-3 sm:order-2 sm:w-auto sm:justify-end">
-                {step > 0 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-12 flex-1 rounded-full border-border/40 bg-background/50 shadow-sm hover:bg-background/80 hover:text-primary transition-all sm:flex-initial sm:min-w-[8rem] font-semibold"
-                    onClick={goBack}
-                  >
-                    {onboarding.backLabel}
-                  </Button>
-                )}
-                <Button
+                <X className="size-4" />
+              </button>
+            </DialogClose>
+          </div>
+
+          {/* Scrollable content */}
+          <ScrollArea className="min-h-0 flex-1">
+            <div className="px-5 pt-7 pb-4 sm:px-8 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+              <StepContent
+                current={current}
+                direction={direction}
+                reduceMotion={reduceMotion}
+              />
+            </div>
+          </ScrollArea>
+
+          {/* Footer navigation */}
+          <div className="shrink-0 border-t border-white/[0.06] bg-zinc-950/80 px-5 py-4 backdrop-blur-xl sm:px-8 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+            {/* Mobile dots */}
+            <div
+              className="mb-4 flex items-center justify-center gap-2 md:hidden"
+              role="tablist"
+              aria-label={ob.stepsAriaLabel}
+            >
+              {ob.steps.map((s, i) => (
+                <button
+                  key={s.id}
                   type="button"
+                  role="tab"
+                  aria-selected={i === step}
+                  aria-label={interpolate(ob.stepAriaTemplate, { n: i + 1 })}
+                  onClick={() => {
+                    setDirection(i > step ? 1 : -1);
+                    setStep(i);
+                  }}
                   className={cn(
-                    "group relative h-12 flex-1 overflow-hidden rounded-full font-semibold transition-all sm:flex-initial sm:min-w-[11rem]",
-                    "bg-gradient-to-r from-primary to-orange-500 text-white shadow-[0_8px_25px_-5px_color-mix(in_oklch,var(--primary)_50%,transparent)] hover:shadow-[0_10px_30px_-5px_color-mix(in_oklch,var(--primary)_60%,transparent)]"
+                    "h-[5px] rounded-full transition-all duration-300",
+                    i === step
+                      ? "w-7 bg-gradient-to-r from-primary to-orange-400 shadow-[0_0_8px_oklch(0.769_0.188_70.08_/_0.5)]"
+                      : "w-[5px] bg-zinc-700 hover:bg-zinc-500",
                   )}
-                  onClick={step < onboarding.steps.length - 1 ? goNext : closeAndRemember}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between gap-3">
+              {/* Skip */}
+              <button
+                type="button"
+                onClick={closeAndRemember}
+                className="shrink-0 text-[13px] font-semibold text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-300 hover:underline"
+              >
+                {ob.skipLabel}
+              </button>
+
+              {/* Back + Next */}
+              <div className="flex items-center gap-2.5">
+                {step > 0 && (
+                  <button
+                    type="button"
+                    onClick={goBack}
+                    className="flex h-11 items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 text-sm font-bold text-zinc-400 backdrop-blur-sm transition-all hover:border-white/[0.16] hover:bg-white/[0.06] hover:text-white sm:px-5"
+                  >
+                    <ArrowLeft className="size-4 shrink-0" />
+                    <span className="hidden sm:inline">{ob.backLabel}</span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={step < total - 1 ? goNext : closeAndRemember}
+                  className="group relative h-11 overflow-hidden rounded-full bg-primary px-5 text-sm font-bold text-zinc-950 shadow-[0_0_0_1px_oklch(0.769_0.188_70.08/0.45),0_8px_28px_-4px_oklch(0.769_0.188_70.08/0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_oklch(0.769_0.188_70.08/0.65),0_12px_36px_-4px_oklch(0.769_0.188_70.08/0.7)] sm:px-7"
                 >
-                  <span className="absolute inset-0 bg-white/20 translate-y-full transition-transform duration-300 group-hover:translate-y-0" />
-                  <span className="relative flex items-center justify-center gap-2">
-                    {step < onboarding.steps.length - 1 ? onboarding.nextLabel : onboarding.finishLabel}
-                    {step < onboarding.steps.length - 1 && (
-                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/22 to-transparent" />
+                  <span className="relative flex items-center gap-2">
+                    {step < total - 1 ? ob.nextLabel : ob.finishLabel}
+                    {step < total - 1 && (
+                      <ArrowRight className="size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
                     )}
                   </span>
-                </Button>
+                </button>
               </div>
             </div>
           </div>

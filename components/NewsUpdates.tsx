@@ -1,329 +1,151 @@
 "use client";
 
 import ScrollableCardStack from "@/components/smoothui/scrollable-card-stack";
-import { Badge } from "@/components/ui/badge";
-import { SectionCtaLink } from "@/components/section-cta-link";
 import { content, isExternalHref, resolveHref } from "@/lib/content";
-import {
-  SECTION_HEADING_ACCENT_CLASS,
-  sectionHeadingClassName,
-} from "@/lib/section-heading";
 import { cn } from "@/lib/utils";
-import gsap from "gsap";
-import { Sparkles } from "lucide-react";
-import { motion } from "motion/react"; // Yoki framer-motion
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
 import * as React from "react";
 import { FaTelegramPlane } from "react-icons/fa";
-import { HiArrowUpRight } from "react-icons/hi2";
 
 const news = content.news;
+
 const resolvedCards = news.cards.map((c) => ({
   ...c,
   href: resolveHref(c.href),
 }));
 
-function useNewsCardHeight() {
-  const [height, setHeight] = React.useState(400);
-
+function useCardHeight() {
+  const [h, setH] = React.useState(420);
   React.useEffect(() => {
-    const mqLg = window.matchMedia("(min-width: 1024px)");
-    const mqMd = window.matchMedia("(min-width: 768px)");
-    const update = () => {
-      if (mqLg.matches) setHeight(520);
-      else if (mqMd.matches) setHeight(440);
-      else setHeight(400);
-    };
-    update();
-    mqLg.addEventListener("change", update);
-    mqMd.addEventListener("change", update);
-    return () => {
-      mqLg.removeEventListener("change", update);
-      mqMd.removeEventListener("change", update);
-    };
+    const upd = () =>
+      setH(window.innerWidth >= 1024 ? 520 : window.innerWidth >= 768 ? 460 : 420);
+    upd();
+    window.addEventListener("resize", upd);
+    return () => window.removeEventListener("resize", upd);
   }, []);
-
-  return height;
-}
-
-// --- GSAP Magnetic Button Component ---
-function MagneticElement({
-  children,
-  strength = 0.3,
-}: {
-  children: React.ReactNode;
-  strength?: number;
-}) {
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const xTo = gsap.quickTo(element, "x", {
-      duration: 1,
-      ease: "elastic.out(1, 0.3)",
-    });
-    const yTo = gsap.quickTo(element, "y", {
-      duration: 1,
-      ease: "elastic.out(1, 0.3)",
-    });
-
-    const mouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { height, width, left, top } = element.getBoundingClientRect();
-      const x = clientX - (left + width / 2);
-      const y = clientY - (top + height / 2);
-      xTo(x * strength);
-      yTo(y * strength);
-    };
-
-    const mouseLeave = () => {
-      xTo(0);
-      yTo(0);
-    };
-
-    element.addEventListener("mousemove", mouseMove);
-    element.addEventListener("mouseleave", mouseLeave);
-
-    return () => {
-      element.removeEventListener("mousemove", mouseMove);
-      element.removeEventListener("mouseleave", mouseLeave);
-    };
-  }, [strength]);
-
-  return (
-    <div ref={ref} className="inline-block w-full z-10">
-      {children}
-    </div>
-  );
+  return h;
 }
 
 export default function NewsUpdates() {
-  const cardHeight = useNewsCardHeight();
+  const cardHeight = useCardHeight();
   const secondaryHref = resolveHref(news.secondaryCta.href);
   const secondaryIsExternal = isExternalHref(news.secondaryCta.href);
 
-  // GSAP Refs
-  const sectionRef = React.useRef<HTMLElement>(null);
-  const orb1Ref = React.useRef<HTMLDivElement>(null);
-  const orb2Ref = React.useRef<HTMLDivElement>(null);
-  const rightColRef = React.useRef<HTMLDivElement>(null);
-
-  // GSAP Animations (Orbs + 3D Hover Tilt)
-  React.useEffect(() => {
-    const ctx = gsap.context(() => {
-      // 1. Floating Orbs
-      gsap.to(orb1Ref.current, {
-        y: "random(-30, 30)",
-        x: "random(-30, 30)",
-        duration: "random(4, 6)",
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      gsap.to(orb2Ref.current, {
-        y: "random(-40, 40)",
-        x: "random(-40, 40)",
-        scale: "random(0.9, 1.2)",
-        duration: "random(5, 7)",
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-    }, sectionRef);
-
-    // 2. 3D Tilt for Right Column
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!rightColRef.current) return;
-      const { clientX, clientY } = e;
-      const xPos = clientX / window.innerWidth - 0.5;
-      const yPos = clientY / window.innerHeight - 0.5;
-
-      gsap.to(rightColRef.current, {
-        rotationY: xPos * 8, // Subtle tilt so it doesn't break cards UX
-        rotationX: -yPos * 8,
-        ease: "power3.out",
-        transformPerspective: 1200,
-        duration: 1.5,
-      });
-    };
-
-    const handleMouseLeave = () => {
-      if (!rightColRef.current) return;
-      gsap.to(rightColRef.current, {
-        rotationY: 0,
-        rotationX: 0,
-        duration: 1.5,
-        ease: "power3.out",
-      });
-    };
-
-    const section = sectionRef.current;
-    if (section) {
-      window.addEventListener("mousemove", handleMouseMove);
-      section.addEventListener("mouseleave", handleMouseLeave);
-    }
-
-    return () => {
-      ctx.revert();
-      if (section) {
-        window.removeEventListener("mousemove", handleMouseMove);
-        section.removeEventListener("mouseleave", handleMouseLeave);
-      }
-    };
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="news"
-      className="relative overflow-hidden border-b border-border/20 bg-background py-24 md:py-32"
+      className="relative overflow-hidden border-b border-white/[0.06] bg-zinc-950 py-24 md:py-32"
     >
-      {/* Background Grid Pattern */}
-      <div
-        className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-30"
-        aria-hidden
-      />
+      {/* bg */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.016)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.016)_1px,transparent_1px)] bg-[size:56px_56px]" />
+        <div className="absolute left-0 top-1/4 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/[0.1] blur-[130px]" />
+        <div className="absolute right-0 top-1/2 h-[400px] w-[400px] translate-x-1/4 rounded-full bg-orange-500/[0.07] blur-[120px]" />
+      </div>
 
-      {/* Animated GSAP Orbs */}
-      <div
-        ref={orb1Ref}
-        className="pointer-events-none absolute left-0 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px] opacity-60"
-        aria-hidden
-      />
-      <div
-        ref={orb2Ref}
-        className="pointer-events-none absolute right-0 top-1/2 h-[450px] w-[450px] -translate-y-1/2 translate-x-1/4 rounded-full bg-orange-500/15 blur-[120px] opacity-60"
-        aria-hidden
-      />
+      <div className="container relative mx-auto px-4 md:px-6">
+        <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20 xl:gap-28">
 
-      <div className="container relative mx-auto px-4 md:px-6 z-10">
-        <div className="grid content-start items-center gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20">
-          {/* LEFT COLUMN: Texts and Actions */}
+          {/* ── LEFT: text ── */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -32 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="order-1 flex w-full min-w-0 max-w-none flex-col items-center self-center text-center lg:order-1 lg:col-span-6 lg:col-start-1"
+            className="flex flex-col"
           >
-            <Badge className="mb-6 w-fit gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium tracking-wide text-primary shadow-sm backdrop-blur-md hover:bg-primary/20 transition-colors">
-              <Sparkles className="size-4" />
+            {/* Section number accent */}
+            <p className="mb-6 text-[10px] font-extrabold uppercase tracking-[0.32em] text-primary/60">
               {news.badge}
-            </Badge>
+            </p>
 
+            {/* Headline */}
             <h2
-              className={sectionHeadingClassName({
-                inverse: true,
-                variant: "news",
-                className: "relative w-full text-balance text-center",
-              })}
+              className="font-extrabold leading-[1.04] tracking-[-0.025em] text-white"
+              style={{ fontSize: "clamp(2rem, 4.5vw, 3.6rem)" }}
             >
-              <span className="mx-auto flex w-full max-w-4xl flex-col items-center px-1 sm:px-2">
-                <span
-                  className="mb-4 h-1 w-14 shrink-0 rounded-full bg-linear-to-r from-primary via-orange-400 to-primary/30 sm:mb-5 sm:w-16"
-                  aria-hidden
-                />
-                <span className="inline-block max-w-full">
-                  <span className="text-white/94">
-                    {news.heading.before}
-                  </span>{" "}
-                  <span className="relative inline-block group align-baseline">
-                    <span
-                      className="pointer-events-none absolute inset-[-0.12em_-0.25em] -z-10 rounded-2xl bg-linear-to-r from-primary/35 via-orange-500/25 to-transparent blur-2xl opacity-80 transition-opacity duration-500 group-hover:opacity-100"
-                      aria-hidden
-                    />
-                    <span
-                      className={cn(
-                        SECTION_HEADING_ACCENT_CLASS,
-                        "relative drop-shadow-[0_2px_18px_rgba(0,0,0,0.35)]"
-                      )}
-                    >
-                      {news.heading.accent}
-                    </span>
-                  </span>
-                  <span className="mt-3 block text-[0.78em] font-semibold leading-snug tracking-[-0.02em] text-white/72 md:mt-3.5 md:text-[0.76em]">
-                    {news.heading.after}
-                  </span>
+              <span className="text-white/80">{news.heading.before} </span>
+              <span className="text-gradient-orange">{news.heading.accent}</span>
+              {news.heading.after && (
+                <span className="block mt-1 text-white/35" style={{ fontSize: "0.7em" }}>
+                  {news.heading.after}
                 </span>
-              </span>
+              )}
             </h2>
 
-            <p className="mt-6 w-full max-w-2xl text-lg leading-relaxed text-white/70 md:mt-8 md:text-xl">
+            {/* Divider */}
+            <div className="my-8 h-px w-16 bg-gradient-to-r from-primary to-transparent" />
+
+            {/* Paragraph */}
+            <p className="max-w-md text-[15px] leading-relaxed text-zinc-400 sm:text-base">
               {news.paragraph}
             </p>
 
-            <div className="mt-10 flex w-full max-w-xl flex-col items-stretch justify-center gap-4 lg:max-w-none lg:flex-row lg:flex-wrap lg:items-center lg:justify-center">
-              <MagneticElement strength={0.3}>
-                <SectionCtaLink
-                  href={news.primaryCta.href}
-                  label={news.primaryCta.label}
-                  variant="primary"
-                  className="lg:w-auto lg:min-w-[min(100%,17.5rem)]"
-                  icon={
-                    <HiArrowUpRight
-                      className="size-5 shrink-0 text-primary-foreground"
-                      aria-hidden
-                    />
-                  }
-                />
-              </MagneticElement>
+            {/* CTAs */}
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+              {/* Primary */}
+              <a
+                href={news.primaryCta.href}
+                className="group relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-zinc-950 shadow-[0_0_0_1px_oklch(0.769_0.188_70.08/0.5),0_8px_28px_-4px_oklch(0.769_0.188_70.08/0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_oklch(0.769_0.188_70.08/0.7),0_14px_40px_-4px_oklch(0.769_0.188_70.08/0.7)]"
+              >
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/25 to-transparent" />
+                <span className="relative">{news.primaryCta.label}</span>
+                <ArrowUpRight className="relative size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
 
-              <MagneticElement strength={0.2}>
-                <SectionCtaLink
-                  href={secondaryHref}
-                  label={news.secondaryCta.label}
-                  variant="outline"
-                  tone="onDark"
-                  className="lg:w-auto lg:min-w-[min(100%,17.5rem)]"
-                  target={secondaryIsExternal ? "_blank" : undefined}
-                  rel={
-                    secondaryIsExternal ? "noopener noreferrer" : undefined
-                  }
-                  icon={
-                    <FaTelegramPlane
-                      className="size-5 shrink-0 text-primary"
-                      aria-hidden
-                    />
-                  }
-                />
-              </MagneticElement>
+              {/* Secondary */}
+              <a
+                href={secondaryHref}
+                target={secondaryIsExternal ? "_blank" : undefined}
+                rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
+                className="group inline-flex items-center justify-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/10"
+              >
+                <FaTelegramPlane className="size-4 text-primary transition-transform duration-300 group-hover:scale-110" />
+                {news.secondaryCta.label}
+              </a>
+            </div>
+
+            {/* Small feature dots */}
+            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/[0.06] pt-8">
+              {["Tasdiqlangan ma'lumotlar", "Haftalik yangilanadi", "Ekspert tahlili"].map((f) => (
+                <div key={f} className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-primary shadow-[0_0_6px_oklch(0.769_0.188_70.08)]" />
+                  <span className="text-[12px] font-semibold text-zinc-600">{f}</span>
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* RIGHT COLUMN: 3D Scrollable Card Stack container */}
+          {/* ── RIGHT: card stack ── */}
           <motion.div
-            initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+            initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="order-2 flex w-full justify-center lg:order-2 lg:col-span-6 lg:col-start-7 perspective-[1200px]"
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+            className="flex w-full justify-center lg:justify-end"
           >
-            <div
-              ref={rightColRef}
-              className="relative w-full max-w-[min(100vw-2rem,550px)] transform-gpu"
-            >
-              {/* Outer Glow of the box */}
+            <div className="relative w-full max-w-[min(100vw-2rem,520px)]">
+              {/* Outer glow */}
               <div
-                className="pointer-events-none absolute -inset-2 rounded-[2.5rem] bg-gradient-to-br from-primary/30 via-orange-500/10 to-transparent opacity-50 blur-2xl transition-opacity duration-500 hover:opacity-80"
+                className="pointer-events-none absolute -inset-3 rounded-[2.5rem] blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 50% 50%, oklch(0.769 0.188 70.08 / 0.2), transparent 70%)",
+                }}
                 aria-hidden
               />
 
-              {/* Main Premium Glass Container */}
-              <div className="relative overflow-visible rounded-[2.2rem] border border-white/10 bg-black/40 p-2 shadow-2xl backdrop-blur-xl transition-all duration-500">
-                {/* Inner darker container for contrast */}
-                <div className="rounded-[1.9rem] bg-black/60 p-4 pb-14 border border-white/5 relative z-10 md:p-6 md:pb-16">
-                  {/* Subtle inner grid inside the box */}
-                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px] rounded-[1.9rem]" />
-
+              {/* Card container */}
+              <div className="relative overflow-visible rounded-[2rem] border border-white/[0.08] bg-black/50 p-2 shadow-2xl backdrop-blur-xl">
+                <div className="rounded-[1.7rem] border border-white/[0.04] bg-zinc-900/60 p-4 pb-14 md:p-6 md:pb-16">
                   <ScrollableCardStack
                     cardHeight={cardHeight}
                     items={resolvedCards}
                     perspective={1300}
                     transitionDuration={200}
                     showArrowNav
-                    className="mx-auto min-w-0 w-full max-w-full relative z-20"
+                    className="relative z-20 mx-auto w-full max-w-full min-w-0"
                   />
                 </div>
               </div>

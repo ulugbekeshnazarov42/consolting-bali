@@ -533,6 +533,96 @@
       ]
     }
   },
+  "stats": {
+    "badge": "Raqamlarda Natijalar",
+    "heading": {
+      "before": "Har bir talaba —",
+      "accent": "alohida muvaffaqiyat"
+    },
+    "items": [
+      {
+        "icon": "GraduationCap",
+        "value": 200,
+        "suffix": "+",
+        "label": "Muvaffaqiyatli talabalar"
+      },
+      {
+        "icon": "ShieldCheck",
+        "value": 95,
+        "suffix": "%",
+        "label": "Viza tasdiqlash darajasi"
+      },
+      {
+        "icon": "Building2",
+        "value": 20,
+        "suffix": "+",
+        "label": "Hamkor universitetlar"
+      },
+      {
+        "icon": "Clock",
+        "value": 5,
+        "suffix": "+",
+        "label": "Yillik tajriba"
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Talabalar Fikri",
+    "heading": {
+      "before": "Ular orzusiga",
+      "accent": "yetishdi"
+    },
+    "paragraph": "Bizning talabalarimizning o'z so'zlari bilan aytilgan haqiqiy tajribalari.",
+    "items": [
+      {
+        "text": "Guzal opa bilan ishlash hayotimning eng to'g'ri qadami bo'ldi. Hujjatlarimni yig'ishdan to vizagacha har bir bosqichda yonimda bo'lishdi. NUS — endi mening universitetim!",
+        "name": "Madina Karimova",
+        "program": "NUS · Kompyuter Fanlari",
+        "initial": "M"
+      },
+      {
+        "text": "Singapur Polytechnicga kirish uchun 6 oy harakat qildim, lekin hujjatlardan qo'rqqandim. Guzal Opa Education bilan 3 oyda hamma narsa tayyor bo'ldi. Juda professional va samimiy jamoa.",
+        "name": "Jasur Toshmatov",
+        "program": "SP · Biznes Menejment",
+        "initial": "J"
+      },
+      {
+        "text": "Bali dasturi ingliz tilimni va qat'iyatimni butunlay o'zgartirdi. Endi Singapurga o'tishga hech qanday shubhasiz tayyorman. Bu ko'prik dastur — eng yaxshi qaror!",
+        "name": "Nilufar Saidova",
+        "program": "Bali Pathway → SGP",
+        "initial": "N"
+      },
+      {
+        "text": "Viza intervyusidan oldin juda xavotirlandim. Lekin Guzal opa menga barcha savol-javoblarni mashq qilishga yordam berdi. Natijada birinchi urinishda viza chiqqan!",
+        "name": "Behzod Mirzayev",
+        "program": "SMU · Iqtisodiyot",
+        "initial": "B"
+      },
+      {
+        "text": "Motivatsion xatimni yozishda uzoq qiynaldim. Guzal opa bilan birga yozdik — komissiya «Bu xat juda ta'sirchan» dedi. Qabul qildim! Har qanday narxga arziydi.",
+        "name": "Shahnoza Razzaqova",
+        "program": "NTU · Dizayn",
+        "initial": "S"
+      }
+    ]
+  },
+  "partners": {
+    "trustLabel": "O'quvchilarimiz o'qiyotgan yetakchi ta'lim muassasalari",
+    "items": [
+      "NUS",
+      "NTU",
+      "SMU",
+      "SUTD",
+      "SIM",
+      "Singapore Polytechnic",
+      "Ngee Ann Polytechnic",
+      "Republic Poly",
+      "MDIS",
+      "Green School Bali",
+      "IALF Bali",
+      "Monash Indonesia"
+    ]
+  },
   "floatingDock": {
     "ariaLabel": "Tezkor aloqa va menyu",
     "scrollTopLabel": "Yuqoriga qaytish",
@@ -573,6 +663,7 @@
         "body": "Xorijda o'qish yo'lini tanlab eng to'g'ri ishni qildingiz. Biz sizga Osiyoning yulduzlari — Singapur va Bali ta'lim tizimiga kafolatlangan va shaffof yo'lni ko'rsatamiz.",
         "icon": "Heart",
         "accent": "from-primary/35 via-orange-500/18 to-transparent",
+        "image": "https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=900&q=80",
         "bullets": []
       },
       {
@@ -582,6 +673,7 @@
         "body": "Biz bu hududlarni eng mayda detallarigacha bilamiz. Shuning uchun ham sizga umumiy gaplar emas, balki aynan sizga mos tushadigan aniq imkoniyatlarni taklif qilamiz.",
         "icon": "Globe2",
         "accent": "from-sky-500/18 via-primary/20 to-transparent",
+        "image": "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=900&q=80",
         "bullets": [
           {
             "icon": "MapPin",
@@ -604,6 +696,7 @@
         "body": null,
         "icon": "Sparkles",
         "accent": "from-orange-500/22 via-primary/18 to-transparent",
+        "image": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=80",
         "bullets": [
           {
             "icon": "GraduationCap",
@@ -631,6 +724,7 @@
         "body": "Bizda hamma narsa soatdek ishlaydi. Qachon nima bo'lishini va sizdan nima talab qilinishini oldindan aytib turamiz.",
         "icon": "ListChecks",
         "accent": "from-violet-500/18 via-primary/18 to-transparent",
+        "image": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=900&q=80",
         "bullets": [
           {
             "icon": "ListChecks",
@@ -653,6 +747,7 @@
         "body": "Yolg'on va'dalar berib, sizning vaqtingizni o'g'irlamaymiz. Viza yoki qabul bo'yicha qarorni elchixona hal qilsa-da, biz sizning arizangizni eng kuchli darajaga olib chiqib beramiz.",
         "icon": "ShieldCheck",
         "accent": "from-amber-500/25 via-primary/22 to-transparent",
+        "image": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=900&q=80",
         "bullets": []
       },
       {
@@ -662,6 +757,7 @@
         "body": "Muddatlar doim yaqin. Hujjatlarni vaqtida topshirish — yutuqning yarmi. Vaqtni boy bermaslik juda muhim.",
         "icon": "BookOpen",
         "accent": "from-emerald-500/16 via-primary/16 to-transparent",
+        "image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80",
         "bullets": [
           {
             "icon": "BookOpen",
@@ -684,6 +780,7 @@
         "body": "Biz doim aloqadamiz. Hoziroq sahifa pastidagi formani to'ldiring yoki quyidagi raqamlar orqali bog'laning. Kelajagingizni birga quramiz!",
         "icon": "Calendar",
         "accent": "from-primary/25 via-orange-500/20 to-transparent",
+        "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80",
         "bullets": [
           { "icon": "Send", "text": "Telegram: {telegram} — tezkor javoblar" },
           { "icon": "Phone", "text": "Telefon: {phone} — qo'ng'iroqlar uchun" },

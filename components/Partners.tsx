@@ -2,26 +2,14 @@
 
 import Marquee from "react-fast-marquee";
 import { motion } from "motion/react";
+import { content } from "@/lib/content";
 
-const partners = [
-  "UzCard",
-  "Humans",
-  "Kapitalbank",
-  "Beeline",
-  "Uztelecom",
-  "Ucell",
-  "Artel",
-  "Uzum",
-  "Anorbank",
-  "Alif",
-  "EPAM",
-  "Deloitte",
-];
+const partners = content.partners;
 
 export default function Partners() {
   return (
     <section
-      aria-label="Hamkorlar"
+      aria-label="Hamkor universitetlar"
       className="relative border-b border-border/60 bg-background/60 py-12"
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -32,7 +20,7 @@ export default function Partners() {
           transition={{ duration: 0.5 }}
           className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground"
         >
-          150+ kompaniya ishonch bildirgan
+          {partners.trustLabel}
         </motion.p>
 
         <div className="relative">
@@ -45,11 +33,11 @@ export default function Partners() {
             aria-hidden
           />
 
-          <Marquee autoFill pauseOnHover speed={40} className="py-2">
-            {partners.map((name) => (
+          <Marquee autoFill pauseOnHover speed={38} className="py-2">
+            {partners.items.map((name) => (
               <div
                 key={name}
-                className="mx-4 flex h-14 min-w-[160px] items-center justify-center rounded-xl border border-border/50 bg-card/40 px-8 text-base font-semibold tracking-tight text-muted-foreground transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+                className="mx-3 flex h-12 min-w-[150px] items-center justify-center rounded-xl border border-border/50 bg-card/40 px-6 text-sm font-semibold tracking-tight text-muted-foreground transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
               >
                 {name}
               </div>

@@ -1,9 +1,11 @@
 import WelcomeOnboarding from "@/components/WelcomeOnboarding";
 import Hero from "@/components/Hero";
+import Partners from "@/components/Partners";
+import Stats from "@/components/Stats";
 import Services from "@/components/Services";
-import NewsUpdates from "@/components/NewsUpdates";
 import Process from "@/components/Process";
 import StudentVoicesReels from "@/components/StudentVoicesReels";
+import Testimonials from "@/components/Testimonials";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
@@ -14,10 +16,12 @@ export default function Home() {
     <>
       <WelcomeOnboarding />
       <Hero />
+      <Partners />
+      <Stats />
       <Services />
-      <NewsUpdates />
       <Process />
       <StudentVoicesReels />
+      <Testimonials />
       <WhyChooseUs />
       <FAQ />
       <ContactForm />
