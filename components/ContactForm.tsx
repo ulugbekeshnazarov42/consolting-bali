@@ -129,9 +129,8 @@ function MagneticElement({
   );
 }
 
-// Barcha Input, Select va Textarea uchun aynan bir xil premium stillar
 const fieldBaseStyles =
-  "rounded-2xl border-border/60 bg-background/50 px-4 text-base text-foreground placeholder:text-muted-foreground transition-all duration-300 hover:bg-background hover:border-border focus-visible:border-primary focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/50 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 shadow-sm";
+  "rounded-2xl border-white/[0.08] bg-white/[0.04] px-4 text-base text-white placeholder:text-zinc-600 transition-all duration-300 hover:bg-white/[0.07] hover:border-white/[0.12] focus-visible:border-primary/60 focus-visible:bg-white/[0.07] focus-visible:ring-1 focus-visible:ring-primary/40 shadow-none";
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = React.useState(false);
@@ -230,23 +229,21 @@ export default function ContactForm() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden border-b border-border/40 bg-background py-24 md:py-32"
+      className="relative overflow-hidden border-b border-white/[0.06] bg-zinc-950 py-24 md:py-32"
     >
-      {/* Background Overlay */}
+      {/* bg */}
       <div
-        className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-[0.15] dark:opacity-30 z-0"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.016)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.016)_1px,transparent_1px)] bg-[size:56px_56px] z-0"
         aria-hidden
       />
-
-      {/* Animated GSAP Orbs */}
       <div
         ref={orb1Ref}
-        className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/20 blur-[120px] opacity-40 dark:opacity-60 z-0"
+        className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/[0.1] blur-[130px] z-0"
         aria-hidden
       />
       <div
         ref={orb2Ref}
-        className="pointer-events-none absolute right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-orange-500/15 blur-[120px] opacity-40 dark:opacity-60 z-0"
+        className="pointer-events-none absolute right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-orange-500/[0.08] blur-[120px] z-0"
         aria-hidden
       />
 
@@ -259,22 +256,17 @@ export default function ContactForm() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center text-center"
         >
-          <Badge className="mb-6 gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold tracking-wide text-primary shadow-sm backdrop-blur-md">
-            <Sparkles className="size-4" />
+          <p className="mb-4 text-[10px] font-extrabold uppercase tracking-[0.32em] text-primary/60">
             {form.badge}
-          </Badge>
-          <h2 className={sectionHeadingClassName({ className: "w-full" })}>
-            <span className="relative inline-block my-1 group">
-              <span className="pointer-events-none absolute inset-[-0.1em_-0.2em] -z-10 rounded-xl bg-gradient-to-r from-primary/20 to-orange-500/20 blur-xl opacity-60 dark:opacity-80" />
-              <span
-                className={cn(SECTION_HEADING_ACCENT_CLASS, "drop-shadow-sm")}
-              >
-                {form.heading.accent}
-              </span>
-            </span>{" "}
-            <span className="text-foreground/90">{form.heading.after}</span>
+          </p>
+          <h2
+            className="font-extrabold tracking-[-0.025em] text-white"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.06 }}
+          >
+            <span className="text-gradient-orange">{form.heading.accent}</span>{" "}
+            <span className="text-white/80">{form.heading.after}</span>
           </h2>
-          <p className="mt-6 w-full max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+          <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-zinc-400 sm:text-base">
             {form.paragraph}
           </p>
         </motion.div>
@@ -290,11 +282,11 @@ export default function ContactForm() {
             className="flex flex-col gap-6 lg:col-span-2"
           >
             {/* Contact Links Box */}
-            <div className="rounded-[2rem] border border-border/50 bg-card/60 p-6 backdrop-blur-2xl shadow-xl md:p-8 dark:bg-card/30 dark:border-white/10">
-              <h3 className="text-xl font-bold capitalize tracking-tight text-foreground">
+            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-6 md:p-8">
+              <h3 className="text-xl font-bold tracking-tight text-white">
                 {form.side.title}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-sm leading-relaxed text-zinc-500">
                 {form.side.paragraph}
               </p>
               <div className="mt-8 flex flex-col gap-4">
@@ -308,16 +300,16 @@ export default function ContactForm() {
                         ? "noopener noreferrer"
                         : undefined
                     }
-                    className="group relative flex items-center gap-4 rounded-2xl border border-border/60 bg-background/50 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-background hover:shadow-md dark:bg-white/5 dark:border-white/5 dark:hover:bg-white/10 dark:hover:shadow-[0_10px_30px_-10px_var(--primary)]"
+                    className="group relative flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-white/[0.05]"
                   >
-                    <span className="grid size-12 place-items-center rounded-xl bg-primary/10 text-primary border border-primary/20 transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                    <span className="grid size-12 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-inset ring-primary/20 transition-all duration-300 group-hover:bg-primary group-hover:text-zinc-950 group-hover:ring-primary">
                       <Icon className="size-5" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-bold uppercase tracking-widest text-primary/80">
+                      <p className="text-[10px] font-extrabold uppercase tracking-widest text-primary/60">
                         {label}
                       </p>
-                      <p className="truncate text-sm font-semibold text-foreground mt-0.5">
+                      <p className="truncate text-sm font-semibold text-zinc-200 mt-0.5">
                         {value}
                       </p>
                     </div>
@@ -327,45 +319,31 @@ export default function ContactForm() {
             </div>
 
             {/* Working Hours Box */}
-            <div className="rounded-[2rem] border border-primary/20 bg-gradient-to-br from-primary/10 via-card/50 to-orange-500/5 p-6 backdrop-blur-2xl shadow-lg md:p-8 dark:from-primary/20 dark:via-black/40 dark:to-orange-500/10 dark:shadow-[0_0_40px_-15px_var(--primary)]">
-              <h3 className="text-xl font-bold capitalize tracking-tight text-foreground">
+            <div className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-6 md:p-8">
+              <h3 className="text-xl font-bold tracking-tight text-white">
                 {form.side.hoursTitle}
               </h3>
               <div className="mt-4 space-y-2">
-                <p className="text-sm font-medium text-muted-foreground flex justify-between border-b border-border/50 pb-2 dark:border-white/10">
-                  <span>{content.contact.hours.weekdays.days}</span>
-                  <span className="text-foreground">
-                    {content.contact.hours.weekdays.time}
-                  </span>
-                </p>
-                <p className="text-sm font-medium text-muted-foreground flex justify-between pt-1">
-                  <span>{content.contact.hours.saturday.days}</span>
-                  <span className="text-foreground">
-                    {content.contact.hours.saturday.time}
-                  </span>
-                </p>
+                <div className="flex justify-between border-b border-white/[0.06] pb-2 text-sm">
+                  <span className="text-zinc-500">{content.contact.hours.weekdays.days}</span>
+                  <span className="font-semibold text-zinc-200">{content.contact.hours.weekdays.time}</span>
+                </div>
+                <div className="flex justify-between pt-1 text-sm">
+                  <span className="text-zinc-500">{content.contact.hours.saturday.days}</span>
+                  <span className="font-semibold text-zinc-200">{content.contact.hours.saturday.time}</span>
+                </div>
               </div>
 
               {online !== null && (
-                <div className="mt-6 flex items-center gap-3 rounded-xl bg-background/60 px-4 py-3 border border-border/50 dark:bg-black/40 dark:border-white/5">
+                <div className="mt-6 flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3">
                   <span className="relative flex size-3">
                     {online && (
                       <span className="absolute inset-0 animate-ping rounded-full bg-green-500/60" />
                     )}
-                    <span
-                      className={`relative size-3 rounded-full ${
-                        online
-                          ? "bg-green-500 shadow-[0_0_10px_#22c55e]"
-                          : "bg-muted-foreground/50"
-                      }`}
-                    />
+                    <span className={`relative size-3 rounded-full ${online ? "bg-green-500 shadow-[0_0_10px_#22c55e]" : "bg-zinc-600"}`} />
                   </span>
-                  <span
-                    className={`text-sm font-bold tracking-wide ${online ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}
-                  >
-                    {online
-                      ? content.contact.hours.onlineBadge
-                      : content.contact.hours.offlineBadge}
+                  <span className={`text-sm font-bold ${online ? "text-green-400" : "text-zinc-500"}`}>
+                    {online ? content.contact.hours.onlineBadge : content.contact.hours.offlineBadge}
                   </span>
                 </div>
               )}
@@ -380,14 +358,14 @@ export default function ContactForm() {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             onSubmit={handleSubmit(onSubmit)}
             noValidate
-            className="relative flex flex-col gap-6 rounded-[2rem] border border-border/50 bg-card/60 p-6 backdrop-blur-2xl shadow-xl md:p-10 lg:col-span-3 dark:bg-card/30 dark:border-white/10"
+            className="relative flex flex-col gap-6 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-6 md:p-10 lg:col-span-3"
           >
             <div className="grid gap-6 sm:grid-cols-2">
               {/* Ism Input */}
               <div className="flex flex-col gap-2.5">
                 <Label
                   htmlFor="name"
-                  className="text-foreground/90 font-medium ml-1"
+                  className="text-zinc-300 font-medium ml-1"
                 >
                   {form.fields.name.label}{" "}
                   <span className="text-primary">{form.required}</span>
@@ -472,7 +450,7 @@ export default function ContactForm() {
             <div className="grid gap-6 sm:grid-cols-2">
               {/* Xizmat turi Select */}
               <div className="flex flex-col gap-2.5">
-                <Label className="text-foreground/90 font-medium ml-1">
+                <Label className="text-zinc-300 font-medium ml-1">
                   {form.fields.service.label}{" "}
                   <span className="text-primary">{form.required}</span>
                 </Label>
@@ -498,12 +476,12 @@ export default function ContactForm() {
                       placeholder={form.fields.service.placeholder}
                     />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-border bg-popover text-popover-foreground shadow-xl dark:border-white/10 dark:bg-black/90 dark:backdrop-blur-xl">
+                  <SelectContent className="rounded-2xl border-white/10 bg-zinc-900 text-white shadow-xl backdrop-blur-xl">
                     {Object.entries(serviceLabels).map(([k, label]) => (
                       <SelectItem
                         key={k}
                         value={k}
-                        className="focus:bg-primary/10 focus:text-primary rounded-xl cursor-pointer"
+                        className="focus:bg-primary/15 focus:text-primary rounded-xl cursor-pointer text-zinc-300"
                       >
                         {label}
                       </SelectItem>
@@ -519,7 +497,7 @@ export default function ContactForm() {
 
               {/* Yosh oralig'i Select */}
               <div className="flex flex-col gap-2.5">
-                <Label className="text-foreground/90 font-medium ml-1">
+                <Label className="text-zinc-300 font-medium ml-1">
                   {form.fields.age.label}{" "}
                   <span className="text-primary">{form.required}</span>
                 </Label>
@@ -543,12 +521,12 @@ export default function ContactForm() {
                   >
                     <SelectValue placeholder={form.fields.age.placeholder} />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-border bg-popover text-popover-foreground shadow-xl dark:border-white/10 dark:bg-black/90 dark:backdrop-blur-xl">
+                  <SelectContent className="rounded-2xl border-white/10 bg-zinc-900 text-white shadow-xl backdrop-blur-xl">
                     {Object.entries(ageLabels).map(([k, label]) => (
                       <SelectItem
                         key={k}
                         value={k}
-                        className="focus:bg-primary/10 focus:text-primary rounded-xl cursor-pointer"
+                        className="focus:bg-primary/15 focus:text-primary rounded-xl cursor-pointer text-zinc-300"
                       >
                         {label}
                       </SelectItem>

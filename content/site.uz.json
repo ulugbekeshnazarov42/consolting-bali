@@ -86,8 +86,8 @@
     ],
     "card": {
       "eyebrow": "Marshrut xaritasi",
-      "title": "Ikki manzil — cheksiz imkoniyat",
-      "badge": "2 · mamlakat",
+      "title": "Uch manzil — cheksiz imkoniyat",
+      "badge": "3 · mamlakat",
       "footer": {
         "bold": "Muhim qoida: ",
         "text": "Biz bo'sh va'dalar bermaymiz. Maqsadingiz va imkoniyatingizni tahlil qilib, eng optimal yo'lni tanlaymiz."
@@ -98,13 +98,25 @@
           "code": "SGP",
           "city": "Singapur",
           "note": "Xalqaro darajadagi Oliy ta'lim va diplom",
-          "tag": "Asosiy Manzil"
+          "tag": "Asosiy Manzil",
+          "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1400&q=75",
+          "unis": ["NUS", "NTU", "SMU", "SP", "NYP"]
         },
         {
           "code": "DPS",
           "city": "Bali",
           "note": "Akademik til va xorijga moslashish",
-          "tag": "Startap Qadam"
+          "tag": "Startap Qadam",
+          "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=75",
+          "unis": ["Til kurslari", "Pathway", "Adaptatsiya"]
+        },
+        {
+          "code": "KUL",
+          "city": "Malayziya",
+          "note": "Zamonaviy ta'lim, qulay narx va xalqaro diplom",
+          "tag": "Yangi Yo'nalish",
+          "image": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=75",
+          "unis": ["UTAR", "APU", "Sunway", "HELP"]
         }
       ]
     }

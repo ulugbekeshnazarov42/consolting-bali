@@ -56,7 +56,7 @@ export default function Stats() {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   className={cn(
-                    "group relative flex flex-col items-center gap-5 overflow-hidden px-6 py-12 text-center transition-colors duration-500 hover:bg-white/[0.02]",
+                    "group relative flex flex-col items-center gap-4 overflow-hidden px-4 py-8 text-center transition-colors duration-500 hover:bg-white/[0.02] sm:gap-5 sm:px-6 sm:py-12",
                     borderMap[i],
                   )}
                 >
@@ -72,7 +72,7 @@ export default function Stats() {
                   <div>
                     <p
                       className="font-black leading-none tracking-[-0.04em] text-gradient-orange"
-                      style={{ fontSize: "clamp(3rem, 7vw, 5.5rem)" }}
+                      style={{ fontSize: "clamp(2.4rem, 8vw, 5.5rem)" }}
                     >
                       <CountUp
                         end={value}

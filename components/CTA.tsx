@@ -3,13 +3,7 @@
 import { motion } from "motion/react";
 import { FaTelegramPlane } from "react-icons/fa";
 import { HiArrowUpRight } from "react-icons/hi2";
-
-import { SectionCtaLink } from "@/components/section-cta-link";
-import { content, resolveHref, isExternalHref } from "@/lib/content";
-import {
-  SECTION_HEADING_ACCENT_CLASS,
-  sectionHeadingClassName,
-} from "@/lib/section-heading";
+import { content, isExternalHref, resolveHref } from "@/lib/content";
 
 const cta = content.cta;
 
@@ -18,80 +12,87 @@ export default function CTA() {
   const secondaryIsExternal = isExternalHref(cta.secondaryCta.href);
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-28">
-      <div className="container mx-auto px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7 }}
-          className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-to-br from-primary/15 via-card/80 to-orange-500/10 p-10 text-center shadow-2xl shadow-primary/10 backdrop-blur-sm md:p-16"
-        >
-          <div
-            className="pointer-events-none absolute inset-0 bg-grid mask-radial-fade opacity-30"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -left-20 -top-20 size-72 rounded-full bg-primary/28 blur-[64px]"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -right-20 -bottom-20 size-72 rounded-full bg-orange-500/18 blur-[64px]"
-            aria-hidden
-          />
+    <section className="relative overflow-hidden bg-zinc-950 py-28 md:py-40">
+      {/* bg */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.016)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.016)_1px,transparent_1px)] bg-[size:56px_56px]" />
+        {/* Center mega glow */}
+        <div className="absolute left-1/2 top-1/2 h-[700px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.13] blur-[160px]" />
+        <div className="absolute -left-24 top-1/2 h-[350px] w-[350px] -translate-y-1/2 rounded-full bg-primary/[0.08] blur-[90px]" />
+        <div className="absolute -right-24 top-1/2 h-[350px] w-[350px] -translate-y-1/2 rounded-full bg-orange-500/[0.08] blur-[90px]" />
+      </div>
 
-          <div className="relative mx-auto max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-              <span className="relative flex size-1.5">
-                <span className="absolute inset-0 motion-reduce:animate-none animate-ping rounded-full bg-primary/60" />
-                <span className="relative size-1.5 rounded-full bg-primary" />
-              </span>
-              {cta.eyebrow}
+      <div className="container relative mx-auto px-4 md:px-6">
+        <div className="mx-auto max-w-4xl text-center">
+          {/* Eyebrow */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 inline-flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-[0.32em] text-primary/60"
+          >
+            <span className="relative flex size-1.5">
+              <span className="absolute inset-0 animate-ping rounded-full bg-primary/60" />
+              <span className="relative size-1.5 rounded-full bg-primary" />
             </span>
+            {cta.eyebrow}
+          </motion.p>
 
-            <h2 className={sectionHeadingClassName({ className: "mt-6" })}>
-              {cta.heading.before}{" "}
-              <span className={SECTION_HEADING_ACCENT_CLASS}>
-                {cta.heading.accent}
-              </span>
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground">
-              {cta.paragraph}
-            </p>
+          {/* Mega headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.08 }}
+            className="font-extrabold tracking-[-0.032em] text-white"
+            style={{ fontSize: "clamp(2.2rem, 7vw, 5.8rem)", lineHeight: 0.95 }}
+          >
+            {cta.heading.before}{" "}
+            <span className="text-gradient-orange">{cta.heading.accent}</span>
+          </motion.h2>
 
-            <div className="mx-auto mt-10 flex w-full max-w-xl flex-col gap-3 md:max-w-none md:flex-row md:items-stretch md:gap-3">
-              <SectionCtaLink
-                href={cta.primaryCta.href}
-                label={cta.primaryCta.label}
-                variant="primary"
-                className="shadow-xl shadow-primary/30 md:flex-1"
-                icon={
-                  <HiArrowUpRight
-                    className="size-5 shrink-0 text-primary-foreground"
-                    aria-hidden
-                  />
-                }
-              />
+          {/* Paragraph */}
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mx-auto mt-8 max-w-xl text-[15px] leading-relaxed text-zinc-400 sm:text-base"
+          >
+            {cta.paragraph}
+          </motion.p>
 
-              <SectionCtaLink
-                href={secondaryHref}
-                label={cta.secondaryCta.label}
-                variant="outline"
-                className="bg-background/40 md:flex-1"
-                target={secondaryIsExternal ? "_blank" : undefined}
-                rel={
-                  secondaryIsExternal ? "noopener noreferrer" : undefined
-                }
-                icon={
-                  <FaTelegramPlane
-                    className="size-5 shrink-0 text-primary"
-                    aria-hidden
-                  />
-                }
-              />
-            </div>
-          </div>
-        </motion.div>
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          >
+            {/* Primary */}
+            <a
+              href={cta.primaryCta.href}
+              className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-primary px-8 py-4 text-base font-bold text-zinc-950 shadow-[0_0_0_1px_oklch(0.769_0.188_70.08/0.5),0_8px_36px_-4px_oklch(0.769_0.188_70.08/0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_oklch(0.769_0.188_70.08/0.7),0_16px_52px_-4px_oklch(0.769_0.188_70.08/0.8)]"
+            >
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/25 to-transparent" />
+              <span className="relative">{cta.primaryCta.label}</span>
+              <HiArrowUpRight className="relative size-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+
+            {/* Secondary */}
+            <a
+              href={secondaryHref}
+              target={secondaryIsExternal ? "_blank" : undefined}
+              rel={secondaryIsExternal ? "noopener noreferrer" : undefined}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-8 py-4 text-base font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/10"
+            >
+              <FaTelegramPlane className="size-4.5 text-primary transition-transform duration-300 group-hover:scale-110" />
+              {cta.secondaryCta.label}
+            </a>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

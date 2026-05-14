@@ -1,12 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Badge } from "@/components/ui/badge";
 import { content } from "@/lib/content";
-import {
-  SECTION_HEADING_ACCENT_CLASS,
-  sectionHeadingClassName,
-} from "@/lib/section-heading";
 import { getIcon } from "@/lib/icons";
 
 const process = content.process;
@@ -15,71 +10,106 @@ export default function Process() {
   return (
     <section
       id="process"
-      className="relative overflow-hidden border-b border-border/60 bg-background/60 py-24 md:py-32"
+      className="relative overflow-hidden border-b border-white/[0.06] bg-zinc-950 py-24 md:py-32"
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.016)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.016)_1px,transparent_1px)] bg-[size:56px_56px]" />
+        <div className="absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2 bg-primary/[0.07] blur-[130px]" />
+      </div>
+
+      <div className="container relative mx-auto px-4 md:px-6">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto max-w-2xl text-center md:max-w-3xl xl:max-w-4xl"
+          className="mb-20 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
         >
-          <Badge className="mb-5 gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            {process.badge}
-          </Badge>
-          <h2 className={sectionHeadingClassName()}>
-            <span className={SECTION_HEADING_ACCENT_CLASS}>
-              {process.heading.accent}
-            </span>{" "}
-            {process.heading.after}
-          </h2>
-          <p className="mt-5 text-lg text-muted-foreground">
+          <div>
+            <p className="mb-3 text-[10px] font-extrabold uppercase tracking-[0.32em] text-primary/60">
+              {process.badge}
+            </p>
+            <h2
+              className="font-extrabold tracking-[-0.025em] text-white"
+              style={{ fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.08 }}
+            >
+              <span className="text-gradient-orange">{process.heading.accent}</span>{" "}
+              <span className="text-white/70">{process.heading.after}</span>
+            </h2>
+          </div>
+          <p className="max-w-sm text-[15px] leading-relaxed text-zinc-500">
             {process.paragraph}
           </p>
         </motion.div>
 
-        <div className="mx-auto mt-16 max-w-5xl lg:max-w-6xl xl:max-w-7xl">
-          <div className="relative grid gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-8 xl:gap-10">
-            <div
-              className="pointer-events-none absolute inset-x-4 top-8 hidden h-px bg-linear-to-r from-transparent via-primary/40 to-transparent lg:inset-x-6 lg:top-12 xl:inset-x-8 xl:top-14 lg:block"
-              aria-hidden
-            />
-            {process.steps.map(({ icon, title, desc, duration }, i) => {
-              const Icon = getIcon(icon);
-              return (
-                <motion.div
-                  key={title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ delay: i * 0.12, duration: 0.6 }}
-                  className="relative flex min-h-0 min-w-0 flex-col rounded-2xl border border-border/60 bg-card/60 p-6 backdrop-blur-sm lg:min-h-[320px] lg:rounded-3xl lg:p-8 xl:min-h-[340px] xl:p-10"
-                >
-                  <div className="flex items-center justify-between gap-3 lg:gap-4">
-                    <span className="relative grid size-16 place-items-center rounded-2xl bg-linear-to-br from-primary to-orange-500 text-primary-foreground shadow-lg shadow-primary/30 lg:size-20 lg:rounded-3xl lg:shadow-xl xl:size-21">
-                      <span className="absolute inset-0 rounded-2xl bg-linear-to-b from-white/30 to-transparent lg:rounded-3xl" />
-                      <Icon className="relative size-7 lg:size-8 xl:size-9" />
-                    </span>
-                    <span className="text-4xl font-extrabold tabular-nums text-transparent [-webkit-text-stroke:1px_color-mix(in_oklch,var(--muted-foreground)_40%,transparent)] lg:text-5xl xl:text-6xl">
-                      0{i + 1}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-5 text-lg font-bold capitalize tracking-tight lg:mt-6 lg:text-xl xl:mt-7 xl:text-2xl xl:leading-snug">
-                    {title}
-                  </h3>
-                  <p className="mt-2 min-w-0 flex-1 text-pretty text-sm leading-relaxed wrap-break-word text-muted-foreground lg:mt-3 lg:text-base lg:leading-relaxed xl:text-[1.0625rem] xl:leading-relaxed">
-                    {desc}
-                  </p>
-                  <div className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary lg:mt-6 lg:gap-2 lg:px-3.5 lg:py-1.5 lg:text-sm xl:mt-7">
-                    <span className="size-1.5 shrink-0 rounded-full bg-primary lg:size-2" />
-                    {duration}
-                  </div>
-                </motion.div>
-              );
-            })}
+        {/* Steps grid */}
+        <div className="relative grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+          {/* Connecting line (desktop) */}
+          <div
+            className="pointer-events-none absolute inset-x-0 top-[3.5rem] hidden h-px lg:block"
+            aria-hidden
+          >
+            <div className="mx-auto h-px max-w-full bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
           </div>
+
+          {process.steps.map(({ icon, title, desc, duration }, i) => {
+            const Icon = getIcon(icon);
+            return (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{
+                  delay: i * 0.1,
+                  duration: 0.6,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                whileHover={{ y: -4 }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.025] p-6 transition-colors duration-300 hover:border-primary/25 hover:bg-white/[0.04] lg:p-7"
+              >
+                {/* Hover glow */}
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 70% 50% at 50% 0%, oklch(0.769 0.188 70.08 / 0.09), transparent)",
+                  }}
+                  aria-hidden
+                />
+
+                {/* Icon + Step number */}
+                <div className="relative mb-7 flex items-start justify-between">
+                  <div className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-primary to-orange-600 shadow-[0_8px_24px_-6px_oklch(0.769_0.188_70.08_/_0.65)] ring-1 ring-white/15">
+                    <Icon className="size-6 text-white" strokeWidth={1.5} />
+                  </div>
+                  {/* Connector dot (desktop) */}
+                  <span className="absolute -top-6 left-7 hidden size-2 rounded-full bg-primary shadow-[0_0_8px_oklch(0.769_0.188_70.08)] lg:block" />
+                  <span
+                    className="select-none font-black leading-none text-white/[0.055]"
+                    style={{ fontSize: "clamp(4rem,10vw,6.5rem)" }}
+                    aria-hidden
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <h3 className="text-lg font-bold tracking-tight text-white lg:text-xl">
+                  {title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-500 lg:text-[15px]">
+                  {desc}
+                </p>
+
+                {/* Duration */}
+                <div className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold text-primary">
+                  <span className="size-1.5 shrink-0 rounded-full bg-primary" />
+                  {duration}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
